@@ -2056,12 +2056,14 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
   width:190px;
   height:190px;
   margin:18px auto;
-  display:grid;
-  grid-template-columns:repeat(21,1fr);
-  grid-template-rows:repeat(21,1fr);
+  display:flex;
+  align-items:center;
+  justify-content:center;
   background:#fff;
   border:10px solid #fff;
-  outline:2px solid #111827;
+  outline:2px solid #e2e8f0;
+  border-radius:4px;
+  overflow:hidden;
 }
 .real-qr i{
   display:block;

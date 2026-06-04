@@ -7086,10 +7086,11 @@ function renderQrInto(el, text){
   el.innerHTML = "";
   if(typeof QRCode !== "undefined"){
     // Vraie librairie QRCode.js — QR scannable
+    const qrSize = el.offsetWidth > 50 ? el.offsetWidth : 180;
     new QRCode(el, {
       text: text,
-      width: el.offsetWidth || 160,
-      height: el.offsetHeight || 160,
+      width: qrSize,
+      height: qrSize,
       colorDark: "#111827",
       colorLight: "#ffffff",
       correctLevel: QRCode.CorrectLevel.M
@@ -7110,8 +7111,8 @@ function openQrDialog(vehicleId){
   document.getElementById("qrVehicleName").textContent = vehicle.name;
   document.getElementById("qrVehicleMeta").textContent = `${vehicle.type} · ${vehicle.plate}`;
   document.getElementById("qrUrlText").textContent = url;
-  renderQrInto(document.getElementById("realQrBox"), url);
   document.getElementById("qrPrintDialog").showModal();
+  setTimeout(() => renderQrInto(document.getElementById("realQrBox"), url), 50);
 }
 
 function printQrOnly(){
