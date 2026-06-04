@@ -6145,7 +6145,9 @@ function renderFcDetail(root){
       e.preventDefault();
       drop.classList.remove("drag-over");
       const item = JSON.parse(e.dataTransfer.getData("application/json"));
-      fcInventory.push({id:"fcitem-" + Date.now(), vehicleId:vehicle.id, zone:fcState.zone, name:item.name, category:item.family, qty:item.qty || 1});
+      const newItem = {id:"fcitem-" + Date.now(), vehicleId:vehicle.id, zone:fcState.zone, name:item.name, category:item.family, qty:item.qty || 1};
+      fcInventory.push(newItem);
+      if(typeof saveInventaireItemSupabase === "function") saveInventaireItemSupabase(newItem);
       toast(`${item.name} ajouté à ${fcState.zone}`);
       renderCheckSheets();
     };
@@ -6153,7 +6155,9 @@ function renderFcDetail(root){
 
   document.querySelectorAll("[data-delete]").forEach(btn=>{
     btn.onclick = () => {
-      fcInventory = fcInventory.filter(i => i.id !== btn.dataset.delete);
+      const deletedId = btn.dataset.delete;
+      fcInventory = fcInventory.filter(i => i.id !== deletedId);
+      if(typeof deleteInventaireItemSupabase === "function") deleteInventaireItemSupabase(deletedId);
       renderCheckSheets();
     };
   });
@@ -6231,13 +6235,15 @@ function fcBindCreate(){
     save.onclick = () => {
       const name = document.getElementById("fcNewName").value || "Nouvel inventaire";
       const id = name.toLowerCase().replace(/[^a-z0-9]+/g,"-") + "-" + Date.now();
-      fcVehicles.push({
+      const newVehicle = {
         id,
         category:document.getElementById("fcNewCategory").value,
         name,
         type:document.getElementById("fcNewType").value || "À définir",
         plate:document.getElementById("fcNewPlate").value || "À définir"
-      });
+      };
+      fcVehicles.push(newVehicle);
+      if(typeof saveVehicleSupabase === "function") saveVehicleSupabase(newVehicle);
       fcState.category = document.getElementById("fcNewCategory").value;
       fcState.vehicleId = id;
       fcState.mode = "detail";
@@ -6449,14 +6455,16 @@ renderFcDetail = function(root){
         toast("Ouvre un inventaire et sélectionne une zone");
         return;
       }
-      fcInventory.push({
+      const dblItem = {
         id:"fcitem-" + Date.now(),
         vehicleId:vehicle.id,
         zone:fcState.zone,
         name:el.dataset.name,
         category:el.dataset.family,
         qty:Number(el.dataset.qty || 1)
-      });
+      };
+      fcInventory.push(dblItem);
+      if(typeof saveInventaireItemSupabase === "function") saveInventaireItemSupabase(dblItem);
       toast(`${el.dataset.name} ajouté à ${fcState.zone}`);
       renderCheckSheets();
     };
@@ -7701,6 +7709,17 @@ function importPersonnelCsv(file){
       if(parsed.length){
         personnelList = parsed;
         localStorage.setItem("fc_personnel", JSON.stringify(personnelList));
+    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
+    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
+    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
+    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
+    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
+    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
+    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
+    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
+    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
+    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
+    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
         renderPersonnelTable();
         toast(`${parsed.length} personnels importés depuis Excel`);
       } else {

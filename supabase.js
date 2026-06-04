@@ -322,6 +322,72 @@ async function updateRemonteeStatusSupabase(id, status){
 }
 
 /* ============================================================
+   SYNC — Inventaires & Véhicules
+   ============================================================ */
+
+async function syncInventaires(){
+  if(!sb) return;
+  try{
+    // Véhicules
+    const { data: vData } = await sb.from("fc_vehicles").select("*");
+    if(vData && vData.length > 0){
+      // Fusionner avec les véhicules existants (ne pas écraser)
+      vData.forEach(v => {
+        if(!fcVehicles.find(x => x.id === v.id)){
+          fcVehicles.push({id:v.id, name:v.name, plate:v.plate, type:v.type, category:v.category, status:v.status});
+        }
+      });
+    }
+    // Items inventaire
+    const { data: iData } = await sb.from("fc_inventaire").select("*");
+    if(iData && iData.length > 0){
+      iData.forEach(item => {
+        if(!fcInventory.find(x => x.id === item.id)){
+          fcInventory.push({id:item.id, vehicleId:item.vehicle_id, zone:item.zone, name:item.name, qty:item.qty, category:item.category});
+        }
+      });
+      if(typeof renderCheckSheets === "function") renderCheckSheets();
+    }
+    console.log("✅ Inventaires synchronisés");
+  }catch(e){ console.warn("syncInventaires:", e); }
+}
+
+async function saveVehicleSupabase(vehicle){
+  if(!sb || !vehicle) return;
+  try{
+    await sb.from("fc_vehicles").upsert({
+      id: vehicle.id,
+      name: vehicle.name || "",
+      plate: vehicle.plate || "",
+      type: vehicle.type || "",
+      category: vehicle.category || "",
+      status: vehicle.status || "Actif"
+    });
+  }catch(e){ console.warn("saveVehicleSupabase:", e); }
+}
+
+async function saveInventaireItemSupabase(item){
+  if(!sb || !item) return;
+  try{
+    await sb.from("fc_inventaire").upsert({
+      id: item.id,
+      vehicle_id: item.vehicleId,
+      zone: item.zone || "",
+      name: item.name || "",
+      qty: item.qty || 1,
+      category: item.category || ""
+    });
+  }catch(e){ console.warn("saveInventaireItemSupabase:", e); }
+}
+
+async function deleteInventaireItemSupabase(id){
+  if(!sb) return;
+  try{
+    await sb.from("fc_inventaire").delete().eq("id", id);
+  }catch(e){ console.warn("deleteInventaireItemSupabase:", e); }
+}
+
+/* ============================================================
    SYNC GLOBAL — appelé au démarrage
    ============================================================ */
 
@@ -330,6 +396,7 @@ async function syncAll(){
   await syncPharmacie();
   await syncPersonnel();
   await syncRemontees();
+  await syncInventaires();
   console.log("🔄 Sync Supabase terminée");
 }
 
