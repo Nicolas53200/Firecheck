@@ -397,6 +397,20 @@ async function syncAll(){
   await syncPersonnel();
   await syncRemontees();
   await syncInventaires();
+
+  // Vérifier que l'utilisateur connecté existe toujours dans le personnel
+  const storedUser = JSON.parse(localStorage.getItem("fc_current_user") || "null");
+  if(storedUser && personnelList.length > 0){
+    const stillExists = personnelList.some(p =>
+      String(p.matricule).toUpperCase() === String(storedUser.matricule || "").toUpperCase()
+    );
+    if(!stillExists){
+      localStorage.removeItem("fc_current_user");
+      if(typeof renderAll === "function") renderAll();
+      console.log("⚠️ Utilisateur inconnu déconnecté");
+    }
+  }
+
   console.log("🔄 Sync Supabase terminée");
 }
 

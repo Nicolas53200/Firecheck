@@ -7561,11 +7561,6 @@ let personnelList = JSON.parse(localStorage.getItem("fc_personnel") || "null") |
 ];
 
 let currentUser = JSON.parse(localStorage.getItem("fc_current_user") || "null");
-// Réinitialiser si l'utilisateur n'est plus dans la liste du personnel
-if(currentUser && personnelList.length > 0){
-  const stillExists = personnelList.some(p => String(p.matricule).toUpperCase() === String(currentUser.matricule || "").toUpperCase());
-  if(!stillExists){ currentUser = null; localStorage.removeItem("fc_current_user"); }
-}
 
 function applyCenterSettings(){
   const cisNameEls = [
