@@ -10807,7 +10807,7 @@ function pharmRender(){
   });
   panel.querySelectorAll(".pharm-del-btn").forEach(btn => {
     btn.onclick = () => {
-      if(confirm("Supprimer ce produit ?")){ pharmData.splice(parseInt(btn.dataset.pidx), 1); pharmSave(); pharmRender(); }
+      if(confirm("Supprimer ce produit ?")){ pharmData.splice(parseInt(btn.dataset.pidx), 1); pharmSave(); pharmRender(); if(typeof savePharmacieSupabase === "function") savePharmacieSupabase(); }
     };
   });
 }
@@ -10876,6 +10876,7 @@ function pharmOpenForm(idx){
     pharmRender();
     dlg.close();
     toast(isEdit ? "Produit mis à jour" : "Produit ajouté");
+    if(typeof savePharmacieSupabase === "function") savePharmacieSupabase();
   };
 
   document.getElementById("pharmFormCancel").onclick = () => dlg.close();
