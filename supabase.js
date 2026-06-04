@@ -19,6 +19,16 @@ function initSupabase(){
   console.log("✅ Supabase connecté");
   showSupabaseStatus(true);
   syncAll();
+
+  // Patch pharmSave pour sauvegarder sur Supabase
+  if(typeof window.pharmSave === "function"){
+    const _origPharmSave = window.pharmSave;
+    window.pharmSave = function(){
+      _origPharmSave();
+      savePharmacieSupabase();
+    };
+    console.log("✅ pharmSave patché");
+  }
 }
 
 /* ============================================================
@@ -268,22 +278,7 @@ async function syncAll(){
    HOOKS — intercept les sauvegardes locales
    ============================================================ */
 
-// Patch pharmSave pour aussi sauvegarder sur Supabase
-const _origPharmSave = typeof pharmSave === "function" ? pharmSave : () => {};
-
-function pharmSaveWithSupabase(){
-  _origPharmSave();
-  savePharmacieSupabase(); // async, fire & forget
-}
-
-// Patch setMediaV30 pour uploader les photos
-if(typeof setMediaV30 === "function"){
-  const _orig = setMediaV30;
-  window.setMediaV30 = function(vehicleId, slot, dataUrl){
-    _orig(vehicleId, slot, dataUrl);
-    if(sb) setMediaSupabase(vehicleId, slot, dataUrl);
-  };
-}
+// Les patches sont appliqués après init (voir initSupabase)
 
 /* ============================================================
    STATUT — indicateur visuel connexion
