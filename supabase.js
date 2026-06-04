@@ -338,13 +338,12 @@ async function syncInventaires(){
         }
       });
     }
-    // Items inventaire
+    // Items inventaire — remplace entièrement le tableau
     const { data: iData } = await sb.from("fc_inventaire").select("*");
-    if(iData && iData.length > 0){
+    if(iData){
+      fcInventory.length = 0;
       iData.forEach(item => {
-        if(!fcInventory.find(x => x.id === item.id)){
-          fcInventory.push({id:item.id, vehicleId:item.vehicle_id, zone:item.zone, name:item.name, qty:item.qty, category:item.category});
-        }
+        fcInventory.push({id:item.id, vehicleId:item.vehicle_id, zone:item.zone, name:item.name, qty:item.qty, category:item.category});
       });
       if(typeof renderCheckSheets === "function") renderCheckSheets();
     }

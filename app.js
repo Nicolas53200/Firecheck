@@ -5755,7 +5755,7 @@ let fcVehicles = [
   {id:"fpt-go", category:"rolling", name:"FPT GO", plate:"GQ 311 JE", type:"Fourgon pompe tonne"},
   {id:"vsav-02", category:"rolling", name:"VSAV 02", plate:"AB-123-CD", type:"VSAV"},
   {id:"mpr-02", category:"equipment", name:"MPR 02", plate:"MAT-MPR-02", type:"Motopompe remorquable"}
-];
+]; // Véhicules de base — complétés par Supabase
 
 const fcViews = [
   {id:"droite", label:"Côté droit"},
@@ -5822,31 +5822,7 @@ let fcLayouts = {
   }
 };
 
-let fcInventory = [
-  ["fpt-53","Cabine conducteur","Carte carburant","DIVERS",1],
-  ["fpt-53","Cabine conducteur","Clés gaz","DIVERS",1],
-  ["fpt-53","Cabine conducteur","Outil OFD","DIVERS",1],
-  ["fpt-53","Cabine conducteur","Boîte de craies","DIVERS",1],
-  ["fpt-53","Cabine conducteur","Rouleau de rubalise","DIVERS",1],
-  ["fpt-53","Cabine chef d’agrès","Portatif TPH 900","DIVERS",1],
-  ["fpt-53","Cabine chef d’agrès","Classeur cartographie","DIVERS",1],
-  ["fpt-53","Cabine chef d’agrès","Classeur PI","DIVERS",1],
-  ["fpt-53","Dévidoir arrière gauche","Tuyau Ø70 x40 m","INCENDIE",5],
-  ["fpt-53","Dévidoir arrière droit","Tuyau Ø70 x40 m","INCENDIE",5],
-  ["fpt-53","Pompe","Crépine","INCENDIE",1],
-  ["fpt-53","Pompe","Flotteur","INCENDIE",1],
-  ["fpt-53","Pompe","Collecteur d’alimentation","INCENDIE",1],
-  ["fpt-53","Rideau avant gauche","ARI complet avec masque","INCENDIE",2],
-  ["fpt-53","Rideau avant gauche","Bouteille ARI","INCENDIE",2],
-  ["fpt-53","Rideau arrière gauche","Division","INCENDIE",1],
-  ["fpt-53","Rideau arrière gauche","LDV 500","INCENDIE",1],
-  ["fpt-53","Rideau avant droit","Projecteur","DIVERS",2],
-  ["fpt-53","Rideau avant droit","Ventilateur","INCENDIE",1],
-  ["fpt-53","Rideau arrière droit","LSPCC","INCENDIE",1],
-  ["fpt-53","Rideau arrière droit","Cône de Lübeck","DIVERS",4],
-  ["fpt-53","Toit / échelles","Échelle à coulisse","INCENDIE",1],
-  ["fpt-53","Toit / échelles","Échelle à crochet","INCENDIE",1]
-].map((x,i)=>({id:"fc-"+i, vehicleId:x[0], zone:x[1], name:x[2], category:x[3], qty:x[4]}));
+let fcInventory = []; // Chargé depuis Supabase
 
 function fcEnsureVehicle(vehicleId){
   if(!fcLayouts[vehicleId]){
@@ -5910,13 +5886,14 @@ function renderFcLibrary(){
       return `
         <div class="fc-lib-item ${i.custom ? "fc-lib-custom" : ""}" draggable="true" data-name="${fcEsc(i.name)}" data-family="${i.family}" data-sub="${fcEsc(i.sub)}" data-qty="${i.qty}" data-lib-idx="${libIdx}">
           <strong>${i.name}</strong>
-          <button class="fc-lib-edit-btn" data-lib-idx="${libIdx}" title="Modifier / déplacer">✏️</button>
+          <button class="fc-lib-edit-btn" data-lib-idx="${libIdx}" title="Modifier / déplacer" draggable="false">✏️</button>
         </div>
       `;
     }).join("")}
   `).join("");
   document.querySelectorAll(".fc-lib-item").forEach(el=>{
     el.ondragstart = e => {
+      e.dataTransfer.effectAllowed = "copy";
       e.dataTransfer.setData("application/json", JSON.stringify({
         name:el.dataset.name, family:el.dataset.family, sub:el.dataset.sub, qty:Number(el.dataset.qty || 1)
       }));
@@ -6088,6 +6065,8 @@ function renderFcDetail(root){
   `;
 
   root.querySelector(".fc-back").onclick = () => { fcState.mode = "list"; renderCheckSheets(); };
+
+
 
   document.querySelectorAll(".fc-view-tab").forEach(btn=>{
     btn.onclick = () => {
