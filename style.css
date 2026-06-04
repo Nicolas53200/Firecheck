@@ -884,6 +884,7 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
   grid-template-columns:320px 1fr;
   gap:18px;
   align-items:start;
+  min-height:100%;
 }
 .global-library{
   border:1px solid var(--line);
@@ -892,7 +893,9 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
   box-shadow:var(--shadow);
   padding:16px;
   position:sticky;
-  top:20px;
+  top:0;
+  max-height:calc(100vh - 60px);
+  overflow-y:auto;
 }
 .global-library h3{
   margin:0 0 6px;
@@ -1836,7 +1839,9 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
 .desktop-mode .workspace{
   padding:34px;
   min-width:0;
-  overflow:hidden;
+  overflow-x:hidden;
+  overflow-y:auto;
+  height:calc(100vh - 0px);
 }
 .desktop-mode .workspace-top{
   background:white;
@@ -3422,4 +3427,76 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
   display:block;
   width:100% !important;
   height:100% !important;
+}
+
+
+/* Fix drag & drop — bouton édition ne bloque pas le glisser */
+.fc-lib-edit-btn{
+  pointer-events: none;
+}
+.fc-lib-item:hover .fc-lib-edit-btn{
+  pointer-events: auto;
+}
+
+
+/* Mini bibliothèque inline dans le panneau zone */
+.fc-inline-library{
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  background: #f8fafc;
+}
+.fc-inline-lib-head{
+  padding: 10px;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+.fc-inline-search{
+  width: 100%;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 13px;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+}
+.fc-inline-tabs{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.fc-inline-tab{
+  padding: 3px 8px;
+  border-radius: 20px;
+  border: 1.5px solid var(--line);
+  background: #f1f5f9;
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+  letter-spacing: .3px;
+}
+.fc-inline-tab.active{
+  background: var(--red);
+  color: #fff;
+  border-color: var(--red);
+}
+.fc-inline-lib-list{
+  max-height: 180px;
+  overflow-y: auto;
+  padding: 4px;
+}
+.fc-inline-item{
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: grab;
+  transition: background .12s;
+  user-select: none;
+}
+.fc-inline-item:hover{
+  background: #e0f2fe;
+}
+.fc-inline-item:active{
+  cursor: grabbing;
 }
