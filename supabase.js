@@ -9,12 +9,15 @@ const SUPABASE_KEY = "sb_publishable_2mhygVWhrzORbmPRf7ZlEQ_JrkNO-s4";
 let sb = null;
 
 function initSupabase(){
-  if(typeof window.supabase === "undefined"){
+  const createClient = window.supabaseCreateClient || (window.supabase && window.supabase.createClient);
+  if(typeof createClient === "undefined"){
     console.warn("Supabase SDK non chargé — mode localStorage uniquement");
+    showSupabaseStatus(false);
     return;
   }
-  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  sb = createClient(SUPABASE_URL, SUPABASE_KEY);
   console.log("✅ Supabase connecté");
+  showSupabaseStatus(true);
   syncAll();
 }
 
@@ -308,10 +311,14 @@ function showSupabaseStatus(ok){
    ============================================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
-  if(typeof window.supabase !== "undefined"){
-    initSupabase();
-    showSupabaseStatus(true);
-  } else {
-    showSupabaseStatus(false);
-  }
+  // Attendre que le module ESM soit chargé (léger délai)
+  setTimeout(() => {
+    const createClient = window.supabaseCreateClient || (window.supabase && window.supabase.createClient);
+    if(typeof createClient !== "undefined"){
+      initSupabase();
+    } else {
+      console.warn("Supabase SDK indisponible");
+      showSupabaseStatus(false);
+    }
+  }, 500);
 });
