@@ -463,7 +463,7 @@ $("deleteItemIssue").onclick = () => {
 function syncStepIssuesToReports(stepIndex){
   const issues = Object.values(stepIssues).filter(i => i.stepIndex === stepIndex && !i.sent);
   issues.forEach(issue => {
-    reports.unshift({
+    const report = {
       id: Date.now() + Math.floor(Math.random() * 999),
       asset: issue.asset,
       zone: issue.zone,
@@ -473,9 +473,11 @@ function syncStepIssuesToReports(stepIndex){
       comment: issue.comment,
       status: "Nouveau",
       priority: issue.priority,
-      author: "Caporal Nicolas Morel",
-      time: "À l’instant"
-    });
+      author: currentUser ? `${currentUser.grade} ${currentUser.nom}` : "Inconnu",
+      time: "À l'instant"
+    };
+    reports.unshift(report);
+    if(typeof saveRemonteeSupabase === "function") saveRemonteeSupabase(report);
     issue.sent = true;
   });
 }
@@ -513,7 +515,7 @@ $("saveAnomaly").onclick = () => {
 };
 
 $("sendQuickReport").onclick = () => {
-  reports.unshift({
+  const report = {
     id: Date.now(),
     asset: $("quickAsset").value,
     zone: "Signalement direct",
@@ -523,9 +525,11 @@ $("sendQuickReport").onclick = () => {
     comment: $("quickComment").value || "Aucun commentaire.",
     status: "Nouveau",
     priority: "Normale",
-    author: "Caporal Nicolas Morel",
-    time: "À l’instant"
-  });
+    author: currentUser ? `${currentUser.grade} ${currentUser.nom}` : "Inconnu",
+    time: "À l'instant"
+  };
+  reports.unshift(report);
+  if(typeof saveRemonteeSupabase === "function") saveRemonteeSupabase(report);
   $("quickComment").value = "";
   toast("Avarie envoyée au service technique");
   showScreen("home");
@@ -578,12 +582,12 @@ function renderReports(){
 
   document.querySelectorAll(".take-btn").forEach(btn => btn.onclick = () => {
     const r = reports.find(x => x.id === Number(btn.dataset.id));
-    if(r) r.status = "Pris en compte";
+    if(r){ r.status = "Pris en compte"; if(typeof updateRemonteeStatusSupabase === "function") updateRemonteeStatusSupabase(r.id, "Pris en compte"); }
     renderAll();
   });
   document.querySelectorAll(".close-btn").forEach(btn => btn.onclick = () => {
     const r = reports.find(x => x.id === Number(btn.dataset.id));
-    if(r) r.status = "Clôturé";
+    if(r){ r.status = "Clôturé"; if(typeof updateRemonteeStatusSupabase === "function") updateRemonteeStatusSupabase(r.id, "Clôturé"); }
     renderAll();
   });
 
@@ -595,7 +599,7 @@ function renderReports(){
 $("confirmFix").onclick = () => {
   const r = reports.find(x => x.id === activeFixReportId);
   if(r){
-    r.status = "Corrigé par SP";
+    r.status = "Corrigé par SP"; if(typeof updateRemonteeStatusSupabase === "function") updateRemonteeStatusSupabase(r.id, "Corrigé par SP");
     const c = $("fixComment").value;
     r.comment += c ? ` Correction SP : ${c}` : " Correction SP indiquée.";
   }

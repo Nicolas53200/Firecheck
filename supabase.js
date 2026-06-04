@@ -264,6 +264,64 @@ async function savePersonnelSupabase(){
 }
 
 /* ============================================================
+   SYNC — Remontées
+   ============================================================ */
+
+async function syncRemontees(){
+  if(!sb) return;
+  try{
+    const { data, error } = await sb.from("fc_remontees").select("*").order("created_at", {ascending: false});
+    if(error) throw error;
+    if(data && data.length > 0){
+      const local = data.map(r => ({
+        id: r.id,
+        asset: r.asset,
+        zone: r.zone,
+        origin: r.origin,
+        type: r.type,
+        item: r.item,
+        comment: r.comment,
+        status: r.status,
+        priority: r.priority,
+        author: r.author,
+        time: r.time
+      }));
+      reports.length = 0;
+      reports.push(...local);
+      if(typeof renderAll === "function") renderAll();
+    }
+  }catch(e){ console.warn("syncRemontees:", e); }
+}
+
+async function saveRemonteeSupabase(report){
+  if(!sb || !report) return;
+  try{
+    await sb.from("fc_remontees").upsert({
+      id: report.id,
+      asset: report.asset || "",
+      zone: report.zone || "",
+      origin: report.origin || "",
+      type: report.type || "",
+      item: report.item || "",
+      comment: report.comment || "",
+      status: report.status || "Nouveau",
+      priority: report.priority || "Normale",
+      author: report.author || "",
+      time: report.time || ""
+    });
+    console.log("✅ Remontée sauvegardée:", report.id);
+  }catch(e){ console.warn("saveRemonteeSupabase:", e); }
+}
+
+async function updateRemonteeStatusSupabase(id, status){
+  if(!sb) return;
+  try{
+    await sb.from("fc_remontees").update({status}).eq("id", String(id));
+    console.log("✅ Statut remontée mis à jour:", id, status);
+  }catch(e){ console.warn("updateRemonteeStatusSupabase:", e); }
+}
+
+/* ============================================================
    SYNC GLOBAL — appelé au démarrage
    ============================================================ */
 
@@ -271,6 +329,7 @@ async function syncAll(){
   if(!sb) return;
   await syncPharmacie();
   await syncPersonnel();
+  await syncRemontees();
   console.log("🔄 Sync Supabase terminée");
 }
 
