@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FireCheck — V3</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+
+  <section id="home" class="screen active">
+    <button class="settings-fab" data-go="settings" title="Paramètres">⚙️</button>
+    <div class="mobile-shell home-shell">
+      <div class="cis-card">
+        <div class="cis-logo">🚒</div>
+        <p class="eyebrow light">Centre de secours</p>
+        <h1><span id="homeCisName">CIS Château-Gontier</span></h1>
+        <p class="subtle light">FIRECHECK</p>
+      </div>
+
+      <div class="profile-card" id="loginCard">
+        <p class="eyebrow">Identification</p>
+        <h2>Bienvenue</h2>
+        <p class="muted">Saisis ton matricule, ou identifie-toi manuellement si tu n’es pas encore dans la liste.</p>
+
+        <div class="login-tabs">
+          <button class="login-tab active" id="loginTabMatricule">Matricule</button>
+          <button class="login-tab" id="loginTabManual">Grade + nom</button>
+        </div>
+
+        <div id="loginMatriculePanel">
+          <div class="login-row">
+            <input id="matriculeInput" placeholder="Matricule ex : SP-45821">
+            <button class="btn primary" id="loginByMatricule">OK</button>
+          </div>
+          <p class="login-help">Prototype : SP-45821, SP-10254, SP-77881</p>
+        </div>
+
+        <div id="loginManualPanel" class="hidden">
+          <div class="manual-login-grid">
+            <input id="manualGrade" placeholder="Grade">
+            <input id="manualNom" placeholder="Nom">
+            <input id="manualPrenom" placeholder="Prénom">
+            <input id="manualMatricule" placeholder="Matricule facultatif">
+          </div>
+          <button class="btn primary full" id="loginManual">S’identifier</button>
+        </div>
+      </div>
+
+      <div class="profile-card hidden" id="profileCard">
+        <p class="eyebrow">Utilisateur connecté</p>
+        <h2 id="profileName">Caporal Nicolas Morel</h2>
+        <div class="profile-grid">
+          <span>Grade</span><strong id="profileGrade">Caporal</strong>
+          <span>Matricule</span><strong id="profileMatricule">SP-45821</strong>
+          <span>Garde</span><strong id="profileService">Jour</strong>
+        </div>
+        <button class="link-btn" id="changeUser">Changer d’utilisateur</button>
+      </div>
+
+      <div class="main-actions">
+        <button class="action-card danger" data-go="scanner">
+          <span class="action-icon">✅</span>
+          <span>
+            <strong id="verificationTitle">Vérifications</strong>
+            <small id="verificationSubtitle">Scanner le QR code de l’engin</small>
+          </span>
+        </button>
+
+        <button class="action-card dark" data-go="quickReport">
+          <span class="action-icon">⚠️</span>
+          <span>
+            <strong>Signaler une avarie</strong>
+            <small>Intervention, manœuvre ou constat au centre</small>
+          </span>
+        </button>
+      </div>
+
+      <div class="mini-status">
+        <button data-go="myReports">
+          <strong id="homeReportsCount">0</strong>
+          <span>Mes signalements</span>
+        </button>
+        <button id="stAccessButton">
+          <strong>ST</strong>
+          <span>Service technique</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="settings" class="screen">
+    <div class="mobile-shell settings-shell">
+      <header class="mobile-top">
+        <button class="round" data-go="home">←</button>
+        <div>
+          <p class="eyebrow">Administration locale</p>
+          <h2>Paramètres du centre</h2>
+        </div>
+      </header>
+
+      <div class="card">
+        <h3>Centre de secours</h3>
+        <label>Nom du CIS</label>
+        <input id="cisNameInput" class="modal-input" placeholder="Ex : CIS Château-Gontier">
+
+        <label>Logo du centre</label>
+        <input id="cisLogoInput" type="file" accept="image/*">
+        <div class="logo-preview" id="logoPreview">🚒</div>
+
+        <button class="btn primary full" id="saveCenterSettings">Enregistrer les paramètres</button>
+      </div>
+
+      <div class="card">
+        <h3>Personnel du CIS</h3>
+        <p class="muted">Import Excel conseillé : modèle Personnel CHG (.xlsx). CSV accepté aussi : matricule;grade;nom;prenom;service</p>
+
+        <label>Importer une liste CSV</label>
+        <input id="personnelImport" type="file" accept=".xlsx,.xls,.csv,text/csv">
+        <div class="import-format-note">Colonnes reconnues : MATRICULE, NOM, PRÉNOM, GRADE, TYPE, ÉQUIPE, APTITUDE, SPÉCIALITÉS, STATUT, NOTES.</div>
+
+        <div class="personnel-actions">
+          <button class="btn secondary" id="addPersonnelRow">+ Ajouter un SP</button>
+          <button class="btn ghost" id="downloadCsvModel">Modèle CSV</button>
+        </div>
+
+        <div id="personnelTable" class="personnel-table"></div>
+
+        <button class="btn primary full" id="savePersonnel">Enregistrer la liste du personnel</button>
+      </div>
+
+      <div class="card">
+        <h3>Accès sans installation</h3>
+        <p class="muted">
+          FireCheck peut fonctionner comme une application web : le QR code ouvre une URL dans le navigateur du téléphone.
+          Aucun téléchargement depuis un store n’est nécessaire.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="scanner" class="screen">
+    <div class="mobile-shell">
+      <header class="mobile-top">
+        <button class="round" data-go="home">←</button>
+        <div>
+          <p class="eyebrow">Vérifications</p>
+          <h2>Scanner le QR code</h2>
+        </div>
+      </header>
+
+      <div class="scan-card">
+        <div class="scan-frame">
+          <div class="corner tl"></div><div class="corner tr"></div>
+          <div class="corner bl"></div><div class="corner br"></div>
+          <span>QR</span>
+        </div>
+        <h3>Positionne le QR code dans le cadre</h3>
+        <p>L’application ouvrira directement la fiche de contrôle correspondante.</p>
+        <button class="btn primary full" id="simulateScan">Simuler scan FPT GO</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="check" class="screen">
+    <div class="mobile-shell check-shell">
+      <header class="control-top">
+        <button class="round" data-go="home">×</button>
+        <div>
+          <p class="eyebrow">FPT GO · GQ 311 JE</p>
+          <h2 id="zoneTitle">Cabine avant</h2>
+        </div>
+        <button class="info-btn" id="openInfo">+ d’infos</button>
+      </header>
+
+      <div class="progress-card">
+        <div class="progress-meta">
+          <span id="stepLabel">Étape 1 / 11</span>
+          <strong id="itemsCount">0 éléments</strong>
+        </div>
+        <div class="progress"><div id="progressBar"></div></div>
+      </div>
+
+      <div class="photo-card">
+        <div id="referencePhoto" class="reference-photo">
+          <span>📷</span>
+          <strong>Photo de référence</strong>
+          <small>À remplacer par la photo réelle du compartiment</small>
+        </div>
+      </div>
+
+      <div class="inventory-card">
+        <div class="section-title">
+          <h3>Matériel attendu</h3>
+          <span>Liste à contrôler visuellement</span>
+        </div>
+        <div id="inventoryList" class="inventory-list"></div>
+      </div>
+
+      <div class="bottom-actions">
+        <button class="btn danger-outline" id="viewAnomalies">Anomalies</button>
+        <button class="btn success" id="conforme">Étape suivante</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="anomaly" class="screen">
+    <div class="mobile-shell">
+      <header class="mobile-top">
+        <button class="round" data-go="check">←</button>
+        <div>
+          <p class="eyebrow">Anomalie</p>
+          <h2 id="anomalyZone">Cabine avant</h2>
+        </div>
+      </header>
+
+      <div class="card">
+        <h3>Quel élément pose problème ?</h3>
+        <p class="muted">Coche uniquement le matériel manquant, cassé ou non conforme.</p>
+        <div id="anomalyItems" class="checkbox-list"></div>
+
+        <label>Nature du problème</label>
+        <select id="problemType">
+          <option>Manquant</option>
+          <option>Cassé</option>
+          <option>Non conforme</option>
+          <option>À remplacer</option>
+          <option>À contrôler</option>
+          <option>Autre</option>
+        </select>
+
+        <label>Priorité</label>
+        <select id="priority">
+          <option>Normale</option>
+          <option>Urgente</option>
+          <option>Bloquant départ</option>
+        </select>
+
+        <label>Commentaire</label>
+        <textarea id="problemComment" placeholder="Ex : carte carburant absente, jauge carburant à 1/4..."></textarea>
+
+        <button class="photo-upload">📷 Ajouter une photo</button>
+        <button class="btn primary full" id="saveAnomaly">Envoyer au service technique</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="finish" class="screen">
+    <div class="mobile-shell finish-shell">
+      <div class="finish-card">
+        <div class="finish-icon">✅</div>
+        <p class="eyebrow">Vérification terminée</p>
+        <h1>FPT GO</h1>
+        <div class="finish-stats">
+          <div><strong id="finishedSteps">11</strong><span>zones contrôlées</span></div>
+          <div><strong id="finishedIssues">0</strong><span>anomalies</span></div>
+        </div>
+        <button class="btn primary full" data-go="home">Terminer</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="quickReport" class="screen">
+    <div class="mobile-shell">
+      <header class="mobile-top">
+        <button class="round" data-go="home">←</button>
+        <div>
+          <p class="eyebrow">Avarie</p>
+          <h2>Signaler un problème</h2>
+        </div>
+      </header>
+
+      <div class="card">
+        <label>Origine</label>
+        <select id="quickOrigin">
+          <option>Après intervention</option>
+          <option>Après manœuvre</option>
+          <option>Constat au centre</option>
+          <option>Vérification complémentaire</option>
+        </select>
+
+        <label>Engin ou matériel</label>
+        <select id="quickAsset">
+          <option>FPT GO</option>
+          <option>VSAV 02</option>
+          <option>CCF 01</option>
+          <option>MPR 02</option>
+          <option>Motopompe 01</option>
+          <option>Autre</option>
+        </select>
+
+        <label>Type</label>
+        <select id="quickType">
+          <option>Matériel manquant</option>
+          <option>Matériel cassé</option>
+          <option>Plein à faire</option>
+          <option>Problème mécanique</option>
+          <option>Problème électrique</option>
+          <option>Autre</option>
+        </select>
+
+        <label>Commentaire</label>
+        <textarea id="quickComment" placeholder="Décris simplement le problème..."></textarea>
+
+        <button class="photo-upload">📷 Ajouter une photo</button>
+        <button class="btn primary full" id="sendQuickReport">Envoyer au service technique</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="myReports" class="screen">
+    <div class="mobile-shell">
+      <header class="mobile-top">
+        <button class="round" data-go="home">←</button>
+        <div>
+          <p class="eyebrow">Interface pompier</p>
+          <h2>Mes signalements</h2>
+        </div>
+      </header>
+      <div id="myReportsList" class="reports-list"></div>
+    </div>
+  </section>
+
+  <section id="tech" class="screen">
+    <div class="tech-layout">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">🔥</div>
+          <div>
+            <h2>FireCheck</h2>
+            <p>Service technique</p>
+          </div>
+        </div>
+        <nav>
+          <button class="tech-nav active" data-tab="dashboard">Remontées</button>
+          <button class="tech-nav" data-tab="vehicles">Entretien véhicules</button>
+          <button class="tech-nav" data-tab="equipment">Matériel technique</button>
+          <button class="tech-nav" data-tab="pharmacie">Pharmacie</button>
+          <button class="tech-nav" data-tab="checkSheets">Fiches vérification</button>
+          <button class="tech-nav" data-tab="stAccess">Accès ST</button>
+          <button class="tech-nav" data-tab="personnelCis">Personnel CIS</button>
+        </nav>
+        <button class="btn ghost full" data-go="home">Retour interface SP</button>
+      </aside>
+
+      <main class="workspace">
+        <header class="workspace-top">
+          <div>
+            <p class="eyebrow">Service technique</p>
+            <h1 id="techTitle">Remontées</h1>
+          </div>
+          <div class="user-pill">CIS Château-Gontier</div>
+        </header>
+
+        <section id="dashboard" class="tech-tab active">
+          <div class="stats-grid">
+            <div class="stat"><strong id="newCount">0</strong><span>Nouveaux</span></div>
+            <div class="stat"><strong id="progressCount">1</strong><span>En cours</span></div>
+            <div class="stat"><strong id="spFixedCount">0</strong><span>Corrigés par SP</span></div>
+            <div class="stat urgent"><strong>2</strong><span>Échéances proches</span></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <h2>Remontées terrain</h2>
+              <select id="reportFilter">
+                <option value="all">Toutes</option>
+                <option value="Nouveau">Nouveau</option>
+                <option value="Pris en compte">Pris en compte</option>
+                <option value="Corrigé par SP">Corrigé par SP</option>
+                <option value="Clôturé">Clôturé</option>
+              </select>
+            </div>
+            <div id="techReportsList" class="tech-reports"></div>
+          </div>
+        </section>
+
+        <section id="vehicles" class="tech-tab">
+          <div class="panel">
+            <div class="panel-head"><h2>Suivi CT / vidange véhicules</h2><button class="btn secondary">+ Ajouter</button></div>
+            <div class="asset-grid" id="vehiclesGrid"></div>
+          </div>
+        </section>
+
+        <section id="equipment" class="tech-tab">
+          <div class="panel">
+            <div class="panel-head"><h2>Suivi MPR / motopompes / matériel</h2><button class="btn secondary">+ Ajouter</button></div>
+            <div class="asset-grid" id="equipmentGrid"></div>
+          </div>
+        </section>
+
+        <section id="pharmacie" class="tech-tab">
+          <div class="panel" id="pharmaciePanel">
+            <div class="panel-head">
+              <div>
+                <h2>Pharmacie — Dates de péremption</h2>
+                <p class="muted">Alerte automatique 1 mois avant péremption.</p>
+              </div>
+              <button class="btn primary" id="pharmAddBtn">+ Ajouter un produit</button>
+            </div>
+            <div id="pharmAlertBanner" class="pharm-alert-banner hidden"></div>
+            <div id="pharmEnginFilter" class="pharm-filter-bar"></div>
+            <div id="pharmList" class="pharm-list"></div>
+          </div>
+        </section>
+
+        <section id="checkSheets" class="tech-tab">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Fiches vérification</h2>
+                <p class="muted">Bibliothèque à gauche, inventaires à droite, zones cliquables sur photos.</p>
+              </div>
+              <button class="btn primary" id="fcCreateInventory">+ Créer un inventaire</button>
+            </div>
+
+            <div class="fc-layout">
+              <aside class="fc-library">
+                <h3>Bibliothèque matériel</h3>
+                <p class="muted">Glisse un matériel vers une zone.</p>
+
+                <div class="fc-tabs">
+                  <button class="fc-tab active" data-fc-family="INCENDIE">INCENDIE</button>
+                  <button class="fc-tab" data-fc-family="SSUAP">SSUAP</button>
+                  <button class="fc-tab" data-fc-family="SR">SR</button>
+                  <button class="fc-tab" data-fc-family="DIVERS">DIVERS</button>
+                  <button class="fc-tab" data-fc-family="PROTECTION">PROTECTION</button>
+                  <button class="fc-tab" data-fc-family="COMMUNICATION">COMMUNICATION</button>
+                </div>
+
+                <input id="fcSearch" class="fc-search" placeholder="Rechercher un matériel...">
+                <div id="fcLibraryList" class="fc-library-list"></div>
+              </aside>
+
+              <main class="fc-main">
+                <div class="inventory-home" id="fcCategoryCards">
+                  <button class="inventory-category active" data-fc-category="rolling">
+                    <span>🚒</span>
+                    <strong>Parc roulant</strong>
+                    <small>FPT, VSAV, CCF, VTU...</small>
+                  </button>
+                  <button class="inventory-category" data-fc-category="equipment">
+                    <span>⚙️</span>
+                    <strong>Matériel</strong>
+                    <small>MPR, motopompes, groupes...</small>
+                  </button>
+                  <button class="inventory-category" data-fc-category="create">
+                    <span>➕</span>
+                    <strong>Créer un inventaire</strong>
+                    <small>Nouveau véhicule ou matériel</small>
+                  </button>
+                </div>
+
+                <div id="fcView"></div>
+              </main>
+            </div>
+          </div>
+        </section>
+
+
+        <section id="personnelCis" class="tech-tab">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Personnel CIS</h2>
+                <p class="muted">Liste complète utilisée pour l’identification par matricule.</p>
+              </div>
+              <div class="personnel-header-actions">
+                <button class="btn secondary" id="importPersonnelFromSt">Importer Excel</button>
+                <button class="btn primary" id="addPersonnelFromSt">+ Ajouter un SP</button>
+              </div>
+            </div>
+
+            <input id="personnelSearchSt" class="fc-search" placeholder="Rechercher matricule, nom, grade...">
+
+            <div class="personnel-stats">
+              <article><strong id="personnelTotalCount">0</strong><span>Total</span></article>
+              <article><strong id="personnelActiveCount">0</strong><span>Actifs</span></article>
+              <article><strong id="personnelStCount">0</strong><span>Accès ST</span></article>
+            </div>
+
+            <div id="personnelTableSt" class="personnel-table-st"></div>
+          </div>
+        </section>
+
+        <section id="stAccess" class="tech-tab">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Accès service technique</h2>
+                <p class="muted">Personnes autorisées à accéder à l’interface ST depuis téléphone.</p>
+              </div>
+              <button class="btn primary" id="addStAccessRow">+ Ajouter accès</button>
+            </div>
+
+            <div class="access-code-card">
+              <h3>Code mobile ST</h3>
+              <p class="muted">Demandé uniquement sur téléphone. Sur PC, l’accès est direct.</p>
+              <div class="login-row">
+                <input id="stMobileCodeInput" placeholder="Code ex : 2026">
+                <button class="btn secondary" id="saveStMobileCode">Enregistrer</button>
+              </div>
+            </div>
+
+            <div id="stAccessTable" class="personnel-table"></div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </section>
+
+
+  <dialog id="itemIssueDialog">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Anomalie matériel</p>
+          <h2 id="itemIssueTitle">Matériel</h2>
+        </div>
+        <button class="round" id="closeItemIssue">×</button>
+      </div>
+
+      <p class="muted">Choisis ce qui ne va pas sur cet élément, puis continue la vérification.</p>
+
+      <div class="item-summary">
+        <span id="itemIssueEmoji">🔧</span>
+        <div>
+          <strong id="itemIssueName">Matériel sélectionné</strong>
+          <small id="itemIssueQty">Quantité attendue</small>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <label>Problème constaté
+          <select id="itemProblem">
+            <option>Manquant</option>
+            <option>Défectueux</option>
+            <option>Cassé</option>
+            <option>Non conforme</option>
+            <option>Périmé</option>
+            <option>À remplacer</option>
+            <option>À contrôler</option>
+            <option>Autre</option>
+          </select>
+        </label>
+
+        <label>Nombre
+          <select id="itemProblemQty">
+            <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+            <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+          </select>
+        </label>
+
+        <label>Priorité
+          <select id="itemPriority">
+            <option>Normale</option>
+            <option>Urgente</option>
+            <option>Bloquant départ</option>
+          </select>
+        </label>
+      </div>
+
+      <label>Commentaire</label>
+      <textarea id="itemComment" placeholder="Ex : 1 projecteur défectueux, ne s’allume plus."></textarea>
+
+      <button class="photo-upload">📷 Ajouter une photo</button>
+
+      <div class="modal-actions">
+        <button class="btn ghost" id="deleteItemIssue">Supprimer</button>
+        <button class="btn primary" id="saveItemIssue">Enregistrer et continuer</button>
+      </div>
+    </div>
+  </dialog>
+
+
+
+  <dialog id="createInventoryDialog">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Nouvel inventaire</p>
+          <h2>Créer une fiche</h2>
+        </div>
+        <button class="round" id="closeCreateInventory">×</button>
+      </div>
+
+      <div class="item-form-grid">
+        <label>Catégorie
+          <select id="newInventoryCategory">
+            <option value="rolling">Parc roulant</option>
+            <option value="equipment">Matériel</option>
+          </select>
+        </label>
+        <label>Nom
+          <input id="newInventoryName" placeholder="Ex : VSAV 02">
+        </label>
+        <label>Type
+          <input id="newInventoryType" placeholder="Ex : VSAV">
+        </label>
+      </div>
+
+      <label>Immatriculation / référence</label>
+      <input id="newInventoryPlate" class="modal-input" placeholder="Ex : AB-123-CD">
+
+      <button class="btn primary full" id="saveNewInventory">Créer la fiche</button>
+    </div>
+  </dialog>
+
+  <dialog id="editInventoryDialog">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Fiche vérification</p>
+          <h2 id="inventoryDialogTitle">Ajouter un matériel</h2>
+        </div>
+        <button class="round" id="closeInventoryDialog">×</button>
+      </div>
+
+      <div class="item-form-grid">
+        <label>Zone
+          <input id="newItemZone" placeholder="Cabine avant">
+        </label>
+        <label>Quantité
+          <input id="newItemQty" type="number" min="1" max="99" value="1">
+        </label>
+        <label>Sous-zone
+          <input id="newItemSubzone" placeholder="Côté conducteur">
+        </label>
+      </div>
+
+      <label>Nom du matériel</label>
+      <textarea id="newItemName" placeholder="Ex : Projecteurs"></textarea>
+
+      <div class="item-form-grid">
+        <label>Catégorie
+          <select id="newItemCategory">
+            <option>ARI</option><option>Balisage</option><option>Communication</option><option>Documents</option>
+            <option>Éclairage</option><option>EPI</option><option>Hydraulique</option><option>Outillage</option>
+            <option>Sauvetage</option><option>Secours</option><option>Autre</option>
+          </select>
+        </label>
+        <label>Criticité
+          <select id="newItemCriticality">
+            <option>Normale</option><option>Importante</option><option>Critique</option>
+          </select>
+        </label>
+        <label>Photo
+          <input id="newItemPhoto" placeholder="photo_cabine_avant.jpg">
+        </label>
+      </div>
+
+      <button class="btn primary full" id="saveInventoryItem">Enregistrer dans la fiche</button>
+    </div>
+  </dialog>
+
+  <dialog id="infoDialog">
+    <div class="modal">
+      <div class="modal-head">
+        <h2>FPT GO — Informations</h2>
+        <button class="round" id="closeInfo">×</button>
+      </div>
+      <div class="info-grid">
+        <article>
+          <h3>Caractéristiques</h3>
+          <ul>
+            <li>Immatriculation : GQ 311 JE</li>
+            <li>Véhicule polyvalent incendie</li>
+            <li>Tonne : 3 000 L d’eau</li>
+            <li>Émulseur : 200 L</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Possibilités hydrauliques</h3>
+          <ul>
+            <li>400 m de tuyaux Ø70 sur dévidoirs</li>
+            <li>200 m de tuyaux Ø70</li>
+            <li>20 m de tuyaux Ø110</li>
+            <li>Dévidoirs et lignes préconnectées</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Personnel</h3>
+          <ul>
+            <li>1 sous-officier chef d’agrès</li>
+            <li>1 conducteur PL COD 1</li>
+            <li>2 binômes</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Missions</h3>
+          <ul>
+            <li>Sauvetage</li>
+            <li>Extinction incendie</li>
+            <li>Feux urbains / véhicules / industriels</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="fixDialog">
+    <div class="modal">
+      <div class="modal-head">
+        <h2>J’ai réglé le problème</h2>
+        <button class="round" id="closeFix">×</button>
+      </div>
+      <p class="muted">Le service technique verra que le signalement a été corrigé par le SP.</p>
+      <label>Commentaire</label>
+      <textarea id="fixComment" placeholder="Ex : plein effectué à 14h20."></textarea>
+      <button class="btn primary full" id="confirmFix">Valider</button>
+    </div>
+  </dialog>
+
+
+  <dialog id="fcCreateDialog">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Nouvel inventaire</p>
+          <h2>Créer une fiche</h2>
+        </div>
+        <button class="round" id="fcCloseCreate">×</button>
+      </div>
+
+      <div class="item-form-grid">
+        <label>Catégorie
+          <select id="fcNewCategory">
+            <option value="rolling">Parc roulant</option>
+            <option value="equipment">Matériel</option>
+          </select>
+        </label>
+        <label>Nom
+          <input id="fcNewName" placeholder="Ex : VSAV 02">
+        </label>
+        <label>Type
+          <input id="fcNewType" placeholder="Ex : VSAV">
+        </label>
+      </div>
+
+      <label>Immatriculation / référence</label>
+      <input id="fcNewPlate" class="modal-input" placeholder="Ex : AB-123-CD">
+
+      <button class="btn primary full" id="fcSaveNew">Créer la fiche</button>
+    </div>
+  </dialog>
+
+
+  <dialog id="takeChargeDialog">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Service technique</p>
+          <h2>Prendre en charge</h2>
+        </div>
+        <button class="round" id="closeTakeCharge">×</button>
+      </div>
+
+      <p class="muted" id="takeChargeSummary">Dossier sélectionné</p>
+
+      <label>Pris en charge par</label>
+      <input id="takeChargeName" class="modal-input" placeholder="Nom du technicien">
+
+      <label>Date de prise en charge</label>
+      <input id="takeChargeDate" class="modal-input" type="date">
+
+      <label>Commentaire / action prévue</label>
+      <textarea id="takeChargeComment" placeholder="Ex : dossier repris en main, contrôle prévu demain matin."></textarea>
+
+      <button class="btn primary full" id="confirmTakeCharge">Valider la prise en charge</button>
+    </div>
+  </dialog>
+
+  <dialog id="assetDialog">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow" id="assetDialogEyebrow">Entretien</p>
+          <h2 id="assetDialogTitle">Ajouter</h2>
+        </div>
+        <button class="round" id="closeAssetDialog">×</button>
+      </div>
+
+      <div class="item-form-grid">
+        <label>Nom
+          <input id="assetName" placeholder="Ex : FPT 53">
+        </label>
+        <label>Type
+          <input id="assetType" placeholder="Ex : FPT, VSAV, MPR...">
+        </label>
+        <label>Référence / immat.
+          <input id="assetRef" placeholder="Ex : GL-485-CL">
+        </label>
+      </div>
+
+      <div class="item-form-grid">
+        <label>Suivi
+          <select id="assetFollowType">
+            <option value="km">Kilométrage</option>
+            <option value="hours">Heures</option>
+            <option value="date">Date uniquement</option>
+          </select>
+        </label>
+        <label>Valeur actuelle
+          <input id="assetCurrentValue" type="number" min="0" placeholder="Ex : 48230">
+        </label>
+        <label>Unité
+          <input id="assetUnit" value="km">
+        </label>
+      </div>
+
+      <div class="item-form-grid">
+        <label>Dernier entretien
+          <input id="assetLastServiceValue" type="number" min="0" placeholder="Ex : 45000">
+        </label>
+        <label>Périodicité
+          <input id="assetIntervalValue" type="number" min="0" placeholder="Ex : 15000">
+        </label>
+        <label>Prochain CT / contrôle
+          <input id="assetNextControlDate" type="date">
+        </label>
+      </div>
+
+      <label>Observations</label>
+      <textarea id="assetNotes" placeholder="Ex : vidange moteur tous les 15 000 km, pompe à contrôler toutes les 100 h..."></textarea>
+
+      <button class="btn primary full" id="saveAsset">Enregistrer</button>
+    </div>
+  </dialog>
+
+
+  <dialog id="libraryItemDialog">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Bibliothèque matériel</p>
+          <h2>Ajouter du matériel</h2>
+        </div>
+        <button class="round" id="closeLibraryItemDialog">×</button>
+      </div>
+
+      <label>Nom du matériel</label>
+      <input id="newLibraryItemName" class="modal-input" placeholder="Ex : Lance LDV 500">
+
+      <div class="item-form-grid">
+        <label>Thème
+          <select id="newLibraryItemFamily">
+            <option>INCENDIE</option>
+            <option>SSUAP</option>
+            <option>SR</option>
+            <option>DIVERS</option>
+            <option>PROTECTION</option>
+            <option>COMMUNICATION</option>
+          </select>
+        </label>
+        <label>Sous-catégorie
+          <input id="newLibraryItemSub" placeholder="Ex : Hydraulique">
+        </label>
+        <label>Quantité par défaut
+          <input id="newLibraryItemQty" type="number" min="1" value="1">
+        </label>
+      </div>
+
+      <button class="btn primary full" id="saveLibraryItem">Ajouter à la bibliothèque</button>
+    </div>
+  </dialog>
+
+
+  <dialog id="qrPrintDialog">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">QR Code inventaire</p>
+          <h2 id="qrDialogTitle">QR Code</h2>
+        </div>
+        <button class="round" id="closeQrPrintDialog">×</button>
+      </div>
+
+      <div class="qr-preview-card" id="qrPreviewCard">
+        <div class="qr-print-header">
+          <strong id="qrVehicleName">FPT 53</strong>
+          <span id="qrVehicleMeta">Vérification FireCheck</span>
+        </div>
+        <div class="real-qr" id="realQrBox"></div>
+        <p id="qrUrlText" class="muted"></p>
+      </div>
+
+      <button class="btn primary full" id="printQrOnly">Imprimer le QR Code</button>
+    </div>
+  </dialog>
+
+
+  <input id="personnelImportStHidden" type="file" accept=".xlsx,.xls,.csv,text/csv" style="display:none">
+  <dialog id="stCodeDialog">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Accès protégé</p>
+          <h2>Service technique</h2>
+        </div>
+        <button class="round" id="closeStCodeDialog">×</button>
+      </div>
+      <p class="muted">Accès réservé aux personnels autorisés du service technique.</p>
+      <label>Code d’accès mobile</label>
+      <input id="stCodeAttempt" class="modal-input" placeholder="Code">
+      <button class="btn primary full" id="confirmStAccess">Accéder au service technique</button>
+    </div>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="app.js"></script>
+
+  <!-- Dialog Pharmacie -->
+  <dialog id="pharmDialog">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 id="pharmDialogTitle">Ajouter un produit</h2>
+        <button class="btn ghost" id="pharmDialogClose">✕</button>
+      </div>
+      <div class="form-group">
+        <label>Nom du produit *</label>
+        <input id="pharmFormName" class="input" placeholder="Ex: Adrénaline 1mg, Aspégic 500…">
+      </div>
+      <div class="form-group">
+        <label>Engin / matériel *</label>
+        <input id="pharmFormEngin" class="input" list="pharmEnginList" placeholder="Ex: VSAV 1">
+        <datalist id="pharmEnginList"></datalist>
+      </div>
+      <div class="form-group">
+        <label>Date de péremption *</label>
+        <input id="pharmFormExpiry" class="input" type="month">
+      </div>
+      <div class="form-group">
+        <label>Photo du produit</label>
+        <div id="pharmFormPhotoPreview" class="pharm-form-photo-preview">📷</div>
+        <label class="btn secondary" style="cursor:pointer;display:inline-block;margin-top:8px;">
+          Ajouter / remplacer
+          <input id="pharmFormPhotoInput" type="file" accept="image/*" style="display:none;">
+        </label>
+      </div>
+      <div class="modal-actions">
+        <button class="btn ghost" id="pharmFormCancel">Annuler</button>
+        <button class="btn primary" id="pharmFormSave">Ajouter</button>
+      </div>
+    </div>
+  </dialog>
+</body>
+</html>
