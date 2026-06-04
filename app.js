@@ -287,7 +287,7 @@ let reports = [
     comment: "Jauge à 1/4.",
     status: "Nouveau",
     priority: "Normale",
-    author: "Caporal Nicolas Morel",
+    author: "Inconnu",
     time: "Aujourd’hui 08:12"
   },
   {
@@ -546,9 +546,10 @@ function statusClass(status){
 }
 
 function renderReports(){
-  $("homeReportsCount").textContent = reports.filter(r => r.author === "Caporal Nicolas Morel").length;
+  const myName = currentUser ? `${currentUser.grade} ${currentUser.nom}` : null;
+  $("homeReportsCount").textContent = myName ? reports.filter(r => r.author === myName).length : reports.filter(r => r.status === "Nouveau").length;
 
-  $("myReportsList").innerHTML = reports.filter(r => r.author === "Caporal Nicolas Morel").map(r => `
+  $("myReportsList").innerHTML = reports.filter(r => !myName || r.author === myName).map(r => `
     <article class="report-card">
       <div class="report-top">
         <div><strong>${r.asset}</strong><br><span class="muted">${r.zone} · ${r.origin}</span></div>
@@ -7560,6 +7561,11 @@ let personnelList = JSON.parse(localStorage.getItem("fc_personnel") || "null") |
 ];
 
 let currentUser = JSON.parse(localStorage.getItem("fc_current_user") || "null");
+// Réinitialiser si l'utilisateur n'est plus dans la liste du personnel
+if(currentUser && personnelList.length > 0){
+  const stillExists = personnelList.some(p => String(p.matricule).toUpperCase() === String(currentUser.matricule || "").toUpperCase());
+  if(!stillExists){ currentUser = null; localStorage.removeItem("fc_current_user"); }
+}
 
 function applyCenterSettings(){
   const cisNameEls = [
@@ -8350,8 +8356,7 @@ bindSettings = function(){
 let scannedAsset = null;
 let stMobileCode = localStorage.getItem("fc_st_mobile_code") || "2026";
 let stAccessList = JSON.parse(localStorage.getItem("fc_st_access_list") || "null") || [
-  {matricule:"SP-45821", grade:"Caporal", nom:"Morel", prenom:"Nicolas"},
-  {matricule:"SP-10254", grade:"Sergent", nom:"Martin", prenom:"Alexandre"}
+  /* utilisateurs chargés depuis Supabase */
 ];
 
 function detectScannedAsset(){
