@@ -1486,12 +1486,17 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
     width:90px;
     height:90px;
     margin:0 auto;
-    background:
-      linear-gradient(90deg,#111827 10px,transparent 10px) 0 0/22px 22px,
-      linear-gradient(#111827 10px,transparent 10px) 0 0/22px 22px,
-      #fff;
-    border:8px solid #fff;
-    outline:2px solid #111827;
+    background:#fff;
+    border:2px solid #e2e8f0;
+    border-radius:4px;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .qr-box img, .qr-box canvas{
+    width:100% !important;
+    height:100% !important;
   }
   .print-qr strong{
     font-size:9pt;
@@ -2825,14 +2830,10 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
     border-radius:6px !important;
   }
   .qr-box{
-    width:44px !important;
-    height:44px !important;
-    border:4px solid #fff !important;
-    outline:1px solid #111827 !important;
-    background:
-      linear-gradient(90deg,#111827 5px,transparent 5px) 0 0/11px 11px,
-      linear-gradient(#111827 5px,transparent 5px) 0 0/11px 11px,
-      #fff !important;
+    background:#fff;
+    border:1px solid #e2e8f0;
+    border-radius:4px;
+    overflow:hidden;
   }
   .print-qr strong{
     font-size:6.5pt !important;
@@ -3404,4 +3405,19 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
   transform: scale(1.08);
   box-shadow: 0 4px 16px rgba(215,25,32,.35);
   transition: all .15s;
+}
+
+
+/* Vrais QR codes — QRCode.js */
+.real-qr canvas,
+.real-qr img,
+#realQrBox canvas,
+#realQrBox img,
+#qrPrintBox canvas,
+#qrPrintBox img,
+#invCoverQrBox canvas,
+#invCoverQrBox img{
+  display:block;
+  width:100% !important;
+  height:100% !important;
 }

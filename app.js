@@ -6390,7 +6390,7 @@ function fcPrintInventory(){
         <div class="inv-cover-footer">
           <div>INVENTAIRE — ${fcEsc(vehicle.name)}</div>
           <div class="inv-cover-qr">
-            <div class="qr-box" style="width:60px;height:60px;"></div>
+            <div id="invCoverQrBox" style="width:60px;height:60px;"></div>
             <small>QR FireCheck</small>
           </div>
         </div>
@@ -8158,38 +8158,24 @@ function fcVehicleQrUrl(vehicle){
   return `${base}?check=${encodeURIComponent(vehicle.id)}`;
 }
 
-function simpleQrMatrix(text){
-  // QR visuel prototype : matrice déterministe inspirée QR.
-  // En production, remplacer par une vraie librairie QR Code.
-  let seed = 0;
-  for(let i=0;i<text.length;i++) seed = (seed * 31 + text.charCodeAt(i)) >>> 0;
-  const size = 21;
-  const cells = Array.from({length:size},()=>Array(size).fill(false));
-  function finder(x,y){
-    for(let yy=0;yy<7;yy++){
-      for(let xx=0;xx<7;xx++){
-        const border = xx===0||yy===0||xx===6||yy===6;
-        const center = xx>=2&&xx<=4&&yy>=2&&yy<=4;
-        cells[y+yy][x+xx] = border || center;
-      }
-    }
-  }
-  finder(0,0); finder(14,0); finder(0,14);
-  for(let y=0;y<size;y++){
-    for(let x=0;x<size;x++){
-      const inFinder = (x<7&&y<7)||(x>=14&&y<7)||(x<7&&y>=14);
-      if(inFinder) continue;
-      seed = (seed * 1664525 + 1013904223) >>> 0;
-      cells[y][x] = (seed % 100) < 42;
-    }
-  }
-  return cells;
-}
-
 function renderQrInto(el, text){
   if(!el) return;
-  const matrix = simpleQrMatrix(text);
-  el.innerHTML = matrix.flatMap((row,y)=>row.map((on,x)=>on ? `<i style="grid-column:${x+1};grid-row:${y+1}"></i>` : "")).join("");
+  el.innerHTML = "";
+  if(typeof QRCode !== "undefined"){
+    // Vraie librairie QRCode.js — QR scannable
+    new QRCode(el, {
+      text: text,
+      width: el.offsetWidth || 160,
+      height: el.offsetHeight || 160,
+      colorDark: "#111827",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  } else {
+    // Fallback texte si librairie non chargée
+    el.style.cssText = "display:flex;align-items:center;justify-content:center;font-size:10px;word-break:break-all;padding:8px;background:#f1f5f9;";
+    el.textContent = text;
+  }
 }
 
 function openQrDialog(vehicleId){
@@ -10549,7 +10535,19 @@ function fcPrintInventory(){
     </div>
   `;
 
-  window.print();
+  // Rendre les vrais QR codes dans la feuille d'impression
+  const coverQr = document.getElementById("invCoverQrBox");
+  if(coverQr && typeof QRCode !== "undefined"){
+    const url = fcVehicleQrUrl(vehicle);
+    new QRCode(coverQr, {text:url, width:60, height:60, colorDark:"#111827", colorLight:"#fff", correctLevel:QRCode.CorrectLevel.M});
+  }
+  // QR dans les sections
+  document.querySelectorAll(".inv-qr-box").forEach(box => {
+    const url = fcVehicleQrUrl(vehicle);
+    if(typeof QRCode !== "undefined") new QRCode(box, {text:url, width:50, height:50, colorDark:"#111827", colorLight:"#fff", correctLevel:QRCode.CorrectLevel.M});
+  });
+
+  setTimeout(() => window.print(), 300);
 }
 
 
