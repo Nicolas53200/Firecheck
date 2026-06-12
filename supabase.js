@@ -404,6 +404,39 @@ async function deleteInventaireItemSupabase(id){
 }
 
 /* ============================================================
+   SYNC — Layouts (zones, vues, photos de fond) par véhicule
+   ============================================================ */
+
+async function syncLayouts(){
+  if(!sb) return;
+  try{
+    const { data, error } = await sb.from("fc_layouts").select("*");
+    if(error) throw error;
+    (data || []).forEach(row => {
+      if(row.layouts) fcLayouts[row.vehicle_id] = row.layouts;
+      if(row.views) fcVehicleViews[row.vehicle_id] = row.views;
+      if(row.photos) fcPhotos[row.vehicle_id] = row.photos;
+    });
+    if(typeof fcSaveVehicleViews === "function") fcSaveVehicleViews();
+    if(typeof renderCheckSheets === "function") renderCheckSheets();
+  }catch(e){ console.warn("syncLayouts:", e); }
+}
+
+async function saveLayoutSupabase(vehicleId){
+  if(!sb) return;
+  try{
+    fcEnsureVehicle(vehicleId);
+    await sb.from("fc_layouts").upsert({
+      vehicle_id: vehicleId,
+      layouts: fcLayouts[vehicleId] || {},
+      views: fcGetViews(vehicleId),
+      photos: fcPhotos[vehicleId] || {},
+      updated_at: new Date().toISOString()
+    });
+  }catch(e){ console.warn("saveLayoutSupabase:", e); }
+}
+
+/* ============================================================
    SYNC GLOBAL — appelé au démarrage
    ============================================================ */
 
@@ -414,6 +447,7 @@ async function syncAll(){
   await syncRemontees();
   await syncInventaires();
   await syncMedias();
+  await syncLayouts();
 
   // Vérifier que l'utilisateur connecté existe toujours dans le personnel
   const storedUser = JSON.parse(localStorage.getItem("fc_current_user") || "null");

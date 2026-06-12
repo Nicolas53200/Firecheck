@@ -5757,7 +5757,7 @@ let fcVehicles = [
   {id:"mpr-02", category:"equipment", name:"MPR 02", plate:"MAT-MPR-02", type:"Motopompe remorquable"}
 ]; // Véhicules de base — complétés par Supabase
 
-const fcViews = [
+const fcDefaultViews = [
   {id:"droite", label:"Côté droit"},
   {id:"arriere", label:"Arrière"},
   {id:"gauche", label:"Côté gauche"},
@@ -5765,6 +5765,24 @@ const fcViews = [
   {id:"avant", label:"Devant"},
   {id:"interieur", label:"Intérieur"}
 ];
+
+// Vues personnalisées par véhicule, stockées en localStorage
+let fcVehicleViews = JSON.parse(localStorage.getItem("fc_vehicle_views") || "{}");
+
+function fcSaveVehicleViews(){
+  localStorage.setItem("fc_vehicle_views", JSON.stringify(fcVehicleViews));
+}
+
+function fcGetViews(vehicleId){
+  if(!fcVehicleViews[vehicleId]){
+    fcVehicleViews[vehicleId] = fcDefaultViews.map(v => ({...v}));
+    fcSaveVehicleViews();
+  }
+  return fcVehicleViews[vehicleId];
+}
+
+// Compatibilité ascendante
+const fcViews = fcDefaultViews;
 
 let fcState = {
   family:"INCENDIE",
@@ -6018,8 +6036,14 @@ function renderFcDetail(root){
       </div>
     </div>
 
-    <div class="fc-view-tabs">
-      ${fcViews.map(v=>`<button class="fc-view-tab ${v.id===fcState.view?"active":""}" data-view="${v.id}">${v.label}</button>`).join("")}
+    <div class="fc-view-tabs" id="fcViewTabs">
+      ${fcGetViews(vehicle.id).map(v=>`
+        <span class="fc-view-tab-wrap">
+          <button class="fc-view-tab ${v.id===fcState.view?"active":""}" data-view="${v.id}">${fcEsc(v.label)}</button>
+          <button class="fc-view-edit-btn" data-edit-view="${v.id}" title="Renommer / supprimer">✏️</button>
+        </span>
+      `).join("")}
+      <button class="fc-view-add-btn" id="fcAddView" title="Ajouter une vue">➕</button>
     </div>
 
     <div class="fc-detail-grid">
@@ -6035,7 +6059,7 @@ function renderFcDetail(root){
           </div>
         </div>
         <div class="fc-photo-stage" id="fcPhotoStage" ${photo ? `style="background-image:url('${photo}')"` : ""}>
-          ${photo ? "" : `<div class="fc-placeholder"><div><span>📷</span><strong>${fcViews.find(v=>v.id===fcState.view)?.label}</strong><p>Importe une photo ou ajoute des zones.</p></div></div>`}
+          ${photo ? "" : `<div class="fc-placeholder"><div><span>📷</span><strong>${fcGetViews(vehicle.id).find(v=>v.id===fcState.view)?.label || ""}</strong><p>Importe une photo ou ajoute des zones.</p></div></div>`}
           ${zones.map(z=>`<div class="fc-zone ${z.id===fcState.zone?"active":""}" data-zone="${fcEsc(z.id)}" style="left:${z.x}%;top:${z.y}%;width:${z.w}%;height:${z.h}%">${z.label}<span class="resize"></span></div>`).join("")}
         </div>
         <div class="fc-actions">
@@ -6043,7 +6067,7 @@ function renderFcDetail(root){
           <input id="fcPhotoInput" type="file" accept="image/*">
           <button class="btn secondary" id="fcAddZone">+ Ajouter zone</button>
           <button class="btn ghost" id="fcDeleteZone">Supprimer zone</button>
-          <button class="btn primary" onclick="toast('Plan enregistré dans le prototype')">Enregistrer le plan</button>
+          <button class="btn primary" id="fcSaveLayoutBtn">Enregistrer le plan</button>
         </div>
       </div>
 
@@ -6071,20 +6095,95 @@ function renderFcDetail(root){
   document.querySelectorAll(".fc-view-tab").forEach(btn=>{
     btn.onclick = () => {
       fcState.view = btn.dataset.view;
+      fcEnsureVehicle(vehicle.id);
       fcState.zone = (fcLayouts[vehicle.id][fcState.view] || [])[0]?.id || "";
       renderCheckSheets();
     };
   });
 
+  // Ajouter une nouvelle vue
+  const addViewBtn = document.getElementById("fcAddView");
+  if(addViewBtn) addViewBtn.onclick = () => {
+    const label = prompt("Nom de la nouvelle vue (ex: Dessous, Échelle, Coffre cabine...)");
+    if(!label || !label.trim()) return;
+    const id = label.trim().toLowerCase().replace(/[^a-z0-9]+/g,"-") + "-" + Date.now().toString(36);
+    const views = fcGetViews(vehicle.id);
+    views.push({id, label: label.trim()});
+    fcSaveVehicleViews();
+    fcEnsureVehicle(vehicle.id);
+    if(!fcLayouts[vehicle.id][id]) fcLayouts[vehicle.id][id] = [];
+    if(!fcPhotos[vehicle.id]) fcPhotos[vehicle.id] = {};
+    fcState.view = id;
+    fcState.zone = "";
+    if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
+    renderCheckSheets();
+    toast(`Vue "${label.trim()}" ajoutée`);
+  };
+
+  // Renommer / supprimer une vue
+  document.querySelectorAll("[data-edit-view]").forEach(btn => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const viewId = btn.dataset.editView;
+      const views = fcGetViews(vehicle.id);
+      const view = views.find(v => v.id === viewId);
+      if(!view) return;
+
+      const action = prompt(
+        `Vue "${view.label}" :\n\nTape un nouveau nom pour la renommer,\nou tape SUPPRIMER pour la retirer.`,
+        view.label
+      );
+      if(action === null) return;
+
+      if(action.trim().toUpperCase() === "SUPPRIMER"){
+        if(views.length <= 1){
+          toast("Impossible de supprimer la dernière vue");
+          return;
+        }
+        if(!confirm(`Supprimer définitivement la vue "${view.label}" ?`)) return;
+        const idx = views.findIndex(v => v.id === viewId);
+        views.splice(idx, 1);
+        fcSaveVehicleViews();
+        if(fcState.view === viewId){
+          fcState.view = views[0].id;
+          fcState.zone = (fcLayouts[vehicle.id][fcState.view] || [])[0]?.id || "";
+        }
+        if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
+        renderCheckSheets();
+        toast("Vue supprimée");
+      } else if(action.trim() && action.trim() !== view.label){
+        view.label = action.trim();
+        fcSaveVehicleViews();
+        if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
+        renderCheckSheets();
+        toast("Vue renommée");
+      }
+    };
+  });
+
   document.querySelectorAll(".fc-zone").forEach(el=>fcZoneEvents(el, vehicle.id));
+
+  const saveLayoutBtn = document.getElementById("fcSaveLayoutBtn");
+  if(saveLayoutBtn) saveLayoutBtn.onclick = () => {
+    if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
+    toast("Plan enregistré");
+  };
 
   const photoInput = document.getElementById("fcPhotoInput");
   if(photoInput){
-    photoInput.onchange = e => {
+    photoInput.onchange = async e => {
       const file = e.target.files[0];
       if(!file) return;
-      fcPhotos[vehicle.id][fcState.view] = URL.createObjectURL(file);
-      renderCheckSheets();
+      try{
+        const value = await compressImageV32(file, 1400, 0.75);
+        fcPhotos[vehicle.id][fcState.view] = value;
+        if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
+        renderCheckSheets();
+        toast("Photo de vue enregistrée");
+      }catch(err){
+        console.error(err);
+        toast("Impossible d’enregistrer cette photo");
+      }
     };
   }
 
@@ -6092,14 +6191,19 @@ function renderFcDetail(root){
     const z = {id:"Nouvelle zone " + Date.now(), label:"Nouvelle zone", x:30, y:30, w:22, h:18};
     fcLayouts[vehicle.id][fcState.view].push(z);
     fcState.zone = z.id;
+    if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
     renderCheckSheets();
   };
 
   document.getElementById("fcDeleteZone").onclick = () => {
     if(!fcState.zone) return;
+    const deletedZoneId = fcState.zone;
     fcLayouts[vehicle.id][fcState.view] = fcLayouts[vehicle.id][fcState.view].filter(z => z.id !== fcState.zone);
-    fcInventory = fcInventory.filter(i => !(i.vehicleId === vehicle.id && i.zone === fcState.zone));
+    const removedItems = fcInventory.filter(i => i.vehicleId === vehicle.id && i.zone === deletedZoneId);
+    fcInventory = fcInventory.filter(i => !(i.vehicleId === vehicle.id && i.zone === deletedZoneId));
+    removedItems.forEach(i => { if(typeof deleteInventaireItemSupabase === "function") deleteInventaireItemSupabase(i.id); });
     fcState.zone = (fcLayouts[vehicle.id][fcState.view] || [])[0]?.id || "";
+    if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
     renderCheckSheets();
   };
 
@@ -6111,8 +6215,13 @@ function renderFcDetail(root){
       const old = z.id;
       z.id = zoneName.value;
       z.label = zoneName.value;
-      fcInventory.forEach(i => { if(i.vehicleId === vehicle.id && i.zone === old) i.zone = z.id; });
+      const affected = fcInventory.filter(i => i.vehicleId === vehicle.id && i.zone === old);
+      affected.forEach(i => {
+        i.zone = z.id;
+        if(typeof saveInventaireItemSupabase === "function") saveInventaireItemSupabase(i);
+      });
       fcState.zone = z.id;
+      if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
       renderCheckSheets();
     };
   }
@@ -6193,6 +6302,7 @@ function fcZoneEvents(el, vehicleId){
   function end(){
     document.onmousemove = null;
     document.onmouseup = null;
+    if(mode && typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicleId);
     mode = null;
   }
   el.onmousedown = e => begin(e, false);
