@@ -6393,11 +6393,11 @@ function fcBindCreate(){
 fcBindCreate();
 
 
-/* V13 - impression inventaire + amélioration ajout bibliothèque sans drag obligatoire */
+/* V33 - feuille d'impression unifiée : QR réel + photos + données complètes */
 
 function fcPrintInventory(){
   const vehicle = fcVehicles.find(v => v.id === fcState.vehicleId);
-  if(!vehicle){ toast("Aucun véhicule sélectionné"); return; }
+  if(!vehicle){ toast("Aucun inventaire sélectionné"); return; }
 
   const allItems = fcInventory.filter(i => i.vehicleId === vehicle.id);
   let printArea = document.getElementById("printArea");
@@ -6409,163 +6409,178 @@ function fcPrintInventory(){
   }
 
   const updated = new Date().toLocaleDateString("fr-FR");
-  const coverPhoto = (typeof getMediaV30 === "function" && getMediaV30(vehicle.id, "cover"))
-    || fcPhotos?.[vehicle.id]?.avant || fcPhotos?.[vehicle.id]?.gauche || "";
-
-  // Paramètres CIS
   const cisName = localStorage.getItem("fc_cis_name") || "CIS Château-Gontier";
-
-  const printStructure = [
-    { title:"CABINE", steps:[
-        {name:"Cabine avant", aliases:["Cabine avant","Cabine conducteur","Cabine chef d'agrès","Cabine chef d'agres"]},
-        {name:"Cabine arrière", aliases:["Cabine arrière","Cabine arriere"]}
-    ]},
-    { title:"COFFRE LATÉRAL EXTÉRIEUR CÔTÉ GAUCHE", steps:[
-        {name:"Rideau avant gauche", aliases:["Rideau avant gauche","Rideau av. G"]},
-        {name:"Rideau milieu gauche", aliases:["Rideau milieu gauche","Rideau mil. G"]},
-        {name:"Rideau arrière gauche", aliases:["Rideau arrière gauche","Rideau ar. G"]},
-        {name:"Coffre arrière gauche", aliases:["Coffre arrière gauche","Coffre bas gauche"]}
-    ]},
-    { title:"COFFRE LATÉRAL EXTÉRIEUR CÔTÉ DROIT", steps:[
-        {name:"Rideau avant droit", aliases:["Rideau avant droit","Rideau av. D"]},
-        {name:"Rideau milieu droit", aliases:["Rideau milieu droit","Rideau mil. D"]},
-        {name:"Rideau arrière droit", aliases:["Rideau arrière droit","Rideau ar. D"]},
-        {name:"Coffre arrière droit", aliases:["Coffre arrière droit","Coffre bas droit"]}
-    ]},
-    { title:"ARRIÈRE / POMPE", steps:[
-        {name:"Arrière véhicule", aliases:["Arrière véhicule","Arriere vehicule","Compartiment pompe","Pompe","Tableau de commande pompe","Rideau arrière"]},
-        {name:"Dévidoirs", aliases:["Dévidoir arrière gauche","Dévidoir arrière droit","Dévidoir gauche","Dévidoir droit"]}
-    ]},
-    { title:"TOIT", steps:[
-        {name:"Toit / échelles", aliases:["Toit","Toit / échelles","Échelles de toit","Équipements de toit","Échelles arrière / toit"]}
-    ]}
-  ];
+  const structure = getInventoryStepStructureV30(vehicle);
+  const coverPhoto = getMediaV30(vehicle.id, "cover")
+    || fcPhotos?.[vehicle.id]?.avant
+    || fcPhotos?.[vehicle.id]?.gauche
+    || "";
 
   const usedIds = new Set();
   const getItemsForStep = (aliases) => {
-    const cleanAliases = aliases.map(a => a.toLowerCase());
+    const lower = aliases.map(a => String(a).toLowerCase());
     return allItems.filter(item => {
-      const zone = String(item.zone || "").toLowerCase();
-      const match = cleanAliases.some(a => zone === a);
-      if(match) usedIds.add(item.id);
-      return match;
+      const ok = lower.some(a => String(item.zone || "").toLowerCase() === a);
+      if(ok) usedIds.add(item.id);
+      return ok;
     });
   };
 
-  let ficheNum = 1;
-
-  const renderZone = (step) => {
+  let stepCounter = 1;
+  const renderStep = (step) => {
     const items = getItemsForStep(step.aliases);
-    const stepPhoto = typeof getMediaV30 === "function" ? getMediaV30(vehicle.id, `step:${step.name}`) : "";
-    if(!items.length && !stepPhoto) return "";
+    const photo = getMediaV30(vehicle.id, `step:${step.name}`)
+      || step.aliases.map(a => getMediaV30(vehicle.id, `step:${a}`)).find(Boolean)
+      || "";
     return `
-      <div class="inv-zone-block">
-        <div class="inv-zone-title">${fcEsc(step.name)}</div>
-        ${stepPhoto ? `<div class="inv-zone-photo"><img src="${stepPhoto}" alt="${fcEsc(step.name)}"></div>` : ""}
-        ${items.length ? `
-          <table class="inv-table">
-            <thead><tr><th>DÉSIGNATION</th><th class="inv-col-qty">QTÉ</th><th class="inv-col-check">✓</th></tr></thead>
-            <tbody>
-              ${items.map(item => `
-                <tr>
-                  <td>${fcEsc(item.name)}</td>
-                  <td class="inv-col-qty">${fcEsc(String(item.qty))}</td>
-                  <td class="inv-col-check"></td>
-                </tr>
-              `).join("")}
-            </tbody>
-          </table>
-        ` : `<p class="inv-empty-zone">Emplacement disponible — aucun matériel enregistré</p>`}
-      </div>
-    `;
-  };
-
-  const renderSection = (section) => {
-    const zonesHtml = section.steps.map(renderZone).join("");
-    if(!zonesHtml) return "";
-    return `
-      <div class="inv-section">
-        <div class="inv-section-header">
-          <span class="inv-section-num">FICHE N°${ficheNum++}</span>
-          <span class="inv-section-title">${fcEsc(section.title)}</span>
+      <section class="print-step">
+        <div class="print-step-head">
+          <div class="print-step-number">ÉTAPE ${stepCounter++}</div>
+          <div class="print-step-name">${fcEsc(step.name)}</div>
+          <div class="print-step-count">${items.length} matériel${items.length === 1 ? "" : "s"}</div>
         </div>
-        ${zonesHtml}
-      </div>
+        <div class="print-step-body">
+          <div class="print-step-photo ${photo ? "has-photo" : ""}">
+            ${photo ? `<img src="${photo}" alt="Photo ${fcEsc(step.name)}">` : `<span>📷 Aucune photo pour cette zone</span>`}
+          </div>
+          <div class="print-step-items">
+            ${items.length ? `
+              <table class="print-table">
+                <thead><tr><th>Désignation</th><th class="print-col-qty">Qté</th><th class="print-col-check">✓</th></tr></thead>
+                <tbody>
+                  ${items.map(item => `
+                    <tr>
+                      <td>${fcEsc(item.name)}</td>
+                      <td class="print-col-qty">${fcEsc(String(item.qty))}</td>
+                      <td class="print-col-check"></td>
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            ` : `<div class="print-empty-step">Aucun matériel renseigné pour cette zone.</div>`}
+          </div>
+        </div>
+      </section>
     `;
   };
 
   const unclassified = allItems.filter(i => !usedIds.has(i.id));
+  const totalItems = allItems.length;
 
   printArea.innerHTML = `
-    <div class="inv-page">
+    <div class="print-page">
 
-      <!-- PAGE DE COUVERTURE -->
-      <div class="inv-cover-page">
-        <div class="inv-cover-header">
-          <div class="inv-cover-cis">${fcEsc(cisName)}</div>
-          <div class="inv-cover-type">${fcEsc(vehicle.name)}</div>
-          <div class="inv-cover-immat">${fcEsc(vehicle.plate || "")}</div>
-          <div class="inv-cover-fulltype">${fcEsc(vehicle.type || "")}</div>
-          <div class="inv-cover-maj">Mise à jour : ${updated}</div>
+      <!-- COUVERTURE -->
+      <section class="print-cover">
+        <div class="print-cover-head">
+          <div class="print-cover-cis">${fcEsc(cisName)}</div>
+          <div class="print-cover-title">
+            <h1>${fcEsc(vehicle.name)}</h1>
+            <p>${fcEsc(vehicle.type || "")}${vehicle.plate ? " · " + fcEsc(vehicle.plate) : ""}</p>
+          </div>
+          <div class="print-cover-update">Mis à jour le ${updated}</div>
         </div>
 
-        ${coverPhoto ? `<div class="inv-cover-photo"><img src="${coverPhoto}" alt="Photo véhicule"></div>` : `<div class="inv-cover-photo inv-cover-photo-empty">📷 Photo du véhicule</div>`}
-
-        <div class="inv-cover-sommaire">
-          <div class="inv-sommaire-title">SOMMAIRE</div>
-          <table class="inv-sommaire-table">
-            <thead><tr><th>ZONE</th><th>FICHE N°</th></tr></thead>
-            <tbody>
-              ${printStructure.map((s, i) => `<tr><td>${fcEsc(s.title)}</td><td>${i+1}</td></tr>`).join("")}
-              ${unclassified.length ? `<tr><td>AUTRES ÉLÉMENTS</td><td>ANNEXE</td></tr>` : ""}
-            </tbody>
-          </table>
-        </div>
-
-        <div class="inv-cover-footer">
-          <div>INVENTAIRE — ${fcEsc(vehicle.name)}</div>
-          <div class="inv-cover-qr">
-            <div id="invCoverQrBox" style="width:60px;height:60px;"></div>
-            <small>QR FireCheck</small>
+        <div class="print-cover-main">
+          <div class="print-cover-photo ${coverPhoto ? "has-photo" : ""}">
+            ${coverPhoto ? `<img src="${coverPhoto}" alt="Photo ${fcEsc(vehicle.name)}">` : `<span>📷 Photo de couverture</span>`}
+          </div>
+          <div class="print-cover-info">
+            <div class="print-info-grid">
+              <div class="print-info-item"><span>Inventaire</span><strong>${fcEsc(vehicle.name)}</strong></div>
+              <div class="print-info-item"><span>Référence / immatriculation</span><strong>${fcEsc(vehicle.plate || "—")}</strong></div>
+              <div class="print-info-item"><span>Type</span><strong>${fcEsc(vehicle.type || "—")}</strong></div>
+              <div class="print-info-item"><span>Total matériels</span><strong>${totalItems}</strong></div>
+              <div class="print-info-item"><span>Nombre d’étapes</span><strong>${structure.reduce((n,s)=>n+s.steps.length,0)}</strong></div>
+            </div>
+            <div class="print-qr">
+              <div id="invCoverQrBox" class="print-qr-box"></div>
+              <div class="print-qr-text">
+                <strong>QR Code FireCheck</strong>
+                <span>Scanner pour ouvrir la vérification numérique</span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- FICHES PAR ZONE -->
-      ${printStructure.map(renderSection).join("")}
+        <div class="print-cover-sommaire">
+          <div class="print-sommaire-title">Sommaire des étapes</div>
+          <div class="print-sommaire-grid">
+            ${structure.flatMap(section => section.steps.map(step => step.name)).map((name, i) => `
+              <div class="print-sommaire-item"><span>${i+1}</span>${fcEsc(name)}</div>
+            `).join("")}
+            ${unclassified.length ? `<div class="print-sommaire-item"><span>+</span>Autres éléments</div>` : ""}
+          </div>
+        </div>
+      </section>
 
-      <!-- ANNEXE -->
+      <!-- ÉTAPES -->
+      ${structure.map(section => `
+        <div class="print-section-title">
+          ${fcEsc(section.title)}
+          ${section.subtitle ? `<small>${fcEsc(section.subtitle)}</small>` : ""}
+        </div>
+        ${section.steps.map(renderStep).join("")}
+      `).join("")}
+
+      <!-- NON CLASSÉS -->
       ${unclassified.length ? `
-        <div class="inv-section">
-          <div class="inv-section-header">
-            <span class="inv-section-num">ANNEXE</span>
-            <span class="inv-section-title">MATÉRIELS NON CLASSÉS</span>
-          </div>
-          <div class="inv-zone-block">
-            <table class="inv-table">
-              <thead><tr><th>DÉSIGNATION</th><th>ZONE</th><th class="inv-col-qty">QTÉ</th><th class="inv-col-check">✓</th></tr></thead>
-              <tbody>
-                ${unclassified.map(item => `
-                  <tr>
-                    <td>${fcEsc(item.name)}</td>
-                    <td><em>${fcEsc(item.zone)}</em></td>
-                    <td class="inv-col-qty">${fcEsc(String(item.qty))}</td>
-                    <td class="inv-col-check"></td>
-                  </tr>
-                `).join("")}
-              </tbody>
-            </table>
-          </div>
+        <div class="print-section-title">
+          AUTRES ÉLÉMENTS
+          <small>Matériels non rattachés à une étape du parcours</small>
         </div>
+        <section class="print-step">
+          <div class="print-step-head">
+            <div class="print-step-number">ANNEXE</div>
+            <div class="print-step-name">À reclasser</div>
+            <div class="print-step-count">${unclassified.length} matériel${unclassified.length === 1 ? "" : "s"}</div>
+          </div>
+          <div class="print-step-body">
+            <div class="print-step-items" style="flex:1;">
+              <table class="print-table">
+                <thead><tr><th>Désignation</th><th>Zone</th><th class="print-col-qty">Qté</th><th class="print-col-check">✓</th></tr></thead>
+                <tbody>
+                  ${unclassified.map(item => `
+                    <tr>
+                      <td>${fcEsc(item.name)}</td>
+                      <td><em>${fcEsc(item.zone)}</em></td>
+                      <td class="print-col-qty">${fcEsc(String(item.qty))}</td>
+                      <td class="print-col-check"></td>
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
       ` : ""}
 
-      <div class="inv-footer-note">
-        Document de vérification journalière — FireCheck · ${fcEsc(cisName)} · ${fcEsc(vehicle.name)}
+      <div class="print-footer-note">
+        Document de vérification — FireCheck · ${fcEsc(cisName)} · ${fcEsc(vehicle.name)} · ${updated}
       </div>
     </div>
   `;
 
-  window.print();
+  // Rendu du QR code réel (après injection du HTML pour avoir une taille mesurable)
+  const renderPrintQr = () => {
+    const box = document.getElementById("invCoverQrBox");
+    if(box && typeof QRCode !== "undefined"){
+      box.innerHTML = "";
+      const url = fcVehicleQrUrl(vehicle);
+      new QRCode(box, {
+        text: url,
+        width: 96,
+        height: 96,
+        colorDark: "#111827",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    }
+  };
+  renderPrintQr();
+  setTimeout(renderPrintQr, 80);
+
+  setTimeout(() => window.print(), 250);
 }
 
 // Surclasse le détail pour ajouter le bouton imprimer après rendu existant
@@ -7312,11 +7327,7 @@ renderFcDetail = function(root){
   }
 };
 
-const fcPrintInventoryBeforeV20 = fcPrintInventory;
-fcPrintInventory = function(){
-  // La fiche imprimée contient déjà un QR visuel générique ; on garde le bouton QR séparé pour impression dédiée.
-  fcPrintInventoryBeforeV20();
-};
+
 
 function bindQrDialog(){
   const close = document.getElementById("closeQrPrintDialog");
@@ -8076,189 +8087,7 @@ renderFcDetail = function(root){
 };
 
 // Remplace l'impression pour utiliser photo couverture + photos par étapes
-function fcPrintInventory(){
-  const vehicle = fcVehicles.find(v => v.id === fcState.vehicleId);
-  if(!vehicle){
-    toast("Aucun véhicule sélectionné");
-    return;
-  }
 
-  const allItems = fcInventory.filter(i => i.vehicleId === vehicle.id);
-  let printArea = document.getElementById("printArea");
-  if(!printArea){
-    printArea = document.createElement("div");
-    printArea.id = "printArea";
-    printArea.className = "print-only";
-    document.body.appendChild(printArea);
-  }
-
-  const updated = new Date().toLocaleDateString("fr-FR");
-  const coverPhoto = getCoverPhoto(vehicle.id) || fcPhotos?.[vehicle.id]?.avant || fcPhotos?.[vehicle.id]?.gauche || fcPhotos?.[vehicle.id]?.arriere || "";
-
-  const printStructure = [
-    {
-      title:"CABINE",
-      subtitle:"Contrôle intérieur et accès opérationnels",
-      steps:[
-        {name:"Cabine avant", aliases:["Cabine conducteur","Cabine chef d’agrès","Cabine chef d'agres","Cabine avant","Cabine avant gauche","Cabine avant droite"]},
-        {name:"Cabine arrière", aliases:["Cabine arrière","Cabine arriere","Cabine arrière gauche","Cabine arrière droite"]}
-      ]
-    },
-    {
-      title:"CÔTÉ DROIT",
-      subtitle:"Contrôle des rideaux et coffres côté droit",
-      steps:[
-        {name:"Rideau avant droit", aliases:["Rideau avant droit","Rideau av. D"]},
-        {name:"Rideau arrière droit", aliases:["Rideau arrière droit","Rideau ar. D"]},
-        {name:"Coffre arrière droit", aliases:["Coffre arrière droit","Coffre bas droit"]}
-      ]
-    },
-    {
-      title:"ARRIÈRE",
-      subtitle:"Pompe, tableau de commande et dévidoirs",
-      steps:[
-        {name:"Compartiment pompe", aliases:["Pompe","Tableau de commande pompe","Rideau arrière"]},
-        {name:"Dévidoir gauche", aliases:["Dévidoir arrière gauche"]},
-        {name:"Dévidoir droit", aliases:["Dévidoir arrière droit"]},
-        {name:"Échelles arrière", aliases:["Échelles arrière / toit"]}
-      ]
-    },
-    {
-      title:"CÔTÉ GAUCHE",
-      subtitle:"Contrôle des rideaux et coffres côté gauche",
-      steps:[
-        {name:"Rideau avant gauche", aliases:["Rideau avant gauche","Rideau av. G"]},
-        {name:"Rideau arrière gauche", aliases:["Rideau arrière gauche","Rideau ar. G"]},
-        {name:"Coffre arrière gauche", aliases:["Coffre arrière gauche","Coffre bas gauche"]}
-      ]
-    },
-    {
-      title:"TOIT",
-      subtitle:"Échelles et matériel de toit",
-      steps:[
-        {name:"Échelles et matériel de toit", aliases:["Toit","Toit / échelles","Échelles de toit","Équipements de toit"]}
-      ]
-    }
-  ];
-
-  const usedIds = new Set();
-  const getItemsForStep = (aliases) => {
-    const cleanAliases = aliases.map(a => String(a).toLowerCase());
-    return allItems.filter(item => {
-      const zone = String(item.zone || "").toLowerCase();
-      const match = cleanAliases.some(a => zone === a);
-      if(match) usedIds.add(item.id);
-      return match;
-    });
-  };
-
-  const stepPhoto = (vehicleId, step) => {
-    for(const alias of step.aliases){
-      const p = getZonePhoto(vehicleId, alias);
-      if(p) return p;
-    }
-    return "";
-  };
-
-  const unclassified = allItems.filter(i => !usedIds.has(i.id));
-  let stepCounter = 1;
-
-  const renderStep = (step) => {
-    const items = getItemsForStep(step.aliases);
-    const photo = stepPhoto(vehicle.id, step);
-    return `
-      <section class="print-step">
-        <div class="print-step-head">
-          <div class="print-step-number">ÉTAPE ${stepCounter++}</div>
-          <div class="print-step-name">${step.name}</div>
-        </div>
-        <div class="print-step-photo ${photo ? "has-photo" : ""}" ${photo ? `style="background-image:url('${photo}')"` : ""}>
-          ${photo ? `<span>Photo ${step.name}</span>` : `Emplacement photo — ${step.name}`}
-        </div>
-        ${items.length ? `
-          <div class="print-items-list">
-            ${items.map(item => `
-              <div class="print-item-line">
-                <strong>${fcEsc(item.name)}</strong>
-                <span>×${item.qty}</span>
-              </div>
-            `).join("")}
-          </div>
-        ` : `<div class="print-empty-step">Aucun matériel renseigné pour le moment. Emplacement prévu pour compléter l’inventaire.</div>`}
-      </section>
-    `;
-  };
-
-  printArea.innerHTML = `
-    <div class="print-page">
-      <section class="print-cover">
-        <div class="print-titlebar">
-          <div>
-            <h1>Inventaire ${vehicle.name}</h1>
-            <p>Classeur de vérification journalière — FireCheck</p>
-          </div>
-          <div class="print-update">Mise à jour : ${updated}</div>
-        </div>
-
-        <div class="print-vehicle-block">
-          <div class="print-info-grid">
-            <div class="print-info-item"><span>Véhicule</span><strong>${vehicle.name}</strong></div>
-            <div class="print-info-item"><span>Immatriculation</span><strong>${vehicle.plate}</strong></div>
-            <div class="print-info-item"><span>Type</span><strong>${vehicle.type}</strong></div>
-          </div>
-
-          <div class="print-qr">
-            <div class="qr-box"></div>
-            <strong>QR Code vérification</strong>
-          </div>
-
-          <div class="print-vehicle-photo cover-selected" ${coverPhoto ? `style="background-image:url('${coverPhoto}')"` : ""}></div>
-        </div>
-      </section>
-
-      <div class="print-intro">
-        Vérification papier à réaliser dans l’ordre du tour véhicule :
-        <strong>Cabine → Côté droit → Arrière → Côté gauche → Toit</strong>.
-        En cas d’anomalie, scanner le QR Code ou effectuer une remontée dans l’application.
-      </div>
-
-      ${printStructure.map(section => `
-        <div class="print-section-title">
-          ${section.title}
-          <small>${section.subtitle}</small>
-        </div>
-        ${section.steps.map(renderStep).join("")}
-      `).join("")}
-
-      ${unclassified.length ? `
-        <div class="print-section-title">
-          AUTRES ÉLÉMENTS
-          <small>Matériels non rattachés au parcours principal</small>
-        </div>
-        <section class="print-step">
-          <div class="print-step-head">
-            <div class="print-step-number">ANNEXE</div>
-            <div class="print-step-name">À reclasser</div>
-          </div>
-          <div class="print-items-list">
-            ${unclassified.map(item => `
-              <div class="print-item-line">
-                <strong>${fcEsc(item.name)} <em>(${fcEsc(item.zone)})</em></strong>
-                <span>×${item.qty}</span>
-              </div>
-            `).join("")}
-          </div>
-        </section>
-      ` : ""}
-
-      <div class="print-note">
-        Document papier de secours / classeur inventaire. La version numérique FireCheck reste la référence pour les remontées d’anomalies.
-      </div>
-    </div>
-  `;
-
-  window.print();
-}
 
 
 /* V30 - média universel par inventaire + impression illustrée robuste */
@@ -8414,146 +8243,6 @@ renderFcDetail = function(root){
 };
 
 // Impression illustrée robuste avec <img> pour éviter que le navigateur masque les arrière-plans
-function fcPrintInventory(){
-  const vehicle = fcVehicles.find(v => v.id === fcState.vehicleId);
-  if(!vehicle){ toast("Aucun inventaire sélectionné"); return; }
-
-  const allItems = fcInventory.filter(i => i.vehicleId === vehicle.id);
-  let printArea = document.getElementById("printArea");
-  if(!printArea){
-    printArea = document.createElement("div");
-    printArea.id = "printArea";
-    printArea.className = "print-only";
-    document.body.appendChild(printArea);
-  }
-
-  const updated = new Date().toLocaleDateString("fr-FR");
-  const structure = getInventoryStepStructureV30(vehicle);
-  const coverPhoto = getMediaV30(vehicle.id, "cover") || fcPhotos?.[vehicle.id]?.avant || fcPhotos?.[vehicle.id]?.gauche || "";
-
-  const usedIds = new Set();
-  const getItems = aliases => {
-    const lower = aliases.map(a => String(a).toLowerCase());
-    return allItems.filter(item => {
-      const ok = lower.some(a => String(item.zone || "").toLowerCase() === a);
-      if(ok) usedIds.add(item.id);
-      return ok;
-    });
-  };
-
-  let stepCounter = 1;
-  const renderStep = step => {
-    const items = getItems(step.aliases);
-    const photo = getMediaV30(vehicle.id, `step:${step.name}`) || step.aliases.map(a => getMediaV30(vehicle.id, `step:${a}`)).find(Boolean) || "";
-    return `
-      <section class="print-step">
-        <div class="print-step-head">
-          <div class="print-step-number">ÉTAPE ${stepCounter++}</div>
-          <div class="print-step-name">${fcEsc(step.name)}</div>
-        </div>
-        ${photo ? `
-          <div class="print-step-photo has-photo"><img src="${photo}" alt="Photo ${fcEsc(step.name)}"></div>
-        ` : `
-          <div class="print-step-photo placeholder">Emplacement photo — ${fcEsc(step.name)}</div>
-        `}
-        ${items.length ? `
-          <div class="print-items-list">
-            ${items.map(item => `
-              <div class="print-item-line">
-                <strong>${fcEsc(item.name)}</strong>
-                <span>×${item.qty}</span>
-              </div>
-            `).join("")}
-          </div>
-        ` : `<div class="print-empty-step">Aucun matériel renseigné pour le moment. Emplacement prévu pour compléter l’inventaire.</div>`}
-      </section>
-    `;
-  };
-
-  const unclassified = allItems.filter(i => !usedIds.has(i.id));
-
-  printArea.innerHTML = `
-    <div class="print-page">
-      <section class="print-cover">
-        <div class="print-titlebar">
-          <div>
-            <h1>Inventaire ${fcEsc(vehicle.name)}</h1>
-            <p>Classeur de vérification journalière — FireCheck</p>
-          </div>
-          <div class="print-update">Mise à jour : ${updated}</div>
-        </div>
-
-        <div style="display:flex;gap:10px;align-items:stretch;margin:8px 0;">
-          <div class="print-vehicle-block" style="flex:1;margin:0;">
-            <div class="print-info-grid">
-              <div class="print-info-item"><span>Inventaire</span><strong>${fcEsc(vehicle.name)}</strong></div>
-              <div class="print-info-item"><span>Référence / immat.</span><strong>${fcEsc(vehicle.plate || "—")}</strong></div>
-              <div class="print-info-item"><span>Type</span><strong>${fcEsc(vehicle.type || "—")}</strong></div>
-            </div>
-            <div class="print-qr">
-              <div class="qr-box"></div>
-              <strong>QR Code vérification</strong>
-            </div>
-          </div>
-          ${coverPhoto ? `<div style="width:160px;flex-shrink:0;border-radius:8px;overflow:hidden;"><img style="width:100%;height:100%;object-fit:cover;display:block;" src="${coverPhoto}" alt="Photo couverture"></div>` : ""}
-        </div>
-      </section>
-
-      <div class="print-intro">
-        Vérification papier illustrée à réaliser selon l’ordre proposé. En cas d’anomalie, scanner le QR Code ou effectuer une remontée dans l’application.
-      </div>
-
-      ${structure.map(section => `
-        <div class="print-section-title">
-          ${fcEsc(section.title)}
-          <small>${fcEsc(section.subtitle || "")}</small>
-        </div>
-        ${section.steps.map(renderStep).join("")}
-      `).join("")}
-
-      ${unclassified.length ? `
-        <div class="print-section-title">
-          AUTRES ÉLÉMENTS
-          <small>Matériels non rattachés au parcours principal</small>
-        </div>
-        <section class="print-step">
-          <div class="print-step-head">
-            <div class="print-step-number">ANNEXE</div>
-            <div class="print-step-name">À reclasser</div>
-          </div>
-          <div class="print-items-list">
-            ${unclassified.map(item => `
-              <div class="print-item-line">
-                <strong>${fcEsc(item.name)} <em>(${fcEsc(item.zone)})</em></strong>
-                <span>×${item.qty}</span>
-              </div>
-            `).join("")}
-          </div>
-        </section>
-      ` : ""}
-
-      <div class="print-note">
-        Document papier de secours / classeur inventaire. La version numérique FireCheck reste la référence pour les remontées d’anomalies.
-      </div>
-    </div>
-  `;
-
-  // Rendre les vrais QR codes dans la feuille d'impression
-  const coverQr = document.getElementById("invCoverQrBox");
-  if(coverQr && typeof QRCode !== "undefined"){
-    const url = fcVehicleQrUrl(vehicle);
-    new QRCode(coverQr, {text:url, width:60, height:60, colorDark:"#111827", colorLight:"#fff", correctLevel:QRCode.CorrectLevel.M});
-  }
-  // QR dans les sections
-  document.querySelectorAll(".inv-qr-box").forEach(box => {
-    const url = fcVehicleQrUrl(vehicle);
-    if(typeof QRCode !== "undefined") new QRCode(box, {text:url, width:50, height:50, colorDark:"#111827", colorLight:"#fff", correctLevel:QRCode.CorrectLevel.M});
-  });
-
-  setTimeout(() => window.print(), 300);
-}
-
-
 /* V31 - gestion médias fiable + impression compacte */
 function mediaSlotsForVehicleV31(vehicle){
   const structure = getInventoryStepStructureV30(vehicle);
