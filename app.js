@@ -322,6 +322,16 @@ let editingInventoryIndex = null;
 
 function $(id){return document.getElementById(id)}
 function showScreen(id){
+  // Si un véhicule a été scanné via QR Code (?check=xxx), aller directement
+  // à la fiche de vérification au lieu de redemander un scan.
+  if(id === "scanner" && typeof scannedAsset !== "undefined" && scannedAsset){
+    id = "check";
+    if(typeof checkV27 !== "undefined"){
+      checkV27.done = {};
+      checkV27.issues = {};
+      checkV27.currentZone = null;
+    }
+  }
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   $(id).classList.add("active");
   window.scrollTo(0,0);

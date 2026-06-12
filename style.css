@@ -3539,3 +3539,9 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
 .fc-inline-item:active{
   cursor: grabbing;
 }
+
+
+/* Règle générique manquante — utilisée pour cacher cartes/panneaux */
+.hidden{
+  display: none !important;
+}
