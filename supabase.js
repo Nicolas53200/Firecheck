@@ -368,6 +368,17 @@ async function syncInventaires(){
   }catch(e){ console.warn("syncInventaires:", e); }
 }
 
+async function deleteVehicleSupabase(vehicleId){
+  if(!sb) return;
+  try{
+    await sb.from("fc_vehicles").delete().eq("id", vehicleId);
+    await sb.from("fc_inventaire").delete().eq("vehicle_id", vehicleId);
+    await sb.from("fc_layouts").delete().eq("vehicle_id", vehicleId);
+    await sb.from("fc_medias").delete().eq("vehicle_id", vehicleId);
+    console.log("🗑️ Inventaire supprimé sur Supabase:", vehicleId);
+  }catch(e){ console.warn("deleteVehicleSupabase:", e); }
+}
+
 async function saveVehicleSupabase(vehicle){
   if(!sb || !vehicle) return;
   try{
@@ -426,13 +437,26 @@ async function saveLayoutSupabase(vehicleId){
   if(!sb) return;
   try{
     fcEnsureVehicle(vehicleId);
-    await sb.from("fc_layouts").upsert({
+    const payload = {
       vehicle_id: vehicleId,
       layouts: fcLayouts[vehicleId] || {},
       views: fcGetViews(vehicleId),
       photos: fcPhotos[vehicleId] || {},
       updated_at: new Date().toISOString()
-    });
+    };
+    let { error } = await sb.from("fc_layouts").upsert(payload);
+    if(error){
+      console.warn("saveLayoutSupabase erreur (avec photos):", error.message);
+      // Si la colonne photos n'existe pas encore, réessayer sans elle
+      if(String(error.message || "").toLowerCase().includes("photos")){
+        delete payload.photos;
+        const retry = await sb.from("fc_layouts").upsert(payload);
+        if(retry.error) console.warn("saveLayoutSupabase erreur (sans photos):", retry.error.message);
+        else console.log("✅ Plan enregistré (sans photos — ajoute la colonne 'photos' à fc_layouts)");
+      }
+    } else {
+      console.log("✅ Plan enregistré sur Supabase:", vehicleId);
+    }
   }catch(e){ console.warn("saveLayoutSupabase:", e); }
 }
 

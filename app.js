@@ -6000,7 +6000,10 @@ function renderFcList(root){
           <p>${v.type}</p>
           <p><strong>${v.plate}</strong></p>
           <p>${count} matériels inventoriés</p>
-          <button class="btn secondary fc-open" data-id="${v.id}">Ouvrir l’inventaire</button>
+          <div class="fc-card-actions">
+            <button class="btn secondary fc-open" data-id="${v.id}">Ouvrir l’inventaire</button>
+            <button class="btn danger-outline fc-delete-inventory" data-id="${v.id}" title="Supprimer cet inventaire">🗑️</button>
+          </div>
         </article>`;
       }).join("")}
     </div>
@@ -6012,6 +6015,38 @@ function renderFcList(root){
       fcState.view = "gauche";
       fcEnsureVehicle(fcState.vehicleId);
       fcState.zone = (fcLayouts[fcState.vehicleId][fcState.view] || [])[0]?.id || "";
+      renderCheckSheets();
+    };
+  });
+
+  document.querySelectorAll(".fc-delete-inventory").forEach(btn=>{
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const id = btn.dataset.id;
+      const v = fcVehicles.find(x => x.id === id);
+      if(!v) return;
+      const count = fcInventory.filter(i => i.vehicleId === id).length;
+      const msg = count > 0
+        ? `Supprimer "${v.name}" et ses ${count} matériels inventoriés ? Cette action est définitive.`
+        : `Supprimer l'inventaire "${v.name}" ? Cette action est définitive.`;
+      if(!confirm(msg)) return;
+
+      // Supprimer les items d'inventaire associés
+      const items = fcInventory.filter(i => i.vehicleId === id);
+      fcInventory = fcInventory.filter(i => i.vehicleId !== id);
+      items.forEach(i => { if(typeof deleteInventaireItemSupabase === "function") deleteInventaireItemSupabase(i.id); });
+
+      // Supprimer le véhicule lui-même
+      fcVehicles = fcVehicles.filter(x => x.id !== id);
+      if(typeof deleteVehicleSupabase === "function") deleteVehicleSupabase(id);
+
+      // Nettoyer layouts/photos/vues locales
+      delete fcLayouts[id];
+      delete fcPhotos[id];
+      delete fcVehicleViews[id];
+      fcSaveVehicleViews();
+
+      toast(`Inventaire "${v.name}" supprimé`);
       renderCheckSheets();
     };
   });
