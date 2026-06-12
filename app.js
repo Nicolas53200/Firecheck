@@ -8307,7 +8307,7 @@ function getInventoryStepStructureV30(vehicle){
     subtitle:"Contrôle adapté au matériel ou à l’engin",
     steps
   }];
-
+}
 
 function fcStepNameForZone(vehicle, zoneId){
   const structure = getInventoryStepStructureV30(vehicle);
@@ -8319,7 +8319,7 @@ function fcStepNameForZone(vehicle, zoneId){
     }
   }
   return zoneId;
-}}
+}
 
 // Manager média dans la fiche inventaire
 const renderFcDetailBeforeV30 = renderFcDetail;
