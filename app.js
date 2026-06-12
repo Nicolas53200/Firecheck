@@ -7782,36 +7782,55 @@ renderFcDetail = function(root){
   if(!vehicle || !fcState.zone) return;
 
   const panel = root.querySelector(".fc-zone-panel");
-  if(!panel || panel.querySelector("#zoneDetailPhotoInput")) return;
+  if(!panel || panel.querySelector("#zoneDetailPhotoCard")) return;
 
-  const photo = getZonePhoto(vehicle.id, fcState.zone);
+  // La photo de cette zone vient des "Médias de l'inventaire" (slot step:<étape regroupée>)
+  const stepName = fcStepNameForZone(vehicle, fcState.zone);
+  const slot = `step:${stepName}`;
+  const photo = getMediaV30(vehicle.id, slot);
+
   const card = document.createElement("div");
+  card.id = "zoneDetailPhotoCard";
   card.className = "zone-detail-photo-card";
   card.innerHTML = `
     <h3>Photo détaillée de la zone</h3>
     <div class="zone-detail-photo ${photo ? "has-photo" : ""}" id="zoneDetailPhotoPreview" ${photo ? `style="background-image:url('${photo}')"` : ""}>
-      ${photo ? "" : "📷 Photo du compartiment ouvert"}
+      ${photo ? "" : "📷 Aucune photo pour cette zone"}
     </div>
     <div class="zone-detail-photo-actions">
-      <label class="zone-photo-label" for="zoneDetailPhotoInput">Ajouter / remplacer la photo de cette zone</label>
+      <label class="zone-photo-label" for="zoneDetailPhotoInput">${photo ? "Remplacer" : "Ajouter"} la photo de cette zone</label>
       <input id="zoneDetailPhotoInput" type="file" accept="image/*">
     </div>
+    <p class="muted" style="font-size:12px;margin-top:6px;">Cette photo est partagée avec « Médias de l’inventaire » (${fcEsc(stepName)}) et utilisée pour l’impression.</p>
   `;
 
   const zoneInput = panel.querySelector(".fc-zone-name");
   if(zoneInput) zoneInput.insertAdjacentElement("afterend", card);
   else panel.prepend(card);
 
-  card.querySelector("#zoneDetailPhotoInput").onchange = e => {
+  card.querySelector("#zoneDetailPhotoInput").onchange = async e => {
     const file = e.target.files[0];
     if(!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      setZonePhoto(vehicle.id, fcState.zone, reader.result);
+    const preview = card.querySelector("#zoneDetailPhotoPreview");
+    if(preview) preview.textContent = "Compression...";
+    try{
+      const value = await compressImageV32(file, 1000, 0.7);
+      if(preview){
+        preview.classList.add("has-photo");
+        preview.style.backgroundImage = `url('${value}')`;
+        preview.textContent = "";
+      }
+      if(typeof setMediaSupabase === "function"){
+        await setMediaSupabase(vehicle.id, slot, value);
+      } else {
+        safeSetMediaV32(vehicle.id, slot, value);
+      }
       toast("Photo détaillée ajoutée à la zone");
       renderCheckSheets();
-    };
-    reader.readAsDataURL(file);
+    }catch(err){
+      console.error(err);
+      toast("Impossible d’enregistrer cette photo");
+    }
   };
 };
 
@@ -8093,6 +8112,11 @@ function mediaKeyV30(vehicleId, slot){
   return "fcm__" + vehicleId + "__" + slot;
 }
 function getMediaV30(vehicleId, slot){
+  // Priorité 1 : URL Supabase (partagée entre appareils)
+  if(typeof fcMediaUrls !== "undefined"){
+    const url = fcMediaUrls[`${vehicleId}__${slot}`];
+    if(url) return url;
+  }
   if(slot === "cover" && typeof getCoverPhoto === "function"){
     const oldCover = getCoverPhoto(vehicleId);
     if(oldCover) return oldCover;
@@ -8163,7 +8187,19 @@ function getInventoryStepStructureV30(vehicle){
     subtitle:"Contrôle adapté au matériel ou à l’engin",
     steps
   }];
-}
+
+
+function fcStepNameForZone(vehicle, zoneId){
+  const structure = getInventoryStepStructureV30(vehicle);
+  for(const section of structure){
+    for(const step of section.steps){
+      if(step.aliases.some(a => String(a).toLowerCase() === String(zoneId).toLowerCase())){
+        return step.name;
+      }
+    }
+  }
+  return zoneId;
+}}
 
 // Manager média dans la fiche inventaire
 const renderFcDetailBeforeV30 = renderFcDetail;
@@ -8491,13 +8527,18 @@ function renderMediaManagerV31(root, vehicle){
       if(preview) preview.textContent = "Compression de l’image...";
 
       try{
-        const value = await compressImageV32(file);
-        const ok = safeSetMediaV32(vehicle.id, input.dataset.mediaSlotV31, value);
-        if(!ok) throw new Error("Stockage impossible");
-
+        const value = await compressImageV32(file, 1000, 0.7);
         if(preview) preview.innerHTML = `<img src="${value}" alt="">`;
+
+        // Upload vers Supabase Storage (évite le quota localStorage)
+        if(typeof setMediaSupabase === "function"){
+          await setMediaSupabase(vehicle.id, input.dataset.mediaSlotV31, value);
+        } else {
+          safeSetMediaV32(vehicle.id, input.dataset.mediaSlotV31, value);
+        }
         toast("Photo enregistrée");
       }catch(error){
+        console.error(error);
         if(preview) preview.textContent = "📷 Ajouter photo";
         if(err){
           err.textContent = "Photo non enregistrée. Essaie une image plus légère.";

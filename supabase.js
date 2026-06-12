@@ -144,6 +144,21 @@ async function ensureTables(){
 // Remplace setMediaV30 pour uploader sur Supabase
 const _origSetMedia = typeof setMediaV30 === "function" ? setMediaV30 : null;
 
+let fcMediaUrls = {}; // { "vehicleId__slot": url }
+
+async function syncMedias(){
+  if(!sb) return;
+  try{
+    const { data, error } = await sb.from("fc_medias").select("*");
+    if(error) throw error;
+    fcMediaUrls = {};
+    (data || []).forEach(row => {
+      fcMediaUrls[`${row.vehicle_id}__${row.slot}`] = row.photo_url;
+    });
+    if(typeof renderCheckSheets === "function") renderCheckSheets();
+  }catch(e){ console.warn("syncMedias:", e); }
+}
+
 async function setMediaSupabase(vehicleId, slot, dataUrl){
   // 1. Sauvegarder localement d'abord (fallback immédiat)
   if(_origSetMedia) _origSetMedia(vehicleId, slot, dataUrl);
@@ -163,6 +178,8 @@ async function setMediaSupabase(vehicleId, slot, dataUrl){
         updated_at: new Date().toISOString()
       });
       console.log(`📸 Photo uploadée : ${url}`);
+      // Mettre à jour le cache local immédiatement (sans attendre le prochain sync)
+      if(typeof fcMediaUrls !== "undefined") fcMediaUrls[`${vehicleId}__${slot}`] = url;
     }
   }catch(e){ console.warn("setMediaSupabase:", e); }
 }
@@ -396,6 +413,7 @@ async function syncAll(){
   await syncPersonnel();
   await syncRemontees();
   await syncInventaires();
+  await syncMedias();
 
   // Vérifier que l'utilisateur connecté existe toujours dans le personnel
   const storedUser = JSON.parse(localStorage.getItem("fc_current_user") || "null");
