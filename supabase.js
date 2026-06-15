@@ -469,13 +469,22 @@ async function saveLayoutSupabase(vehicleId){
       if(msg.includes("subzones")) delete payload.subzones;
       if(!("photos" in payload) || !("subzones" in payload)){
         const retry = await sb.from("fc_layouts").upsert(payload);
-        if(retry.error) console.warn("saveLayoutSupabase erreur (retry):", retry.error.message);
-        else console.log("✅ Plan enregistré (colonnes manquantes ignorées — vérifie le schéma de fc_layouts)");
+        if(retry.error){
+          console.warn("saveLayoutSupabase erreur (retry):", retry.error.message);
+          if(typeof toast === "function") toast("⚠️ Le plan n'a pas pu être enregistré : " + retry.error.message);
+        } else {
+          console.log("✅ Plan enregistré (colonnes manquantes ignorées — vérifie le schéma de fc_layouts)");
+        }
+      } else {
+        if(typeof toast === "function") toast("⚠️ Le plan n'a pas pu être enregistré : " + error.message);
       }
     } else {
       console.log("✅ Plan enregistré sur Supabase:", vehicleId);
     }
-  }catch(e){ console.warn("saveLayoutSupabase:", e); }
+  }catch(e){
+    console.warn("saveLayoutSupabase:", e);
+    if(typeof toast === "function") toast("⚠️ Erreur lors de l'enregistrement du plan");
+  }
 }
 
 /* ============================================================
