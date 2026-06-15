@@ -396,14 +396,25 @@ async function saveVehicleSupabase(vehicle){
 async function saveInventaireItemSupabase(item){
   if(!sb || !item) return;
   try{
-    await sb.from("fc_inventaire").upsert({
+    const payload = {
       id: item.id,
       vehicle_id: item.vehicleId,
       zone: item.zone || "",
       name: item.name || "",
       qty: item.qty || 1,
       category: item.category || ""
-    });
+    };
+    let { error } = await sb.from("fc_inventaire").upsert(payload);
+    if(error){
+      console.warn("saveInventaireItemSupabase erreur:", error.message);
+      // Si la colonne category n'existe pas encore, réessayer sans elle
+      if(String(error.message || "").toLowerCase().includes("category")){
+        delete payload.category;
+        const retry = await sb.from("fc_inventaire").upsert(payload);
+        if(retry.error) console.warn("saveInventaireItemSupabase erreur (sans category):", retry.error.message);
+        else console.log("✅ Item enregistré (sans category — ajoute la colonne 'category' à fc_inventaire)");
+      }
+    }
   }catch(e){ console.warn("saveInventaireItemSupabase:", e); }
 }
 

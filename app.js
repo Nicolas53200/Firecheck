@@ -6298,7 +6298,10 @@ function renderFcDetail(root){
   document.querySelectorAll("[data-qty]").forEach(input=>{
     input.onchange = () => {
       const item = fcInventory.find(i => i.id === input.dataset.qty);
-      if(item) item.qty = Number(input.value || 1);
+      if(item){
+        item.qty = Number(input.value || 1);
+        if(typeof saveInventaireItemSupabase === "function") saveInventaireItemSupabase(item);
+      }
       renderCheckSheets();
     };
   });
