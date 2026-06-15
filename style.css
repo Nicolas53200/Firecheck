@@ -1260,14 +1260,85 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
   border-radius:16px;
   background:#fbfcff;
   padding:11px;
+  cursor:grab;
 }
+.fc-zone-item:active{ cursor:grabbing; }
 .fc-zone-item strong{display:block}
 .fc-zone-item small{color:var(--muted)}
-.fc-zone-item input{
+.fc-zone-item input[data-qty]{
   width:64px;
   border:1px solid var(--line);
   border-radius:12px;
   padding:9px;
+}
+
+/* Barre d'ajout d'emplacement précis */
+.fc-subzone-toolbar{
+  display:flex;
+  gap:8px;
+  margin:10px 0;
+}
+.fc-subzone-toolbar input{
+  flex:1;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:9px 12px;
+  font-size:13px;
+}
+.fc-subzone-toolbar button{
+  white-space:nowrap;
+}
+
+/* Groupes / sous-zones — zones de dépôt */
+.fc-sub-group{
+  display:grid;
+  gap:10px;
+  border:1.5px dashed transparent;
+  border-radius:16px;
+  padding:6px;
+  transition:background .12s, border-color .12s;
+}
+.fc-sub-group + .fc-sub-group{
+  margin-top:6px;
+  padding-top:14px;
+  border-top:1.5px dashed var(--line);
+}
+.fc-sub-group.drag-over{
+  background:#fff7f8;
+  border-color:#f4a3a7;
+}
+.fc-sub-group-head{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:12px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.4px;
+  color:var(--red);
+}
+.fc-sub-group-head span{ flex:1; }
+.fc-sub-group-head button{
+  border:none;
+  background:transparent;
+  font-size:13px;
+  cursor:pointer;
+  opacity:.6;
+  padding:2px 4px;
+  border-radius:6px;
+}
+.fc-sub-group-head button:hover{
+  opacity:1;
+  background:rgba(0,0,0,.06);
+}
+.fc-sub-empty{
+  border:1.5px dashed #cbd5e1;
+  background:#f8fafc;
+  border-radius:14px;
+  padding:14px;
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
 }
 .fc-empty{
   border:1px dashed #cbd5e1;
@@ -2101,6 +2172,19 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
   .print-table tr:last-child td{
     border-bottom: none;
   }
+  .print-subloc-row td{
+    padding: 1.5mm 2mm 0.8mm;
+    font-size: 7.5pt;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    color: #d71920;
+    border-bottom: 1px solid #f1f5f9;
+    background: #fef2f3;
+  }
+  .print-subloc-row:first-child td{
+    padding-top: 0.8mm;
+  }
   .print-col-qty{
     width: 12mm;
     text-align: center;
@@ -2424,6 +2508,21 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
   inset:0;
   background:rgba(15,23,42,.26);
   pointer-events:none;
+}
+.check-photo-empty{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+.check-photo-empty::before{ display:none; }
+.check-photo-empty p{
+  position:relative;
+  z-index:1;
+  color:#cbd5e1;
+  text-align:center;
+  font-size:13px;
+  margin:0;
 }
 .check-zone-hotspot{
   position:absolute;

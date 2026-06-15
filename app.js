@@ -5779,6 +5779,19 @@ const fcDefaultViews = [
 // Vues personnalisées par véhicule, stockées en localStorage
 let fcVehicleViews = JSON.parse(localStorage.getItem("fc_vehicle_views") || "{}");
 
+// Sous-emplacements (sous-zones) par véhicule/zone : { vehicleId: { zoneId: ["Sous la banquette", ...] } }
+let fcSubZones = JSON.parse(localStorage.getItem("fc_subzones") || "{}");
+
+function fcSaveSubZones(){
+  localStorage.setItem("fc_subzones", JSON.stringify(fcSubZones));
+}
+
+function fcGetSubZones(vehicleId, zoneId){
+  fcSubZones[vehicleId] = fcSubZones[vehicleId] || {};
+  fcSubZones[vehicleId][zoneId] = fcSubZones[vehicleId][zoneId] || [];
+  return fcSubZones[vehicleId][zoneId];
+}
+
 function fcSaveVehicleViews(){
   localStorage.setItem("fc_vehicle_views", JSON.stringify(fcVehicleViews));
 }
@@ -6120,13 +6133,42 @@ function renderFcDetail(root){
         <h3>Zone sélectionnée</h3>
         ${selectedZone ? `
           <input class="fc-zone-name" id="fcZoneName" value="${fcEsc(selectedZone.label)}">
+
+          <div class="fc-subzone-toolbar">
+            <input id="fcNewSubZone" placeholder="Nom du nouvel emplacement (ex: Sous la banquette)">
+            <button class="btn secondary" id="fcAddSubZone">+ Créer un emplacement</button>
+          </div>
+
           <div class="fc-zone-drop" id="fcDrop">
-            ${zoneItems.length ? zoneItems.map(i=>`
-              <div class="fc-zone-item">
-                <div><strong>${i.name}</strong><small>${i.category || "Sans catégorie"}</small></div>
-                <input type="number" min="1" value="${i.qty}" data-qty="${i.id}">
-                <button class="delete-mini" data-delete="${i.id}">Suppr.</button>
-              </div>`).join("") : `<div class="fc-empty">Glisse ici du matériel depuis la bibliothèque.</div>`}
+            ${(() => {
+              const definedSubs = fcGetSubZones(vehicle.id, selectedZone.id);
+              const itemSubs = [...new Set(zoneItems.map(i => i.subLocation || "").filter(Boolean))];
+              const allSubs = [...new Set([...definedSubs, ...itemSubs])];
+
+              const renderGroup = (subName, items) => `
+                <div class="fc-sub-group" data-subzone-drop="${fcEsc(subName)}">
+                  <div class="fc-sub-group-head">
+                    <span>${subName ? fcEsc(subName) : "Emplacement général"}</span>
+                    ${subName ? `<button class="fc-sub-rename" data-sub-rename="${fcEsc(subName)}" title="Renommer cet emplacement">✏️</button>
+                             <button class="fc-sub-delete" data-sub-delete="${fcEsc(subName)}" title="Supprimer cet emplacement">🗑️</button>` : ""}
+                  </div>
+                  ${items.length ? items.map(i=>`
+                    <div class="fc-zone-item" draggable="true" data-move-item="${i.id}">
+                      <div><strong>${i.name}</strong><small>${i.category || "Sans catégorie"}</small></div>
+                      <input type="number" min="1" value="${i.qty}" data-qty="${i.id}" draggable="false">
+                      <button class="delete-mini" data-delete="${i.id}" draggable="false">Suppr.</button>
+                    </div>`).join("") : `<div class="fc-sub-empty">Glisse du matériel ici${subName ? "" : " depuis la bibliothèque"}.</div>`}
+                </div>
+              `;
+
+              const generalItems = zoneItems.filter(i => !(i.subLocation || ""));
+              let html = renderGroup("", generalItems);
+              allSubs.forEach(sub => {
+                const items = zoneItems.filter(i => (i.subLocation || "") === sub);
+                html += renderGroup(sub, items);
+              });
+              return html;
+            })()}
           </div>
         ` : `<div class="fc-empty">Aucune zone sur cette vue. Clique sur “Ajouter zone”.</div>`}
       </aside>
@@ -6271,21 +6313,108 @@ function renderFcDetail(root){
     };
   }
 
-  const drop = document.getElementById("fcDrop");
-  if(drop){
-    drop.ondragover = e => { e.preventDefault(); drop.classList.add("drag-over"); };
-    drop.ondragleave = () => drop.classList.remove("drag-over");
-    drop.ondrop = e => {
+  // Glisser-déposer par groupe (Emplacement général + emplacements précis)
+  document.querySelectorAll("[data-subzone-drop]").forEach(group => {
+    const subName = group.dataset.subzoneDrop;
+    group.ondragover = e => { e.preventDefault(); group.classList.add("drag-over"); };
+    group.ondragleave = () => group.classList.remove("drag-over");
+    group.ondrop = e => {
       e.preventDefault();
-      drop.classList.remove("drag-over");
-      const item = JSON.parse(e.dataTransfer.getData("application/json"));
-      const newItem = {id:"fcitem-" + Date.now(), vehicleId:vehicle.id, zone:fcState.zone, name:item.name, category:item.family, qty:item.qty || 1};
+      group.classList.remove("drag-over");
+      let data;
+      try{ data = JSON.parse(e.dataTransfer.getData("application/json")); }catch(err){ return; }
+
+      if(data.moveItemId){
+        // Déplacer un matériel existant vers cet emplacement
+        const item = fcInventory.find(i => i.id === data.moveItemId);
+        if(item && (item.subLocation || "") !== subName){
+          item.subLocation = subName;
+          if(typeof saveInventaireItemSupabase === "function") saveInventaireItemSupabase(item);
+          renderCheckSheets();
+        }
+        return;
+      }
+
+      // Nouveau matériel depuis la bibliothèque
+      const newItem = {id:"fcitem-" + Date.now(), vehicleId:vehicle.id, zone:fcState.zone, name:data.name, category:data.family, qty:data.qty || 1, subLocation:subName};
       fcInventory.push(newItem);
       if(typeof saveInventaireItemSupabase === "function") saveInventaireItemSupabase(newItem);
-      toast(`${item.name} ajouté à ${fcState.zone}`);
+      toast(`${data.name} ajouté${subName ? " à " + subName : " à " + fcState.zone}`);
       renderCheckSheets();
     };
+  });
+
+  // Glisser un matériel déjà placé pour le déplacer entre emplacements
+  document.querySelectorAll("[data-move-item]").forEach(el => {
+    el.ondragstart = e => {
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("application/json", JSON.stringify({moveItemId: el.dataset.moveItem}));
+    };
+  });
+
+  // Créer un nouvel emplacement précis (sous-zone) — vide, prêt à recevoir du matériel
+  const addSubZoneBtn = document.getElementById("fcAddSubZone");
+  const newSubZoneInput = document.getElementById("fcNewSubZone");
+  if(addSubZoneBtn){
+    addSubZoneBtn.onclick = () => {
+      const name = (newSubZoneInput?.value || "").trim();
+      if(!name){ toast("Indique un nom pour ce nouvel emplacement"); return; }
+      const subs = fcGetSubZones(vehicle.id, fcState.zone);
+      if(subs.includes(name)){ toast("Cet emplacement existe déjà"); return; }
+      subs.push(name);
+      fcSaveSubZones();
+      if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
+      if(newSubZoneInput) newSubZoneInput.value = "";
+      renderCheckSheets();
+      toast(`Emplacement "${name}" créé`);
+    };
   }
+
+  // Renommer un emplacement précis (déplace tous les matériels associés)
+  document.querySelectorAll("[data-sub-rename]").forEach(btn => {
+    btn.onclick = () => {
+      const oldName = btn.dataset.subRename;
+      const newName = prompt(`Renommer l'emplacement "${oldName}" en :`, oldName);
+      if(newName === null || !newName.trim() || newName.trim() === oldName) return;
+      const trimmed = newName.trim();
+      const subs = fcGetSubZones(vehicle.id, fcState.zone);
+      const idx = subs.indexOf(oldName);
+      if(idx >= 0) subs[idx] = trimmed; else subs.push(trimmed);
+      fcInventory.forEach(i => {
+        if(i.vehicleId === vehicle.id && i.zone === fcState.zone && (i.subLocation || "") === oldName){
+          i.subLocation = trimmed;
+          if(typeof saveInventaireItemSupabase === "function") saveInventaireItemSupabase(i);
+        }
+      });
+      fcSaveSubZones();
+      if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
+      renderCheckSheets();
+    };
+  });
+
+  // Supprimer un emplacement précis (les matériels repassent en Emplacement général)
+  document.querySelectorAll("[data-sub-delete]").forEach(btn => {
+    btn.onclick = () => {
+      const name = btn.dataset.subDelete;
+      const count = fcInventory.filter(i => i.vehicleId === vehicle.id && i.zone === fcState.zone && (i.subLocation || "") === name).length;
+      const msg = count > 0
+        ? `Supprimer l'emplacement "${name}" ? ${count} matériel(s) repasseront dans "Emplacement général".`
+        : `Supprimer l'emplacement "${name}" ?`;
+      if(!confirm(msg)) return;
+      const subs = fcGetSubZones(vehicle.id, fcState.zone);
+      const idx = subs.indexOf(name);
+      if(idx >= 0) subs.splice(idx, 1);
+      fcInventory.forEach(i => {
+        if(i.vehicleId === vehicle.id && i.zone === fcState.zone && (i.subLocation || "") === name){
+          i.subLocation = "";
+          if(typeof saveInventaireItemSupabase === "function") saveInventaireItemSupabase(i);
+        }
+      });
+      fcSaveSubZones();
+      if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
+      renderCheckSheets();
+    };
+  });
 
   document.querySelectorAll("[data-delete]").forEach(btn=>{
     btn.onclick = () => {
@@ -6451,13 +6580,30 @@ function fcPrintInventory(){
               <table class="print-table">
                 <thead><tr><th>Désignation</th><th class="print-col-qty">Qté</th><th class="print-col-check">✓</th></tr></thead>
                 <tbody>
-                  ${items.map(item => `
-                    <tr>
-                      <td>${fcEsc(item.name)}</td>
-                      <td class="print-col-qty">${fcEsc(String(item.qty))}</td>
-                      <td class="print-col-check"></td>
-                    </tr>
-                  `).join("")}
+                  ${(() => {
+                    // Regrouper par emplacement précis (sous-zone) — "Emplacement général" en premier
+                    const groups = {};
+                    items.forEach(item => {
+                      const key = item.subLocation || "";
+                      (groups[key] = groups[key] || []).push(item);
+                    });
+                    const orderedKeys = Object.keys(groups).sort((a,b) => a === "" ? -1 : b === "" ? 1 : a.localeCompare(b));
+                    const onlyGeneral = orderedKeys.length === 1 && orderedKeys[0] === "";
+                    return orderedKeys.map(key => `
+                      ${!onlyGeneral ? `
+                        <tr class="print-subloc-row">
+                          <td colspan="3">${key ? fcEsc(key) : "Emplacement général"}</td>
+                        </tr>
+                      ` : ""}
+                      ${groups[key].map(item => `
+                        <tr>
+                          <td>${fcEsc(item.name)}</td>
+                          <td class="print-col-qty">${fcEsc(String(item.qty))}</td>
+                          <td class="print-col-check"></td>
+                        </tr>
+                      `).join("")}
+                    `).join("");
+                  })()}
                 </tbody>
               </table>
             ` : `<div class="print-empty-step">Aucun matériel renseigné pour cette zone.</div>`}
@@ -6614,7 +6760,8 @@ renderFcDetail = function(root){
         zone:fcState.zone,
         name:el.dataset.name,
         category:el.dataset.family,
-        qty:Number(el.dataset.qty || 1)
+        qty:Number(el.dataset.qty || 1),
+        subLocation:""
       };
       fcInventory.push(dblItem);
       if(typeof saveInventaireItemSupabase === "function") saveInventaireItemSupabase(dblItem);
@@ -7741,18 +7888,17 @@ function getCheckVehicleV27(){
 function checkViewsV27(vehicleId){
   const layouts = (typeof fcLayouts !== "undefined" ? fcLayouts : {});
   const photos = (typeof fcPhotos !== "undefined" ? fcPhotos : {});
-  const baseViews = [
-    {id:"avant", label:"AVANT"},
-    {id:"droite", label:"CÔTÉ D"},
-    {id:"arriere", label:"ARRIÈRE"},
-    {id:"gauche", label:"CÔTÉ G"},
-    {id:"toit", label:"TOIT"}
-  ];
-  return baseViews.map(v => ({
-    ...v,
-    zones: layouts[vehicleId]?.[v.id] || [],
-    photo: photos[vehicleId]?.[v.id] || ""
-  }));
+  // Utilise les vues définies par ST (personnalisées par véhicule), pour rester
+  // synchronisé avec ce qui a été configuré dans la fiche d'inventaire.
+  const views = (typeof fcGetViews === "function") ? fcGetViews(vehicleId) : [];
+  return views
+    .map(v => ({
+      ...v,
+      zones: layouts[vehicleId]?.[v.id] || [],
+      photo: photos[vehicleId]?.[v.id] || ""
+    }))
+    // Ne propose que les vues qui ont au moins une zone ou une photo définie
+    .filter(v => v.zones.length > 0 || v.photo);
 }
 
 function guidedOrderV27(vehicleId){
@@ -7829,7 +7975,7 @@ function renderStep(){
   const step = getCurrentStepV27(vehicle.id);
   const doneCount = order.filter(s => checkV27.done[s.zone]).length;
   const percent = Math.round((doneCount / order.length) * 100);
-  const activeView = views.find(v => v.id === checkV27.view) || views[0];
+  const activeView = views.find(v => v.id === checkV27.view) || views[0] || {id:"", label:"", zones:[], photo:""};
   const items = getZoneItemsV27(vehicle.id, step);
 
   checkScreen.innerHTML = `
@@ -7856,23 +8002,29 @@ function renderStep(){
         </div>
 
         <div class="check-carousel-tabs">
-          ${views.map(v => {
+          ${views.length ? views.map(v => {
             const viewZones = v.zones || [];
             const viewDone = viewZones.length && viewZones.every(z => checkV27.done[z.id] || order.some(s => s.aliases.includes(z.id) && checkV27.done[s.zone]));
             const hasIssue = viewZones.some(z => checkV27.issues[z.id] || order.some(s => s.aliases.includes(z.id) && checkV27.issues[s.zone]));
             const icon = hasIssue ? "🔴" : viewDone ? "🟢" : "⚪";
-            return `<button class="check-view-tab ${v.id === activeView.id ? "active" : ""}" data-check-view="${v.id}">${icon} ${v.label}</button>`;
-          }).join("")}
+            return `<button class="check-view-tab ${v.id === activeView.id ? "active" : ""}" data-check-view="${v.id}">${icon} ${fcEsc(v.label)}</button>`;
+          }).join("") : ""}
         </div>
 
-        <div class="check-photo-stage" style="${activeView.photo ? `background-image:url('${activeView.photo}')` : ""}">
-          ${activeView.zones.map(z => {
-            const mappedStep = order.find(s => s.aliases.some(a => String(a).toLowerCase() === String(z.id).toLowerCase()));
-            const key = mappedStep?.zone || z.id;
-            const cls = checkV27.issues[key] ? "issue" : checkV27.done[key] ? "done" : key === step.zone ? "active" : "";
-            return `<button class="check-zone-hotspot ${cls}" data-check-zone="${z.id}" data-check-view="${activeView.id}" style="left:${z.x}%;top:${z.y}%;width:${z.w}%;height:${z.h}%">${z.label || z.id}</button>`;
-          }).join("")}
-        </div>
+        ${views.length ? `
+          <div class="check-photo-stage" style="${activeView.photo ? `background-image:url('${activeView.photo}')` : ""}">
+            ${(activeView.zones || []).map(z => {
+              const mappedStep = order.find(s => s.aliases.some(a => String(a).toLowerCase() === String(z.id).toLowerCase()));
+              const key = mappedStep?.zone || z.id;
+              const cls = checkV27.issues[key] ? "issue" : checkV27.done[key] ? "done" : key === step.zone ? "active" : "";
+              return `<button class="check-zone-hotspot ${cls}" data-check-zone="${z.id}" data-check-view="${activeView.id}" style="left:${z.x}%;top:${z.y}%;width:${z.w}%;height:${z.h}%">${fcEsc(z.label || z.id)}</button>`;
+            }).join("")}
+          </div>
+        ` : `
+          <div class="check-photo-stage check-photo-empty">
+            <p>Aucun plan/zone configuré pour ${fcEsc(vehicle.name)}. Configure les zones depuis ST → Fiches de vérification.</p>
+          </div>
+        `}
       </section>
 
       <section class="guided-card-v27">
