@@ -360,7 +360,7 @@ async function syncInventaires(){
     if(iData){
       fcInventory.length = 0;
       iData.forEach(item => {
-        fcInventory.push({id:item.id, vehicleId:item.vehicle_id, zone:item.zone, name:item.name, qty:item.qty, category:item.category});
+        fcInventory.push({id:item.id, vehicleId:item.vehicle_id, zone:item.zone, name:item.name, qty:item.qty, category:item.category, subLocation:item.sub_location || ""});
       });
       if(typeof renderCheckSheets === "function") renderCheckSheets();
     }
@@ -402,17 +402,20 @@ async function saveInventaireItemSupabase(item){
       zone: item.zone || "",
       name: item.name || "",
       qty: item.qty || 1,
-      category: item.category || ""
+      category: item.category || "",
+      sub_location: item.subLocation || ""
     };
     let { error } = await sb.from("fc_inventaire").upsert(payload);
     if(error){
       console.warn("saveInventaireItemSupabase erreur:", error.message);
-      // Si la colonne category n'existe pas encore, réessayer sans elle
-      if(String(error.message || "").toLowerCase().includes("category")){
-        delete payload.category;
+      const msg = String(error.message || "").toLowerCase();
+      // Réessayer en retirant les colonnes manquantes une à une
+      if(msg.includes("category")) delete payload.category;
+      if(msg.includes("sub_location")) delete payload.sub_location;
+      if(!("category" in payload) || !("sub_location" in payload)){
         const retry = await sb.from("fc_inventaire").upsert(payload);
-        if(retry.error) console.warn("saveInventaireItemSupabase erreur (sans category):", retry.error.message);
-        else console.log("✅ Item enregistré (sans category — ajoute la colonne 'category' à fc_inventaire)");
+        if(retry.error) console.warn("saveInventaireItemSupabase erreur (retry):", retry.error.message);
+        else console.log("✅ Item enregistré (colonnes manquantes ignorées — vérifie le schéma de fc_inventaire)");
       }
     }
   }catch(e){ console.warn("saveInventaireItemSupabase:", e); }
@@ -438,8 +441,10 @@ async function syncLayouts(){
       if(row.layouts) fcLayouts[row.vehicle_id] = row.layouts;
       if(row.views) fcVehicleViews[row.vehicle_id] = row.views;
       if(row.photos) fcPhotos[row.vehicle_id] = row.photos;
+      if(row.subzones) fcSubZones[row.vehicle_id] = row.subzones;
     });
     if(typeof fcSaveVehicleViews === "function") fcSaveVehicleViews();
+    if(typeof fcSaveSubZones === "function") fcSaveSubZones();
     if(typeof renderCheckSheets === "function") renderCheckSheets();
   }catch(e){ console.warn("syncLayouts:", e); }
 }
@@ -453,17 +458,19 @@ async function saveLayoutSupabase(vehicleId){
       layouts: fcLayouts[vehicleId] || {},
       views: fcGetViews(vehicleId),
       photos: fcPhotos[vehicleId] || {},
+      subzones: fcSubZones[vehicleId] || {},
       updated_at: new Date().toISOString()
     };
     let { error } = await sb.from("fc_layouts").upsert(payload);
     if(error){
-      console.warn("saveLayoutSupabase erreur (avec photos):", error.message);
-      // Si la colonne photos n'existe pas encore, réessayer sans elle
-      if(String(error.message || "").toLowerCase().includes("photos")){
-        delete payload.photos;
+      console.warn("saveLayoutSupabase erreur:", error.message);
+      const msg = String(error.message || "").toLowerCase();
+      if(msg.includes("photos")) delete payload.photos;
+      if(msg.includes("subzones")) delete payload.subzones;
+      if(!("photos" in payload) || !("subzones" in payload)){
         const retry = await sb.from("fc_layouts").upsert(payload);
-        if(retry.error) console.warn("saveLayoutSupabase erreur (sans photos):", retry.error.message);
-        else console.log("✅ Plan enregistré (sans photos — ajoute la colonne 'photos' à fc_layouts)");
+        if(retry.error) console.warn("saveLayoutSupabase erreur (retry):", retry.error.message);
+        else console.log("✅ Plan enregistré (colonnes manquantes ignorées — vérifie le schéma de fc_layouts)");
       }
     } else {
       console.log("✅ Plan enregistré sur Supabase:", vehicleId);
