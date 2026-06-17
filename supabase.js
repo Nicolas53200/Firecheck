@@ -596,6 +596,92 @@ async function saveLayoutSupabase(vehicleId){
 }
 
 /* ============================================================
+   SYNC — Véhicules et matériels techniques (entretien)
+   ============================================================ */
+
+async function syncAssets(){
+  if(!sb) return;
+  try{
+    const { data, error } = await sb.from("fc_assets").select("*");
+    if(error) throw error;
+    if(data && data.length > 0 && typeof vehicles !== "undefined" && typeof equipment !== "undefined"){
+      const vehicleAssets = data.filter(a => a.mode === "vehicle").map(mapAssetFromSupabase);
+      const equipmentAssets = data.filter(a => a.mode === "equipment").map(mapAssetFromSupabase);
+      if(vehicleAssets.length) vehicles = vehicleAssets;
+      if(equipmentAssets.length) equipment = equipmentAssets;
+      if(typeof renderAll === "function") renderAll();
+    }
+  }catch(e){ console.warn("syncAssets:", e); }
+}
+
+function mapAssetFromSupabase(a){
+  return {
+    id: a.id,
+    name: a.name,
+    detail: a.detail,
+    type: a.type,
+    followType: a.follow_type,
+    currentValue: a.current_value,
+    unit: a.unit,
+    lastServiceValue: a.last_service_value,
+    intervalValue: a.interval_value,
+    nextControlDate: a.next_control_date || "",
+    ct: a.next_control_date || "—",
+    notes: a.notes || "",
+    lastReadingMonth: a.last_reading_month || ""
+  };
+}
+
+async function saveAssetSupabase(asset, mode){
+  if(!sb || !asset) return;
+  try{
+    const payload = {
+      id: asset.id,
+      mode: mode,
+      name: asset.name,
+      detail: asset.detail || "",
+      type: asset.type || "",
+      follow_type: asset.followType || "km",
+      current_value: asset.currentValue || 0,
+      unit: asset.unit || "",
+      last_service_value: asset.lastServiceValue || 0,
+      interval_value: asset.intervalValue || 0,
+      next_control_date: asset.nextControlDate || "",
+      notes: asset.notes || "",
+      last_reading_month: asset.lastReadingMonth || ""
+    };
+    let { error } = await sb.from("fc_assets").upsert(payload);
+    if(error){
+      console.warn("saveAssetSupabase erreur:", error.message);
+      const msg = String(error.message || "").toLowerCase();
+      if(msg.includes("last_reading_month")) delete payload.last_reading_month;
+      const retry = await sb.from("fc_assets").upsert(payload);
+      if(retry.error){
+        console.warn("saveAssetSupabase erreur (retry):", retry.error.message);
+        if(typeof toast === "function") toast("⚠️ Élément non enregistré : " + retry.error.message);
+      } else {
+        console.log("✅ Véhicule/matériel enregistré (colonne manquante ignorée):", asset.id);
+      }
+    } else {
+      console.log("✅ Véhicule/matériel enregistré:", asset.id);
+    }
+  }catch(e){ console.warn("saveAssetSupabase:", e); }
+}
+
+async function deleteAssetSupabase(id){
+  if(!sb) return;
+  try{
+    const { error } = await sb.from("fc_assets").delete().eq("id", id);
+    if(error){
+      console.warn("deleteAssetSupabase erreur:", error.message);
+      if(typeof toast === "function") toast("⚠️ Suppression non enregistrée : " + error.message);
+    } else {
+      console.log("✅ Véhicule/matériel supprimé:", id);
+    }
+  }catch(e){ console.warn("deleteAssetSupabase:", e); }
+}
+
+/* ============================================================
    SYNC GLOBAL — appelé au démarrage
    ============================================================ */
 
@@ -608,6 +694,7 @@ async function syncAll(){
   await syncInventaires();
   await syncMedias();
   await syncLayouts();
+  await syncAssets();
 
   // Vérifier que l'utilisateur connecté existe toujours dans le personnel
   const storedUser = JSON.parse(localStorage.getItem("fc_current_user") || "null");

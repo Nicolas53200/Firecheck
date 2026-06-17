@@ -305,16 +305,16 @@ let reports = [
   }
 ];
 
-const vehicles = [
-  {name:"FPT GO", detail:"GQ 311 JE", ct:"12/09/2026", oil:"18/07/2026", km:"48 230 km", state:"ok"},
-  {name:"VSAV 02", detail:"Immat AB-123-CD", ct:"20/06/2026", oil:"02/07/2026", km:"82 110 km", state:"soon"},
-  {name:"CCF 01", detail:"Immat EF-456-GH", ct:"04/06/2026", oil:"En retard", km:"61 400 km", state:"late"}
+let vehicles = [
+  {id:"asset-veh-1", name:"FPT GO", detail:"GQ 311 JE", ct:"12/09/2026", oil:"18/07/2026", km:"48 230 km", state:"ok"},
+  {id:"asset-veh-2", name:"VSAV 02", detail:"Immat AB-123-CD", ct:"20/06/2026", oil:"02/07/2026", km:"82 110 km", state:"soon"},
+  {id:"asset-veh-3", name:"CCF 01", detail:"Immat EF-456-GH", ct:"04/06/2026", oil:"En retard", km:"61 400 km", state:"late"}
 ];
 
-const equipment = [
-  {name:"MPR 02", detail:"Motopompe remorquable", ct:"—", oil:"Révision 14/08/2026", km:"128 h", state:"ok"},
-  {name:"Motopompe 01", detail:"Pompe portable", ct:"—", oil:"Vidange 22/06/2026", km:"76 h", state:"soon"},
-  {name:"Groupe électrogène", detail:"Lot éclairage", ct:"—", oil:"Révision en retard", km:"214 h", state:"late"}
+let equipment = [
+  {id:"asset-eq-1", name:"MPR 02", detail:"Motopompe remorquable", ct:"—", oil:"Révision 14/08/2026", km:"128 h", state:"ok"},
+  {id:"asset-eq-2", name:"Motopompe 01", detail:"Pompe portable", ct:"—", oil:"Vidange 22/06/2026", km:"76 h", state:"soon"},
+  {id:"asset-eq-3", name:"Groupe électrogène", detail:"Lot éclairage", ct:"—", oil:"Révision en retard", km:"214 h", state:"late"}
 ];
 
 let serviceInventory = [{"id": "FPTGO-Z01-M001", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Côté conducteur", "zoneOrder": 1, "itemOrder": 1, "name": "Gilet haute visibilité conducteur", "qty": 1, "unit": "pièce", "category": "EPI", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M002", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Côté conducteur", "zoneOrder": 1, "itemOrder": 2, "name": "Carte carburant", "qty": 1, "unit": "pièce", "category": "Document / carte", "criticality": "Importante", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M003", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Côté conducteur", "zoneOrder": 1, "itemOrder": 3, "name": "Outil OFD", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M004", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Côté conducteur", "zoneOrder": 1, "itemOrder": 4, "name": "Clés gaz", "qty": 1, "unit": "lot", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M005", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Côté conducteur", "zoneOrder": 1, "itemOrder": 5, "name": "Rouleau de rubalise", "qty": 1, "unit": "rouleau", "category": "Balisage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M006", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Côté conducteur", "zoneOrder": 1, "itemOrder": 6, "name": "Boîte de craies", "qty": 1, "unit": "boîte", "category": "Balisage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M007", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 7, "name": "Double de clé", "qty": 1, "unit": "pièce", "category": "Clés / accès", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M008", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 8, "name": "Badge autoroute", "qty": 1, "unit": "pièce", "category": "Document / carte", "criticality": "Importante", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M009", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 9, "name": "Portatifs TPH 900", "qty": 2, "unit": "pièces", "category": "Communication", "criticality": "Importante", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M010", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 10, "name": "Projecteur", "qty": 1, "unit": "pièce", "category": "Éclairage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M011", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 11, "name": "Explosimètre", "qty": 1, "unit": "pièce", "category": "Détection", "criticality": "Importante", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M012", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 12, "name": "Kit radio", "qty": 1, "unit": "kit", "category": "Communication", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M013", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 13, "name": "Classeur cartographie", "qty": 1, "unit": "classeur", "category": "Documents", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M014", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 14, "name": "Classeur PI", "qty": 1, "unit": "classeur", "category": "Documents", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M015", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 15, "name": "Classeur opérationnel", "qty": 1, "unit": "classeur", "category": "Documents", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M016", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 16, "name": "Polycoise", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M017", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 17, "name": "Pochette véhicule", "qty": 1, "unit": "pochette", "category": "Documents", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M018", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 18, "name": "PNRPA", "qty": 1, "unit": "pochette", "category": "Documents", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M019", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Côté chef d’agrès", "zoneOrder": 1, "itemOrder": 19, "name": "Gilet haute visibilité chef d’agrès", "qty": 1, "unit": "pièce", "category": "EPI", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M020", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Côté chef d’agrès", "zoneOrder": 1, "itemOrder": 20, "name": "ARI chef d’agrès avec BSL, liaison personnel et masque", "qty": 1, "unit": "ensemble", "category": "ARI", "criticality": "Critique", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z02-M001", "vehicle": "FPT GO", "zone": "Cabine arrière", "subzone": "Matériel cabine arrière", "zoneOrder": 2, "itemOrder": 1, "name": "ARI avec BSL, liaison personnel, Rhinoevac et masque", "qty": 4, "unit": "ensembles", "category": "ARI", "criticality": "Critique", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z02-M002", "vehicle": "FPT GO", "zone": "Cabine arrière", "subzone": "Matériel cabine arrière", "zoneOrder": 2, "itemOrder": 2, "name": "Projecteurs", "qty": 5, "unit": "pièces", "category": "Éclairage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z02-M003", "vehicle": "FPT GO", "zone": "Cabine arrière", "subzone": "Matériel cabine arrière", "zoneOrder": 2, "itemOrder": 3, "name": "Portatifs TPH 900", "qty": 2, "unit": "pièces", "category": "Communication", "criticality": "Importante", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z02-M004", "vehicle": "FPT GO", "zone": "Cabine arrière", "subzone": "Matériel cabine arrière", "zoneOrder": 2, "itemOrder": 4, "name": "Commandes en sac", "qty": 2, "unit": "sacs", "category": "Commandement", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z02-M005", "vehicle": "FPT GO", "zone": "Cabine arrière", "subzone": "Matériel cabine arrière", "zoneOrder": 2, "itemOrder": 5, "name": "Gilets haute visibilité", "qty": 4, "unit": "pièces", "category": "EPI", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z02-M006", "vehicle": "FPT GO", "zone": "Cabine arrière", "subzone": "Matériel cabine arrière", "zoneOrder": 2, "itemOrder": 6, "name": "Cagoules d’évacuation", "qty": 2, "unit": "pièces", "category": "Sauvetage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z02-M007", "vehicle": "FPT GO", "zone": "Cabine arrière", "subzone": "Matériel cabine arrière", "zoneOrder": 2, "itemOrder": 7, "name": "Spiraled rouges et vertes", "qty": 4, "unit": "pièces", "category": "Signalisation", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z02-M008", "vehicle": "FPT GO", "zone": "Cabine arrière", "subzone": "Matériel cabine arrière", "zoneOrder": 2, "itemOrder": 8, "name": "Caisse eau sous les sièges", "qty": 1, "unit": "caisse", "category": "Consommable", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z03-M001", "vehicle": "FPT GO", "zone": "Coffre arrière cabine", "subzone": "Coffre", "zoneOrder": 3, "itemOrder": 1, "name": "Aspiraux", "qty": 5, "unit": "pièces", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z03-M002", "vehicle": "FPT GO", "zone": "Coffre arrière cabine", "subzone": "Coffre", "zoneOrder": 3, "itemOrder": 2, "name": "Carquois avec tiges de ramonage", "qty": 1, "unit": "ensemble", "category": "Feux de cheminée", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z03-M003", "vehicle": "FPT GO", "zone": "Coffre arrière cabine", "subzone": "Coffre", "zoneOrder": 3, "itemOrder": 3, "name": "Barre de maintien cabine", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z04-M001", "vehicle": "FPT GO", "zone": "Rideau avant gauche", "subzone": "Haut", "zoneOrder": 4, "itemOrder": 1, "name": "Caisses vides pour tenues souillées", "qty": 2, "unit": "caisses", "category": "Rangement", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z04-M002", "vehicle": "FPT GO", "zone": "Rideau avant gauche", "subzone": "Haut", "zoneOrder": 4, "itemOrder": 2, "name": "Caisse lot de bord", "qty": 1, "unit": "caisse", "category": "Lot de bord", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z04-M003", "vehicle": "FPT GO", "zone": "Rideau avant gauche", "subzone": "Milieu", "zoneOrder": 4, "itemOrder": 3, "name": "Pulvérisateur dorsal souple", "qty": 1, "unit": "pièce", "category": "Extinction", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z04-M004", "vehicle": "FPT GO", "zone": "Rideau avant gauche", "subzone": "Milieu", "zoneOrder": 4, "itemOrder": 4, "name": "Lance feux de cheminée", "qty": 1, "unit": "pièce", "category": "Feux de cheminée", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z04-M005", "vehicle": "FPT GO", "zone": "Rideau avant gauche", "subzone": "Milieu", "zoneOrder": 4, "itemOrder": 5, "name": "Seau acier avec pelle, gants, hérisson, miroir, massette et burins", "qty": 1, "unit": "ensemble", "category": "Feux de cheminée", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z04-M006", "vehicle": "FPT GO", "zone": "Rideau avant gauche", "subzone": "Bas", "zoneOrder": 4, "itemOrder": 6, "name": "Ventilateur sur batterie", "qty": 1, "unit": "pièce", "category": "Ventilation", "criticality": "Importante", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z04-M007", "vehicle": "FPT GO", "zone": "Rideau avant gauche", "subzone": "Bas", "zoneOrder": 4, "itemOrder": 7, "name": "Extincteurs poudre 9 kg", "qty": 2, "unit": "pièces", "category": "Extinction", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z04-M008", "vehicle": "FPT GO", "zone": "Rideau avant gauche", "subzone": "Bas", "zoneOrder": 4, "itemOrder": 8, "name": "Extincteur CO2 5 kg", "qty": 1, "unit": "pièce", "category": "Extinction", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M001", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Haut", "zoneOrder": 5, "itemOrder": 1, "name": "Caisse vide", "qty": 1, "unit": "caisse", "category": "Rangement", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M002", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Haut", "zoneOrder": 5, "itemOrder": 2, "name": "Tuyau de 45 en couronne", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M003", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Haut", "zoneOrder": 5, "itemOrder": 3, "name": "Caisse vide avec caoutchoucs réserve Rhinoevac", "qty": 1, "unit": "caisse", "category": "Rangement", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M004", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 4, "name": "LM2", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M005", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 5, "name": "Lance queue de paon", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M006", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 6, "name": "LDMR 500", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M007", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 7, "name": "LDV 1000", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M008", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 8, "name": "Réduction 100 x 65", "qty": 1, "unit": "pièce", "category": "Raccord", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M009", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 9, "name": "Réduction 65 x 40", "qty": 1, "unit": "pièce", "category": "Raccord", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M010", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 10, "name": "Division 100 / 2 x 65", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M011", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 11, "name": "Division 65 / 2 x 40", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M012", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 12, "name": "Retenue", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M013", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 13, "name": "Coude de 100 raccord Keiser", "qty": 1, "unit": "pièce", "category": "Raccord", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M014", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 14, "name": "Tuyaux de 70 - 20 m en couronne", "qty": 2, "unit": "pièces", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M015", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 15, "name": "Polycoises", "qty": 4, "unit": "pièces", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M001", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Haut", "zoneOrder": 6, "itemOrder": 1, "name": "Caisse accessoires hydrauliques", "qty": 1, "unit": "caisse", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M002", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Haut", "zoneOrder": 6, "itemOrder": 2, "name": "Caisse gaz", "qty": 1, "unit": "caisse", "category": "Gaz", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M003", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Milieu", "zoneOrder": 6, "itemOrder": 3, "name": "Échelle télescopique", "qty": 1, "unit": "pièce", "category": "Échelle", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M004", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Milieu", "zoneOrder": 6, "itemOrder": 4, "name": "LAT : tuyau Ø45 x20 m en O avec lance gâchette", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M005", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Milieu", "zoneOrder": 6, "itemOrder": 5, "name": "LAT : tuyaux Ø45 x20 m en Z", "qty": 2, "unit": "pièces", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M006", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Milieu", "zoneOrder": 6, "itemOrder": 6, "name": "LAT : tuyau Ø45 x20 m en O avec LDV 500", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M007", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Milieu", "zoneOrder": 6, "itemOrder": 7, "name": "LAT : tuyaux Ø45 x20 m en Z", "qty": 2, "unit": "pièces", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M008", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Milieu", "zoneOrder": 6, "itemOrder": 8, "name": "Canne plongeuse", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M009", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Milieu", "zoneOrder": 6, "itemOrder": 9, "name": "Espace désinfection / nettoyage", "qty": 1, "unit": "emplacement", "category": "Hygiène", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M010", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Bas", "zoneOrder": 6, "itemOrder": 10, "name": "Crépine", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M011", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Bas", "zoneOrder": 6, "itemOrder": 11, "name": "Commande", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M012", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Bas", "zoneOrder": 6, "itemOrder": 12, "name": "Flotteur", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M013", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Bas", "zoneOrder": 6, "itemOrder": 13, "name": "Manches d’alimentation Ø110 en écheveaux", "qty": 2, "unit": "pièces", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M014", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Bas", "zoneOrder": 6, "itemOrder": 14, "name": "Cales de roues", "qty": 2, "unit": "pièces", "category": "Sécurité", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z07-M001", "vehicle": "FPT GO", "zone": "Arrière véhicule", "subzone": "Arrière", "zoneOrder": 7, "itemOrder": 1, "name": "Dévidoir avec 2 tuyaux Ø22 x20 m et LDT", "qty": 1, "unit": "ensemble", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z07-M002", "vehicle": "FPT GO", "zone": "Arrière véhicule", "subzone": "Arrière", "zoneOrder": 7, "itemOrder": 2, "name": "Tuyau 45 x20 m en couronne avec raccord GFR", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z07-M003", "vehicle": "FPT GO", "zone": "Arrière véhicule", "subzone": "Arrière", "zoneOrder": 7, "itemOrder": 3, "name": "Tuyau 70 x20 m en couronne", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z07-M004", "vehicle": "FPT GO", "zone": "Arrière véhicule", "subzone": "Arrière", "zoneOrder": 7, "itemOrder": 4, "name": "Projecteur amovible", "qty": 1, "unit": "pièce", "category": "Éclairage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z07-M005", "vehicle": "FPT GO", "zone": "Arrière véhicule", "subzone": "Arrière", "zoneOrder": 7, "itemOrder": 5, "name": "Tricoises Ø100", "qty": 2, "unit": "pièces", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z07-M006", "vehicle": "FPT GO", "zone": "Arrière véhicule", "subzone": "Arrière", "zoneOrder": 7, "itemOrder": 6, "name": "Manivelle pour enroulement DT", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z07-M007", "vehicle": "FPT GO", "zone": "Arrière véhicule", "subzone": "Arrière", "zoneOrder": 7, "itemOrder": 7, "name": "Clé fédérale", "qty": 1, "unit": "pièce", "category": "Clés / accès", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z07-M008", "vehicle": "FPT GO", "zone": "Arrière véhicule", "subzone": "Arrière", "zoneOrder": 7, "itemOrder": 8, "name": "Clé de barrage", "qty": 1, "unit": "pièce", "category": "Clés / accès", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z07-M009", "vehicle": "FPT GO", "zone": "Arrière véhicule", "subzone": "Arrière", "zoneOrder": 7, "itemOrder": 9, "name": "Collecteur d’alimentation", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z07-M010", "vehicle": "FPT GO", "zone": "Arrière véhicule", "subzone": "Arrière", "zoneOrder": 7, "itemOrder": 10, "name": "Tuyau de remplissage tonne", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z07-M011", "vehicle": "FPT GO", "zone": "Arrière véhicule", "subzone": "Arrière", "zoneOrder": 7, "itemOrder": 11, "name": "Dévidoirs avec 5 tuyaux Ø70 x40 m et tricoise", "qty": 2, "unit": "ensembles", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z08-M001", "vehicle": "FPT GO", "zone": "Toit", "subzone": "Toit", "zoneOrder": 8, "itemOrder": 1, "name": "Échelle à coulisse 2 plans", "qty": 1, "unit": "pièce", "category": "Échelle", "criticality": "Importante", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z08-M002", "vehicle": "FPT GO", "zone": "Toit", "subzone": "Toit", "zoneOrder": 8, "itemOrder": 2, "name": "Échelle à crochet", "qty": 1, "unit": "pièce", "category": "Échelle", "criticality": "Importante", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z09-M001", "vehicle": "FPT GO", "zone": "Rideau arrière droit", "subzone": "Haut", "zoneOrder": 9, "itemOrder": 1, "name": "Caisse ceinturon", "qty": 1, "unit": "caisse", "category": "EPI", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z09-M002", "vehicle": "FPT GO", "zone": "Rideau arrière droit", "subzone": "Haut", "zoneOrder": 9, "itemOrder": 2, "name": "Caisse tenue type 3", "qty": 1, "unit": "caisse", "category": "EPI", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z09-M003", "vehicle": "FPT GO", "zone": "Rideau arrière droit", "subzone": "Haut", "zoneOrder": 9, "itemOrder": 3, "name": "Combinaisons CAT3 type 5/6 XL et 2XL", "qty": 4, "unit": "pièces", "category": "EPI", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z09-M004", "vehicle": "FPT GO", "zone": "Rideau arrière droit", "subzone": "Milieu", "zoneOrder": 9, "itemOrder": 4, "name": "Division d’attaque DAT", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z09-M005", "vehicle": "FPT GO", "zone": "Rideau arrière droit", "subzone": "Milieu", "zoneOrder": 9, "itemOrder": 5, "name": "Tuyau Ø70 x20 m en Z avec division", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z09-M006", "vehicle": "FPT GO", "zone": "Rideau arrière droit", "subzone": "Milieu", "zoneOrder": 9, "itemOrder": 6, "name": "Tuyaux Ø70 x20 m en Z", "qty": 2, "unit": "pièces", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z09-M007", "vehicle": "FPT GO", "zone": "Rideau arrière droit", "subzone": "Bas", "zoneOrder": 9, "itemOrder": 7, "name": "DFT", "qty": 4, "unit": "pièces", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z09-M008", "vehicle": "FPT GO", "zone": "Rideau arrière droit", "subzone": "Bas", "zoneOrder": 9, "itemOrder": 8, "name": "Cônes de Lübeck", "qty": 4, "unit": "pièces", "category": "Balisage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M001", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Haut", "zoneOrder": 10, "itemOrder": 1, "name": "Cordage", "qty": 1, "unit": "pièce", "category": "Sauvetage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M002", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Haut", "zoneOrder": 10, "itemOrder": 2, "name": "Bâche", "qty": 1, "unit": "pièce", "category": "Protection", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M003", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Haut", "zoneOrder": 10, "itemOrder": 3, "name": "Récupérateur hydrocarbure", "qty": 1, "unit": "pièce", "category": "Pollution", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M004", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Haut", "zoneOrder": 10, "itemOrder": 4, "name": "Découpeuse à disque avec disques, fiche technique et clé", "qty": 1, "unit": "ensemble", "category": "Découpe", "criticality": "Importante", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M005", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Milieu", "zoneOrder": 10, "itemOrder": 5, "name": "ARI conducteur avec masque", "qty": 1, "unit": "ensemble", "category": "ARI", "criticality": "Critique", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M006", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Milieu", "zoneOrder": 10, "itemOrder": 6, "name": "Projecteur", "qty": 1, "unit": "pièce", "category": "Éclairage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M007", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Milieu", "zoneOrder": 10, "itemOrder": 7, "name": "Batterie projecteur", "qty": 1, "unit": "pièce", "category": "Éclairage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M008", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Milieu", "zoneOrder": 10, "itemOrder": 8, "name": "Batterie découpeuse", "qty": 1, "unit": "pièce", "category": "Découpe", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M009", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Milieu", "zoneOrder": 10, "itemOrder": 9, "name": "Stoppeur de fumées", "qty": 1, "unit": "pièce", "category": "Incendie", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M010", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Bas", "zoneOrder": 10, "itemOrder": 10, "name": "LSPCC avec commande", "qty": 2, "unit": "ensembles", "category": "Sauvetage", "criticality": "Critique", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M011", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Bas", "zoneOrder": 10, "itemOrder": 11, "name": "Halligan tool", "qty": 1, "unit": "pièce", "category": "Forcement", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M012", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Bas", "zoneOrder": 10, "itemOrder": 12, "name": "Merlin", "qty": 1, "unit": "pièce", "category": "Forcement", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M013", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Bas", "zoneOrder": 10, "itemOrder": 13, "name": "Tableau de contrôleur", "qty": 1, "unit": "pièce", "category": "ARI", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M014", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Bas", "zoneOrder": 10, "itemOrder": 14, "name": "Lignes guide", "qty": 2, "unit": "pièces", "category": "ARI", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M015", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Bas", "zoneOrder": 10, "itemOrder": 15, "name": "Coffret Spiraled", "qty": 1, "unit": "coffret", "category": "Signalisation", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M001", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Gauche", "zoneOrder": 11, "itemOrder": 1, "name": "OFD", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M002", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Gauche", "zoneOrder": 11, "itemOrder": 2, "name": "Fourche droite", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M003", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Gauche", "zoneOrder": 11, "itemOrder": 3, "name": "Fourche recourbée", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M004", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Gauche", "zoneOrder": 11, "itemOrder": 4, "name": "Balai de cantonnier", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M005", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Gauche", "zoneOrder": 11, "itemOrder": 5, "name": "Pelle", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M006", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Gauche", "zoneOrder": 11, "itemOrder": 6, "name": "Scie à bûches", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M007", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Gauche", "zoneOrder": 11, "itemOrder": 7, "name": "Gaffe", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M008", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Gauche", "zoneOrder": 11, "itemOrder": 8, "name": "Coupe-boulon", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M009", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Gauche", "zoneOrder": 11, "itemOrder": 9, "name": "Pioche", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M010", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Gauche", "zoneOrder": 11, "itemOrder": 10, "name": "Masse", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M011", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Gauche", "zoneOrder": 11, "itemOrder": 11, "name": "Hache", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M012", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Haut / milieu / bas", "zoneOrder": 11, "itemOrder": 12, "name": "Lot prompt secours", "qty": 1, "unit": "sac", "category": "Secours", "criticality": "Critique", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M013", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Haut / milieu / bas", "zoneOrder": 11, "itemOrder": 13, "name": "Tuyaux 45 x20 en écheveaux préconnectés avec LDMR", "qty": 4, "unit": "pièces", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M014", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Haut / milieu / bas", "zoneOrder": 11, "itemOrder": 14, "name": "Tuyaux 70 x20 en écheveaux préconnectés avec division mixte", "qty": 4, "unit": "pièces", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M015", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Haut / milieu / bas", "zoneOrder": 11, "itemOrder": 15, "name": "Bouteilles d’ARI", "qty": 6, "unit": "pièces", "category": "ARI", "criticality": "Critique", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M016", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Haut / milieu / bas", "zoneOrder": 11, "itemOrder": 16, "name": "Enrouleur avec support métallique pour projecteur", "qty": 1, "unit": "pièce", "category": "Éclairage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M017", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Haut / milieu / bas", "zoneOrder": 11, "itemOrder": 17, "name": "Trépied pour projecteur sur batterie", "qty": 1, "unit": "pièce", "category": "Éclairage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M001", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Ventilation", "zoneOrder": 12, "itemOrder": 1, "name": "Bouteille O2 - 5 litres", "qty": 1, "unit": "pièce", "category": "Secours", "criticality": "Critique", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M002", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Ventilation", "zoneOrder": 12, "itemOrder": 2, "name": "Insufflateur adulte avec tubulure UU", "qty": 1, "unit": "pièce", "category": "Secours", "criticality": "Critique", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M003", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Ventilation", "zoneOrder": 12, "itemOrder": 3, "name": "Masques pour BAVU UU T5 / T3", "qty": 2, "unit": "pièces", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M004", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Ventilation", "zoneOrder": 12, "itemOrder": 4, "name": "Masque haute concentration adulte", "qty": 1, "unit": "pièce", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M005", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Kits pansements", "zoneOrder": 12, "itemOrder": 5, "name": "Unidoses de chlorhexidine", "qty": 3, "unit": "pièces", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M006", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Kits pansements", "zoneOrder": 12, "itemOrder": 6, "name": "Unidoses de chlorure de sodium 0,9%", "qty": 2, "unit": "pièces", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M007", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Kits pansements", "zoneOrder": 12, "itemOrder": 7, "name": "Compresses 7,5 x 7,5 cm", "qty": 5, "unit": "paquets", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M008", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Kits pansements", "zoneOrder": 12, "itemOrder": 8, "name": "Rouleau de sparadrap", "qty": 1, "unit": "pièce", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M009", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Kits pansements", "zoneOrder": 12, "itemOrder": 9, "name": "Bandes de crêpe 5 cm et 10 cm", "qty": 2, "unit": "pièces", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M010", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Kits pansements", "zoneOrder": 12, "itemOrder": 10, "name": "Réserve gants à usage unique", "qty": 1, "unit": "réserve", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M011", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Kits pansements", "zoneOrder": 12, "itemOrder": 11, "name": "Couverture isothermique", "qty": 1, "unit": "pièce", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M012", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Kits pansements", "zoneOrder": 12, "itemOrder": 12, "name": "Gel hydroalcoolique", "qty": 1, "unit": "flacon", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M013", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Kits pansements", "zoneOrder": 12, "itemOrder": 13, "name": "Pansement absorbant", "qty": 1, "unit": "pièce", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M014", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Kits pansements", "zoneOrder": 12, "itemOrder": 14, "name": "Watergel 10 x 10 cm", "qty": 2, "unit": "pièces", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M015", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Kits pansements", "zoneOrder": 12, "itemOrder": 15, "name": "Poche de froid", "qty": 1, "unit": "pièce", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M016", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Divers", "zoneOrder": 12, "itemOrder": 16, "name": "Couteau de sécurité", "qty": 1, "unit": "pièce", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}];
@@ -577,6 +577,21 @@ function fcComputeAlertCount(){
       }).length;
     }
   }catch(e){ /* pharmData pas encore initialisé — ignore pour ce passage */ }
+  try{
+    // Véhicules et matériels techniques en retard ou bientôt dus d'entretien
+    if(typeof vehicles !== "undefined" && typeof computeAssetState === "function"){
+      count += vehicles.filter(a => {
+        const s = computeAssetState(a).state;
+        return s === "late" || s === "soon";
+      }).length;
+    }
+    if(typeof equipment !== "undefined" && typeof computeAssetState === "function"){
+      count += equipment.filter(a => {
+        const s = computeAssetState(a).state;
+        return s === "late" || s === "soon";
+      }).length;
+    }
+  }catch(e){ /* assets pas encore initialisés — ignore pour ce passage */ }
   return count;
 }
 
@@ -7719,6 +7734,32 @@ function bindTakeChargeDialog(){
   };
 }
 
+/* ============================================================
+   V37 — Relevé mensuel kilométrage/heures pendant la vérification SP
+   ============================================================ */
+
+function fcFindAssetForVehicle(vehicleName){
+  if(typeof vehicles !== "undefined"){
+    const v = vehicles.find(a => a.name === vehicleName);
+    if(v) return v;
+  }
+  if(typeof equipment !== "undefined"){
+    const e = equipment.find(a => a.name === vehicleName);
+    if(e) return e;
+  }
+  return null;
+}
+
+function fcCurrentMonthKey(){
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+}
+
+function fcMonthlyReadingDone(asset){
+  if(!asset) return true; // pas de fiche d'entretien configurée par ST → ne bloque pas
+  return asset.lastReadingMonth === fcCurrentMonthKey();
+}
+
 function computeAssetState(asset){
   const followType = asset.followType || (String(asset.km || "").includes("h") ? "hours" : "km");
   const current = Number(asset.currentValue ?? String(asset.km || "").replace(/\D/g,"")) || 0;
@@ -7734,20 +7775,28 @@ function computeAssetState(asset){
   return {followType,current,last,interval,unit,nextValue,remaining,percent,state};
 }
 
-function openAssetDialog(mode){
+let editingAssetId = null;
+
+function openAssetDialog(mode, editId){
   assetDialogMode = mode;
+  editingAssetId = editId || null;
+  const list = mode === "vehicle" ? vehicles : equipment;
+  const existing = editId ? list.find(a => a.id === editId) : null;
+
   document.getElementById("assetDialogEyebrow").textContent = mode === "vehicle" ? "Entretien véhicule" : "Matériel technique";
-  document.getElementById("assetDialogTitle").textContent = mode === "vehicle" ? "Ajouter un véhicule" : "Ajouter un matériel";
-  document.getElementById("assetName").value = "";
-  document.getElementById("assetType").value = mode === "vehicle" ? "Véhicule" : "Matériel";
-  document.getElementById("assetRef").value = "";
-  document.getElementById("assetFollowType").value = mode === "vehicle" ? "km" : "hours";
-  document.getElementById("assetCurrentValue").value = "";
-  document.getElementById("assetUnit").value = mode === "vehicle" ? "km" : "h";
-  document.getElementById("assetLastServiceValue").value = "";
-  document.getElementById("assetIntervalValue").value = mode === "vehicle" ? "15000" : "100";
-  document.getElementById("assetNextControlDate").value = "";
-  document.getElementById("assetNotes").value = "";
+  document.getElementById("assetDialogTitle").textContent = existing
+    ? `Modifier ${existing.name}`
+    : (mode === "vehicle" ? "Ajouter un véhicule" : "Ajouter un matériel");
+  document.getElementById("assetName").value = existing?.name || "";
+  document.getElementById("assetType").value = existing?.type || (mode === "vehicle" ? "Véhicule" : "Matériel");
+  document.getElementById("assetRef").value = existing?.detail || "";
+  document.getElementById("assetFollowType").value = existing?.followType || (mode === "vehicle" ? "km" : "hours");
+  document.getElementById("assetCurrentValue").value = existing?.currentValue || "";
+  document.getElementById("assetUnit").value = existing?.unit || (mode === "vehicle" ? "km" : "h");
+  document.getElementById("assetLastServiceValue").value = existing?.lastServiceValue || "";
+  document.getElementById("assetIntervalValue").value = existing?.intervalValue || (mode === "vehicle" ? "15000" : "100");
+  document.getElementById("assetNextControlDate").value = existing?.nextControlDate || "";
+  document.getElementById("assetNotes").value = existing?.notes || "";
   document.getElementById("assetDialog").showModal();
 }
 
@@ -7769,6 +7818,21 @@ renderAssets = function(){
   document.querySelectorAll("#equipment .secondary").forEach(btn => {
     btn.onclick = () => openAssetDialog("equipment");
   });
+
+  document.querySelectorAll("[data-asset-edit]").forEach(btn => {
+    btn.onclick = () => openAssetDialog(btn.dataset.assetMode, btn.dataset.assetEdit);
+  });
+  document.querySelectorAll("[data-asset-delete]").forEach(btn => {
+    btn.onclick = () => {
+      const id = btn.dataset.assetDelete;
+      const mode = btn.dataset.assetMode;
+      if(mode === "vehicle") vehicles = vehicles.filter(a => a.id !== id);
+      else equipment = equipment.filter(a => a.id !== id);
+      if(typeof deleteAssetSupabase === "function") deleteAssetSupabase(id);
+      renderAll();
+      toast("Élément supprimé");
+    };
+  });
 };
 
 function assetCardV18(a, mode){
@@ -7788,8 +7852,8 @@ function assetCardV18(a, mode){
       <p class="due ${c.state}">${label}</p>
       <span class="asset-next">${c.followType === "hours" ? "Calcul en heures" : c.followType === "km" ? "Calcul en kilomètres" : "Suivi par date"}</span>
       <div class="asset-actions">
-        <button class="btn ghost" onclick="toast('Historique entretien prévu')">Historique</button>
-        <button class="btn secondary" onclick="toast('Modification prévue')">Modifier</button>
+        <button class="btn ghost" data-asset-delete="${a.id}" data-asset-mode="${mode}">Supprimer</button>
+        <button class="btn secondary" data-asset-edit="${a.id}" data-asset-mode="${mode}">Modifier</button>
       </div>
     </article>
   `;
@@ -7809,6 +7873,7 @@ function bindAssetDialog(){
     const followType = document.getElementById("assetFollowType").value;
     const unit = document.getElementById("assetUnit").value || (followType === "hours" ? "h" : "km");
     const asset = {
+      id: editingAssetId || ("asset-" + Date.now()),
       name: document.getElementById("assetName").value || "Nouvel élément",
       detail: document.getElementById("assetRef").value || document.getElementById("assetType").value,
       type: document.getElementById("assetType").value,
@@ -7821,11 +7886,27 @@ function bindAssetDialog(){
       ct: document.getElementById("assetNextControlDate").value || "—",
       notes: document.getElementById("assetNotes").value
     };
-    if(assetDialogMode === "vehicle") vehicles.push(asset);
-    else equipment.push(asset);
+
+    if(editingAssetId){
+      // Mise à jour d'un élément existant
+      if(assetDialogMode === "vehicle"){
+        const idx = vehicles.findIndex(a => a.id === editingAssetId);
+        if(idx >= 0) vehicles[idx] = asset;
+      } else {
+        const idx = equipment.findIndex(a => a.id === editingAssetId);
+        if(idx >= 0) equipment[idx] = asset;
+      }
+    } else {
+      // Création d'un nouvel élément
+      if(assetDialogMode === "vehicle") vehicles.push(asset);
+      else equipment.push(asset);
+    }
+
+    if(typeof saveAssetSupabase === "function") saveAssetSupabase(asset, assetDialogMode);
+
     document.getElementById("assetDialog").close();
     renderAll();
-    toast("Élément ajouté");
+    toast(editingAssetId ? "Élément mis à jour" : "Élément ajouté");
   };
 }
 
@@ -8512,10 +8593,47 @@ function markZoneDoneV27(issue=false){
     const foundView = views.find(v => v.zones.some(z => next.aliases.some(a => String(a).toLowerCase() === String(z.id).toLowerCase())));
     if(foundView) checkV27.view = foundView.id;
     toast("Étape validée, passage à la suivante");
+    renderStep();
   } else {
-    toast("Vérification terminée");
+    // Toutes les zones sont faites : vérifie si le relevé mensuel km/heures a été fait
+    const asset = fcFindAssetForVehicle(vehicle.name);
+    if(asset && !fcMonthlyReadingDone(asset)){
+      openMonthlyReadingDialogV37(vehicle, asset);
+    } else {
+      toast("Vérification terminée");
+      renderStep();
+    }
   }
-  renderStep();
+}
+
+function openMonthlyReadingDialogV37(vehicle, asset){
+  const dialog = document.getElementById("monthlyReadingDialogV37");
+  if(!dialog) return;
+
+  const isHours = asset.followType === "hours";
+  document.getElementById("monthlyReadingTitleV37").textContent = `${vehicle.name} — ${isHours ? "Heures" : "Kilométrage"}`;
+  document.getElementById("monthlyReadingLabelV37").textContent = `Valeur actuelle (${asset.unit || (isHours ? "h" : "km")})`;
+  document.getElementById("monthlyReadingValue").value = asset.currentValue || "";
+
+  const saveBtn = document.getElementById("saveMonthlyReadingV37");
+  saveBtn.onclick = () => {
+    const val = Number(document.getElementById("monthlyReadingValue").value || 0);
+    if(!val || val <= 0){
+      toast(`Indique ${isHours ? "le nombre d'heures" : "le kilométrage"} actuel pour terminer`);
+      return;
+    }
+    asset.currentValue = val;
+    asset.lastReadingMonth = fcCurrentMonthKey();
+    if(typeof saveAssetSupabase === "function"){
+      const mode = (typeof vehicles !== "undefined" && vehicles.includes(asset)) ? "vehicle" : "equipment";
+      saveAssetSupabase(asset, mode);
+    }
+    dialog.close();
+    toast("Relevé enregistré — vérification terminée");
+    renderStep();
+  };
+
+  dialog.showModal();
 }
 
 function renderStep(){
@@ -8541,6 +8659,9 @@ function renderStep(){
   const activeView = views.find(v => v.id === checkV27.view) || views[0] || {id:"", label:"", zones:[], photo:""};
   const items = getZoneItemsV27(vehicle.id, step);
 
+  const fcAssetForBanner = fcFindAssetForVehicle(vehicle.name);
+  const fcShowMonthlyBanner = fcAssetForBanner && !fcMonthlyReadingDone(fcAssetForBanner);
+
   checkScreen.innerHTML = `
     <div class="mobile-shell">
       <header class="mobile-top">
@@ -8551,6 +8672,12 @@ function renderStep(){
           <span class="muted">${vehicle.type || ""} ${vehicle.plate ? "· " + vehicle.plate : ""}</span>
         </div>
       </header>
+
+      ${fcShowMonthlyBanner ? `
+        <div class="monthly-reading-banner">
+          📏 Relevé ${fcAssetForBanner.followType === "hours" ? "horaire" : "kilométrique"} du mois pas encore fait pour ce véhicule — il sera demandé à la fin de la vérification.
+        </div>
+      ` : ""}
 
       <section class="check-hero-v27">
         <div class="check-hero-top">
