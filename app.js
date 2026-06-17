@@ -322,23 +322,221 @@ let editingInventoryIndex = null;
 
 function $(id){return document.getElementById(id)}
 function showScreen(id){
-  // Si un véhicule a été scanné via QR Code (?check=xxx), aller directement
-  // à la fiche de vérification au lieu de redemander un scan.
+  // Si un véhicule a été scanné via QR Code (?check=xxx), proposer un choix
+  // (vérification journalière ou relève sur intervention) au lieu de redemander un scan.
   if(id === "scanner" && typeof scannedAsset !== "undefined" && scannedAsset){
-    id = "check";
-    if(typeof checkV27 !== "undefined"){
-      checkV27.done = {};
-      checkV27.issues = {};
-      checkV27.currentZone = null;
-    }
+    id = "scanChoice";
   }
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   $(id).classList.add("active");
   window.scrollTo(0,0);
   renderAll();
+  if(id === "scanChoice" && typeof renderScanChoiceV36 === "function") renderScanChoiceV36();
+  if(id === "interventionReport" && typeof renderInterventionReportV36 === "function") renderInterventionReportV36();
   if(id === "tech" && typeof fcAskNotificationPermission === "function") fcAskNotificationPermission();
 }
 document.querySelectorAll("[data-go]").forEach(btn => btn.addEventListener("click", () => showScreen(btn.dataset.go)));
+
+/* ============================================================
+   V36 — Choix post-scan + rapport de relève sur intervention (hors-ligne)
+   ============================================================ */
+
+function renderScanChoiceV36(){
+  if(!scannedAsset) return;
+  const eyebrow = document.getElementById("scanChoiceEyebrow");
+  const title = document.getElementById("scanChoiceTitle");
+  if(eyebrow) eyebrow.textContent = `QR scanné : ${scannedAsset.name}`;
+  if(title) title.textContent = "Que veux-tu faire ?";
+
+  const verifBtn = document.getElementById("scanChoiceVerif");
+  const anomalyBtn = document.getElementById("scanChoiceAnomaly");
+  const interBtn = document.getElementById("scanChoiceIntervention");
+
+  if(verifBtn) verifBtn.onclick = () => {
+    if(typeof checkV27 !== "undefined"){
+      checkV27.done = {};
+      checkV27.issues = {};
+      checkV27.currentZone = null;
+    }
+    showScreen("check");
+  };
+
+  if(anomalyBtn) anomalyBtn.onclick = () => {
+    if(typeof openGuidedAnomalyDialogV27 === "function"){
+      openGuidedAnomalyDialogV27(scannedAsset, {zone: "—", section: "SIGNALEMENT DIRECT"}, null, false);
+    }
+  };
+
+  if(interBtn) interBtn.onclick = () => {
+    showScreen("interventionReport");
+  };
+
+  fcShowHandoverIfAnyV36();
+}
+
+function renderInterventionReportV36(){
+  if(!scannedAsset) return;
+  const title = document.getElementById("interventionVehicleTitle");
+  if(title) title.textContent = `${scannedAsset.name}${scannedAsset.plate ? " · " + scannedAsset.plate : ""}`;
+
+  const commentEl = document.getElementById("interventionComment");
+  const priorityEl = document.getElementById("interventionPriority");
+  if(commentEl) commentEl.value = "";
+  if(priorityEl) priorityEl.value = "Normale";
+
+  const offlineNotice = document.getElementById("interventionOfflineNotice");
+  if(offlineNotice) offlineNotice.classList.toggle("hidden", navigator.onLine);
+
+  fcRenderPendingHandoversBannerV36();
+
+  const saveBtn = document.getElementById("saveInterventionReport");
+  if(saveBtn) saveBtn.onclick = () => {
+    const comment = (commentEl?.value || "").trim();
+    if(!comment){
+      toast("Décris au moins le matériel sorti ou l’état constaté");
+      return;
+    }
+
+    const author = currentUser ? `${currentUser.grade} ${currentUser.prenom} ${currentUser.nom}` : "SP non identifié";
+    const handover = {
+      id: "ho-" + Date.now(),
+      vehicleId: scannedAsset.id,
+      vehicleName: scannedAsset.name,
+      comment: comment,
+      priority: priorityEl?.value || "Normale",
+      author: author,
+      time: new Date().toLocaleString("fr-FR"),
+      read: false
+    };
+
+    fcQueueOrSendHandoverV36(handover);
+
+    toast(navigator.onLine ? "Fiche de passation enregistrée" : "Fiche enregistrée localement — sera envoyée dès le retour du réseau");
+    showScreen("home");
+  };
+}
+
+// File d'attente locale pour les fiches de passation créées hors-ligne
+function fcGetPendingHandoversV36(){
+  try{ return JSON.parse(localStorage.getItem("fc_pending_handovers") || "[]"); }
+  catch(e){ return []; }
+}
+function fcSavePendingHandoversV36(list){
+  localStorage.setItem("fc_pending_handovers", JSON.stringify(list));
+}
+
+function fcQueueOrSendHandoverV36(handover){
+  if(navigator.onLine && typeof saveHandoverSupabase === "function"){
+    saveHandoverSupabase(handover);
+  } else {
+    const pending = fcGetPendingHandoversV36();
+    pending.push(handover);
+    fcSavePendingHandoversV36(pending);
+  }
+  fcRenderPendingHandoversBannerV36();
+}
+
+function fcRenderPendingHandoversBannerV36(){
+  const banner = document.getElementById("pendingReportsBanner");
+  const countEl = document.getElementById("pendingReportsCount");
+  if(!banner || !countEl) return;
+  const pending = fcGetPendingHandoversV36();
+  if(pending.length > 0){
+    banner.classList.remove("hidden");
+    countEl.textContent = pending.length;
+  } else {
+    banner.classList.add("hidden");
+  }
+}
+
+// Tente d'envoyer les fiches en attente dès que le réseau revient
+async function fcFlushPendingHandoversV36(){
+  const pending = fcGetPendingHandoversV36();
+  if(!pending.length || typeof saveHandoverSupabase !== "function") return;
+
+  const stillPending = [];
+  for(const handover of pending){
+    try{
+      await saveHandoverSupabase(handover);
+    }catch(e){
+      stillPending.push(handover);
+    }
+  }
+  fcSavePendingHandoversV36(stillPending);
+  fcRenderPendingHandoversBannerV36();
+  if(stillPending.length < pending.length){
+    toast(`${pending.length - stillPending.length} fiche(s) de passation envoyée(s)`);
+  }
+}
+
+// Affiche la fiche de passation non lue pour le véhicule scanné, le cas échéant
+async function fcShowHandoverIfAnyV36(){
+  if(!scannedAsset) return;
+
+  if(navigator.onLine && typeof syncHandovers === "function"){
+    try{ await syncHandovers(); }catch(e){ /* ignore, on utilise le cache local */ }
+  }
+
+  let handover = null;
+  if(typeof fcHandovers !== "undefined"){
+    handover = fcHandovers.find(h => h.vehicleId === scannedAsset.id && !h.read);
+  }
+
+  let dialog = document.getElementById("handoverDialogV36");
+  if(!dialog){
+    dialog = document.createElement("dialog");
+    dialog.id = "handoverDialogV36";
+    dialog.className = "dialog";
+    document.body.appendChild(dialog);
+  }
+
+  if(!handover){
+    if(dialog.open) dialog.close();
+    return;
+  }
+
+  dialog.innerHTML = `
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Passation — ${fcEsc(handover.vehicleName)}</p>
+          <h2>Information de la relève précédente</h2>
+        </div>
+        <button class="round" id="closeHandoverV36">×</button>
+      </div>
+      <p class="muted">Signalé par ${fcEsc(handover.author)} · ${fcEsc(handover.time)}</p>
+      ${handover.priority !== "Normale" ? `<span class="pill red">⚠ ${fcEsc(handover.priority)}</span>` : ""}
+      <p style="white-space:pre-wrap; margin-top:12px;">${fcEsc(handover.comment)}</p>
+      <div class="modal-actions">
+        <button class="btn primary full" id="markHandoverReadV36">J’ai pris connaissance — Marquer comme lu</button>
+      </div>
+    </div>
+  `;
+
+  dialog.querySelector("#closeHandoverV36").onclick = () => dialog.close();
+  dialog.querySelector("#markHandoverReadV36").onclick = () => {
+    handover.read = true;
+    if(typeof markHandoverReadSupabase === "function") markHandoverReadSupabase(handover.id);
+    if(typeof fcHandovers !== "undefined"){
+      const idx = fcHandovers.findIndex(h => h.id === handover.id);
+      if(idx >= 0) fcHandovers.splice(idx, 1);
+    }
+    dialog.close();
+    toast("Fiche de passation marquée comme lue");
+  };
+
+  dialog.showModal();
+}
+
+window.addEventListener("online", () => {
+  toast("Connexion rétablie — envoi des fiches en attente...");
+  fcFlushPendingHandoversV36();
+});
+
+// Tentative de synchronisation au chargement (si déjà en ligne avec des fiches en attente)
+window.addEventListener("load", () => {
+  setTimeout(() => { if(navigator.onLine) fcFlushPendingHandoversV36(); }, 2000);
+});
 
 /* ============================================================
    V35 — Badge de notification (onglet + favicon + notification système)
@@ -7852,6 +8050,7 @@ bindSettings = function(){
 
 /* V23 - Accueil contextualisé QR + accès ST */
 let scannedAsset = null;
+let fcHandovers = []; // Fiches de passation entre relèves, chargées depuis Supabase
 let stMobileCode = localStorage.getItem("fc_st_mobile_code") || "2026";
 let stAccessList = JSON.parse(localStorage.getItem("fc_st_access_list") || "null") || [
   /* utilisateurs chargés depuis Supabase */
@@ -8388,8 +8587,8 @@ function renderStep(){
 
 let activeGuidedAnomalyV27 = null;
 
-function openGuidedAnomalyDialogV27(vehicle, step, item){
-  activeGuidedAnomalyV27 = {vehicle, step, item};
+function openGuidedAnomalyDialogV27(vehicle, step, item, fromGuidedCheck=true){
+  activeGuidedAnomalyV27 = {vehicle, step, item, fromGuidedCheck};
   const dialog = document.getElementById("guidedAnomalyDialogV27");
   if(!dialog){
     console.error("guidedAnomalyDialogV27 introuvable dans le HTML — vérifie que index.html est à jour.");
@@ -8402,6 +8601,9 @@ function openGuidedAnomalyDialogV27(vehicle, step, item){
   if(item){
     title.textContent = `Anomalie — ${item.name}`;
     subtitle.textContent = `${step.zone} · quantité attendue : ${item.qty}`;
+  } else if(step.zone === "—"){
+    title.textContent = `Anomalie — ${vehicle.name}`;
+    subtitle.textContent = "Signalement direct, sans zone précise.";
   } else {
     title.textContent = `Anomalie — ${step.zone}`;
     subtitle.textContent = "Signalement général sur l’ensemble de la zone.";
@@ -8434,7 +8636,7 @@ function bindGuidedAnomalyDialogV27(){
       id: Date.now(),
       asset: vehicle.name,
       zone: step.zone,
-      origin: "Vérification terrain",
+      origin: activeGuidedAnomalyV27.fromGuidedCheck ? "Vérification terrain" : "Signalement direct",
       type: type,
       item: item ? item.name : "—",
       comment: comment || `${type} signalé sur ${step.zone}.`,
@@ -8448,20 +8650,27 @@ function bindGuidedAnomalyDialogV27(){
     if(typeof reports !== "undefined") reports.unshift(report);
     if(typeof saveRemonteeSupabase === "function") saveRemonteeSupabase(report);
 
-    checkV27.issues[step.zone] = true;
-    checkV27.done[step.zone] = true;
-
     dialog.close();
     toast("Anomalie envoyée au service technique");
 
-    const next = guidedOrderV27(vehicle.id).find(s => !checkV27.done[s.zone]);
-    if(next){
-      checkV27.currentZone = next.zone;
-      const views = checkViewsV27(vehicle.id);
-      const foundView = views.find(v => v.zones.some(z => next.aliases.some(a => String(a).toLowerCase() === String(z.id).toLowerCase())));
-      if(foundView) checkV27.view = foundView.id;
+    // Si ce signalement vient du contrôle guidé en cours (zone réelle de l'étape),
+    // on avance comme avant. Si c'est un signalement direct après scan (hors contrôle),
+    // on ne touche pas à la progression du contrôle guidé.
+    if(activeGuidedAnomalyV27.fromGuidedCheck){
+      checkV27.issues[step.zone] = true;
+      checkV27.done[step.zone] = true;
+
+      const next = guidedOrderV27(vehicle.id).find(s => !checkV27.done[s.zone]);
+      if(next){
+        checkV27.currentZone = next.zone;
+        const views = checkViewsV27(vehicle.id);
+        const foundView = views.find(v => v.zones.some(z => next.aliases.some(a => String(a).toLowerCase() === String(z.id).toLowerCase())));
+        if(foundView) checkV27.view = foundView.id;
+      }
+      renderStep();
+    } else {
+      showScreen("home");
     }
-    renderStep();
   };
 }
 bindGuidedAnomalyDialogV27();

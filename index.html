@@ -171,6 +171,77 @@
     </div>
   </section>
 
+  <section id="scanChoice" class="screen">
+    <div class="mobile-shell">
+      <header class="mobile-top">
+        <button class="round" data-go="home">←</button>
+        <div>
+          <p class="eyebrow" id="scanChoiceEyebrow">QR scanné</p>
+          <h2 id="scanChoiceTitle">Que veux-tu faire ?</h2>
+        </div>
+      </header>
+
+      <div class="scan-choice-grid">
+        <button class="scan-choice-card" id="scanChoiceVerif">
+          <span class="scan-choice-icon">✅</span>
+          <strong>Vérification du véhicule</strong>
+          <span class="muted">Contrôle journalier guidé, zone par zone.</span>
+        </button>
+
+        <button class="scan-choice-card scan-choice-anomaly" id="scanChoiceAnomaly">
+          <span class="scan-choice-icon">⚠️</span>
+          <strong>Signaler une anomalie</strong>
+          <span class="muted">Envoie un signalement directement au service technique.</span>
+        </button>
+
+        <button class="scan-choice-card scan-choice-intervention" id="scanChoiceIntervention">
+          <span class="scan-choice-icon">🚨</span>
+          <strong>Relève sur intervention</strong>
+          <span class="muted">Note le matériel sorti, cassé ou abîmé pour la relève suivante.</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section id="interventionReport" class="screen">
+    <div class="mobile-shell">
+      <header class="mobile-top">
+        <button class="round" data-go="home">←</button>
+        <div>
+          <p class="eyebrow">Relève sur intervention</p>
+          <h2 id="interventionVehicleTitle">Véhicule</h2>
+        </div>
+      </header>
+
+      <div class="card">
+        <p class="muted">Décris le matériel sorti, manquant, cassé ou abîmé. Le SP qui prend la relève pourra vérifier avant de quitter les lieux.</p>
+
+        <label>Matériel sorti / état constaté</label>
+        <textarea id="interventionComment" rows="8" placeholder="Ex : 2 tuyaux Ø70 sortis et non rangés, 1 lance déployée, ARI n°4 bouteille à recharger, projecteur cassé..."></textarea>
+
+        <label>Priorité</label>
+        <select id="interventionPriority">
+          <option>Normale</option>
+          <option>Urgente</option>
+          <option>Bloquant départ</option>
+        </select>
+
+        <div id="interventionOfflineNotice" class="intervention-offline-notice hidden">
+          📡 Pas de connexion détectée — ce rapport sera enregistré localement et envoyé automatiquement dès le retour du réseau.
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn ghost" data-go="home">Annuler</button>
+          <button class="btn primary" id="saveInterventionReport">Envoyer le rapport</button>
+        </div>
+      </div>
+
+      <div id="pendingReportsBanner" class="pending-reports-banner hidden">
+        <span>📡 <strong id="pendingReportsCount">0</strong> rapport(s) en attente d’envoi — seront synchronisés automatiquement.</span>
+      </div>
+    </div>
+  </section>
+
   <section id="check" class="screen">
     <div class="mobile-shell check-shell">
       <header class="control-top">

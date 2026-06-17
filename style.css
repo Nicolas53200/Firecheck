@@ -3261,3 +3261,96 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
   flex:0 0 auto;
   padding:0 14px;
 }
+
+
+/* V36 — écran de choix après scan QR + rapport de relève sur intervention */
+.scan-choice-grid{
+  display:grid;
+  gap:16px;
+  margin-top:24px;
+}
+.scan-choice-card{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:6px;
+  text-align:left;
+  border:1.5px solid var(--line);
+  background:#fff;
+  border-radius:22px;
+  padding:22px;
+  box-shadow:var(--shadow);
+  cursor:pointer;
+  transition:transform .12s, box-shadow .12s;
+}
+.scan-choice-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 24px rgba(15,23,42,.10);
+}
+.scan-choice-card strong{
+  font-size:17px;
+}
+.scan-choice-icon{
+  font-size:30px;
+}
+.scan-choice-intervention{
+  border-color:#ffc0c5;
+  background:#fffafa;
+}
+.scan-choice-intervention strong{
+  color:var(--red);
+}
+.scan-choice-anomaly{
+  border-color:#fcd9a0;
+  background:#fffcf5;
+}
+.scan-choice-anomaly strong{
+  color:#b45309;
+}
+
+.intervention-offline-notice{
+  background:#fff7e6;
+  border:1px solid #fcd9a0;
+  color:#92400e;
+  border-radius:14px;
+  padding:12px 14px;
+  font-size:13px;
+  margin:14px 0;
+}
+
+.pending-reports-banner{
+  margin-top:18px;
+  background:#fff7e6;
+  border:1px solid #fcd9a0;
+  color:#92400e;
+  border-radius:16px;
+  padding:14px;
+  font-size:13px;
+  text-align:center;
+}
+
+#interventionReport textarea{
+  width:100%;
+  box-sizing:border-box;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px;
+  font-size:14px;
+  font-family:inherit;
+  resize:vertical;
+  margin:8px 0 16px;
+}
+#interventionReport select{
+  width:100%;
+  box-sizing:border-box;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px;
+  font-size:14px;
+  margin:8px 0 4px;
+}
+#interventionReport label{
+  font-weight:800;
+  font-size:13px;
+  color:var(--muted);
+}
