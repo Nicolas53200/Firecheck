@@ -8262,7 +8262,13 @@ function renderStep(){
   if(!checkScreen) return;
 
   const vehicle = getCheckVehicleV27();
-  const views = checkViewsV27(vehicle.id);
+  let views = checkViewsV27(vehicle.id);
+  // Le contrôle visuel commence toujours par le Côté gauche : on le place en tête de liste.
+  const gaucheIdx = views.findIndex(v => v.id === "gauche");
+  if(gaucheIdx > 0){
+    const [g] = views.splice(gaucheIdx, 1);
+    views.unshift(g);
+  }
   const order = guidedOrderV27(vehicle.id);
   const step = getCurrentStepV27(vehicle.id);
   const doneCount = order.filter(s => checkV27.done[s.zone]).length;
@@ -8338,6 +8344,7 @@ function renderStep(){
             <div class="guided-item-v27" data-guided-item="${item.id}">
               <strong>${item.name}</strong>
               <span>×${item.qty}</span>
+              <small class="guided-item-hint">Toucher pour signaler un problème</small>
             </div>
           `).join("") : `<div class="fc-empty">Aucun matériel renseigné pour cette zone pour le moment.</div>`}
         </div>
@@ -8384,7 +8391,11 @@ let activeGuidedAnomalyV27 = null;
 function openGuidedAnomalyDialogV27(vehicle, step, item){
   activeGuidedAnomalyV27 = {vehicle, step, item};
   const dialog = document.getElementById("guidedAnomalyDialogV27");
-  if(!dialog) return;
+  if(!dialog){
+    console.error("guidedAnomalyDialogV27 introuvable dans le HTML — vérifie que index.html est à jour.");
+    toast("Erreur : fenêtre d'anomalie introuvable. Vérifie que la page est bien à jour (Ctrl+Maj+R).");
+    return;
+  }
 
   const title = document.getElementById("guidedAnomalyTitleV27");
   const subtitle = document.getElementById("guidedAnomalySubtitleV27");
