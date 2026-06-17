@@ -348,6 +348,13 @@ const fcOriginalTitle = document.title;
 let fcLastNotifiedCount = 0;
 let fcNotifPermissionAsked = false;
 
+// Enregistrement du service worker — rend l'application installable (PWA)
+if("serviceWorker" in navigator){
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(e => console.warn("Service worker non enregistré:", e));
+  });
+}
+
 function fcComputeAlertCount(){
   let count = 0;
   // Remontées nouvelles ou urgentes/bloquantes non clôturées
