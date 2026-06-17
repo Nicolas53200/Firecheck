@@ -6110,6 +6110,17 @@ function fcGetSubZones(vehicleId, zoneId){
   return fcSubZones[vehicleId][zoneId];
 }
 
+// État replié/déplié de chaque emplacement (sous-zone), persisté localement
+let fcSubGroupCollapsed = JSON.parse(localStorage.getItem("fc_subgroup_collapsed") || "{}");
+
+function fcSubGroupCollapseKey(vehicleId, zoneId, subName){
+  return `${vehicleId}__${zoneId}__${subName}`;
+}
+
+function fcSaveSubGroupCollapsed(){
+  localStorage.setItem("fc_subgroup_collapsed", JSON.stringify(fcSubGroupCollapsed));
+}
+
 function fcSaveVehicleViews(){
   localStorage.setItem("fc_vehicle_views", JSON.stringify(fcVehicleViews));
 }
@@ -6463,21 +6474,29 @@ function renderFcDetail(root){
               const itemSubs = [...new Set(zoneItems.map(i => i.subLocation || "").filter(Boolean))];
               const allSubs = [...new Set([...definedSubs, ...itemSubs])];
 
-              const renderGroup = (subName, items) => `
-                <div class="fc-sub-group" data-subzone-drop="${fcEsc(subName)}">
+              const renderGroup = (subName, items) => {
+                const collapseKey = fcSubGroupCollapseKey(vehicle.id, selectedZone.id, subName);
+                const isCollapsed = fcSubGroupCollapsed[collapseKey] === true;
+                return `
+                <div class="fc-sub-group ${isCollapsed ? "is-collapsed" : ""}" data-subzone-drop="${fcEsc(subName)}">
                   <div class="fc-sub-group-head">
+                    <button class="fc-sub-toggle" data-sub-toggle="${fcEsc(subName)}" title="${isCollapsed ? "Déplier" : "Replier"}">${isCollapsed ? "▸" : "▾"}</button>
                     <span>${subName ? fcEsc(subName) : "Emplacement général"}</span>
+                    <small class="fc-sub-count">${items.length} matériel${items.length===1?"":"s"}</small>
                     ${subName ? `<button class="fc-sub-rename" data-sub-rename="${fcEsc(subName)}" title="Renommer cet emplacement">✏️</button>
                              <button class="fc-sub-delete" data-sub-delete="${fcEsc(subName)}" title="Supprimer cet emplacement">🗑️</button>` : ""}
                   </div>
-                  ${items.length ? items.map(i=>`
-                    <div class="fc-zone-item" draggable="true" data-move-item="${i.id}">
-                      <div><strong>${i.name}</strong><small>${i.category || "Sans catégorie"}</small></div>
-                      <input type="number" min="1" value="${i.qty}" data-qty="${i.id}" draggable="false">
-                      <button class="delete-mini" data-delete="${i.id}" draggable="false">Suppr.</button>
-                    </div>`).join("") : `<div class="fc-sub-empty">Glisse du matériel ici${subName ? "" : " depuis la bibliothèque"}.</div>`}
+                  <div class="fc-sub-group-body">
+                    ${items.length ? items.map(i=>`
+                      <div class="fc-zone-item" draggable="true" data-move-item="${i.id}">
+                        <div><strong>${i.name}</strong><small>${i.category || "Sans catégorie"}</small></div>
+                        <input type="number" min="1" value="${i.qty}" data-qty="${i.id}" draggable="false">
+                        <button class="delete-mini" data-delete="${i.id}" draggable="false">Suppr.</button>
+                      </div>`).join("") : `<div class="fc-sub-empty">Glisse du matériel ici${subName ? "" : " depuis la bibliothèque"}.</div>`}
+                  </div>
+                  ${isCollapsed ? `<div class="fc-sub-collapsed-drop-hint">Dépose ici pour ajouter à « ${subName ? fcEsc(subName) : "Emplacement général"} »</div>` : ""}
                 </div>
-              `;
+              `;};
 
               const generalItems = zoneItems.filter(i => !(i.subLocation || ""));
               let html = renderGroup("", generalItems);
@@ -6667,6 +6686,18 @@ function renderFcDetail(root){
     el.ondragstart = e => {
       e.dataTransfer.effectAllowed = "move";
       e.dataTransfer.setData("application/json", JSON.stringify({moveItemId: el.dataset.moveItem}));
+    };
+  });
+
+  // Replier / déplier un emplacement (le glisser-déposer reste actif même replié)
+  document.querySelectorAll("[data-sub-toggle]").forEach(btn => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const subName = btn.dataset.subToggle;
+      const key = fcSubGroupCollapseKey(vehicle.id, selectedZone.id, subName);
+      fcSubGroupCollapsed[key] = !fcSubGroupCollapsed[key];
+      fcSaveSubGroupCollapsed();
+      renderCheckSheets();
     };
   });
 

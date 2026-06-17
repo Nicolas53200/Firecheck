@@ -1386,7 +1386,28 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
   color:var(--red);
 }
 .fc-sub-group-head span{ flex:1; }
-.fc-sub-group-head button{
+.fc-sub-toggle{
+  border:none;
+  background:transparent;
+  font-size:13px;
+  cursor:pointer;
+  padding:2px 6px;
+  border-radius:6px;
+  color:var(--red);
+  flex-shrink:0;
+}
+.fc-sub-toggle:hover{
+  background:rgba(0,0,0,.06);
+}
+.fc-sub-count{
+  font-weight:700;
+  text-transform:none;
+  letter-spacing:0;
+  color:var(--muted);
+  font-size:11px;
+  white-space:nowrap;
+}
+.fc-sub-group-head button:not(.fc-sub-toggle){
   border:none;
   background:transparent;
   font-size:13px;
@@ -1395,9 +1416,30 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
   padding:2px 4px;
   border-radius:6px;
 }
-.fc-sub-group-head button:hover{
+.fc-sub-group-head button:not(.fc-sub-toggle):hover{
   opacity:1;
   background:rgba(0,0,0,.06);
+}
+.fc-sub-group.is-collapsed .fc-sub-group-body{
+  display:none;
+}
+.fc-sub-collapsed-drop-hint{
+  display:none;
+  font-size:11px;
+  color:var(--muted);
+  text-align:center;
+  padding:6px;
+  border:1.5px dashed #cbd5e1;
+  border-radius:10px;
+  background:#f8fafc;
+}
+.fc-sub-group.is-collapsed .fc-sub-collapsed-drop-hint{
+  display:block;
+}
+.fc-sub-group.is-collapsed.drag-over .fc-sub-collapsed-drop-hint{
+  border-color:#f4a3a7;
+  background:#fff7f8;
+  color:var(--red);
 }
 .fc-sub-empty{
   border:1.5px dashed #cbd5e1;
