@@ -8488,12 +8488,16 @@ function renderStep(){
 
   const vehicle = getCheckVehicleV27();
   let views = checkViewsV27(vehicle.id);
-  // Le contrôle visuel commence toujours par le Côté gauche : on le place en tête de liste.
-  const gaucheIdx = views.findIndex(v => v.id === "gauche");
-  if(gaucheIdx > 0){
-    const [g] = views.splice(gaucheIdx, 1);
-    views.unshift(g);
-  }
+  // Le contrôle visuel suit toujours cet ordre : Côté gauche, Arrière, Côté droit, Devant,
+  // puis les autres vues éventuelles (toit, intérieur, vues personnalisées...).
+  const fcCheckViewOrderV37 = ["gauche", "arriere", "droite", "avant"];
+  views = views.slice().sort((a, b) => {
+    const ia = fcCheckViewOrderV37.indexOf(a.id);
+    const ib = fcCheckViewOrderV37.indexOf(b.id);
+    const ra = ia === -1 ? fcCheckViewOrderV37.length : ia;
+    const rb = ib === -1 ? fcCheckViewOrderV37.length : ib;
+    return ra - rb;
+  });
   const order = guidedOrderV27(vehicle.id);
   const step = getCurrentStepV27(vehicle.id);
   const doneCount = order.filter(s => checkV27.done[s.zone]).length;
