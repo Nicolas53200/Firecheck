@@ -555,60 +555,69 @@ if("serviceWorker" in navigator){
 
 function fcComputeAlertCount(){
   let count = 0;
-  // Remontées nouvelles ou urgentes/bloquantes non clôturées
-  if(typeof reports !== "undefined"){
-    count += reports.filter(r => r.status === "Nouveau").length;
-    count += reports.filter(r => r.status !== "Nouveau" && r.status !== "Clôturé" &&
-      (r.priority === "Urgente" || r.priority === "Bloquant départ")).length;
-  }
-  // Produits pharmacie expirant dans 30 jours ou moins (ou déjà périmés)
-  if(typeof pharmData !== "undefined" && typeof pharmDaysLeft === "function"){
-    count += pharmData.filter(p => {
-      const d = pharmDaysLeft(p.expiry);
-      return d !== null && d <= 30;
-    }).length;
-  }
+  try{
+    // Remontées nouvelles ou urgentes/bloquantes non clôturées
+    if(typeof reports !== "undefined"){
+      count += reports.filter(r => r.status === "Nouveau").length;
+      count += reports.filter(r => r.status !== "Nouveau" && r.status !== "Clôturé" &&
+        (r.priority === "Urgente" || r.priority === "Bloquant départ")).length;
+    }
+  }catch(e){ /* reports pas encore initialisé — ignore pour ce passage */ }
+  try{
+    // Produits pharmacie expirant dans 30 jours ou moins (ou déjà périmés)
+    if(typeof pharmData !== "undefined" && typeof pharmDaysLeft === "function"){
+      count += pharmData.filter(p => {
+        const d = pharmDaysLeft(p.expiry);
+        return d !== null && d <= 30;
+      }).length;
+    }
+  }catch(e){ /* pharmData pas encore initialisé — ignore pour ce passage */ }
   return count;
 }
 
 function fcDrawFaviconBadge(count){
-  const canvas = document.createElement("canvas");
-  canvas.width = 64; canvas.height = 64;
-  const ctx = canvas.getContext("2d");
+  try{
+    const canvas = document.createElement("canvas");
+    canvas.width = 64; canvas.height = 64;
+    const ctx = canvas.getContext("2d");
+    if(!ctx) return;
 
-  // Base : carré rouge arrondi avec un casque/flamme simplifié (cohérent identité FireCheck)
-  ctx.fillStyle = "#d71920";
-  ctx.beginPath();
-  ctx.roundRect ? ctx.roundRect(4,4,56,56,14) : ctx.rect(4,4,56,56);
-  ctx.fill();
-  ctx.fillStyle = "#fff";
-  ctx.font = "bold 34px Arial";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillText("F", 32, 34);
-
-  if(count > 0){
-    // Pastille badge en haut à droite
+    // Base : carré rouge arrondi avec un casque/flamme simplifié (cohérent identité FireCheck)
+    ctx.fillStyle = "#d71920";
     ctx.beginPath();
-    ctx.arc(50, 14, 14, 0, Math.PI*2);
-    ctx.fillStyle = "#fff";
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(50, 14, 11, 0, Math.PI*2);
-    ctx.fillStyle = "#111827";
+    ctx.roundRect ? ctx.roundRect(4,4,56,56,14) : ctx.rect(4,4,56,56);
     ctx.fill();
     ctx.fillStyle = "#fff";
-    ctx.font = "bold 14px Arial";
-    ctx.fillText(count > 9 ? "9+" : String(count), 50, 15);
-  }
+    ctx.font = "bold 34px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("F", 32, 34);
 
-  let link = document.querySelector("link[rel='icon']");
-  if(!link){
-    link = document.createElement("link");
-    link.rel = "icon";
-    document.head.appendChild(link);
+    if(count > 0){
+      // Pastille badge en haut à droite
+      ctx.beginPath();
+      ctx.arc(50, 14, 14, 0, Math.PI*2);
+      ctx.fillStyle = "#fff";
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(50, 14, 11, 0, Math.PI*2);
+      ctx.fillStyle = "#111827";
+      ctx.fill();
+      ctx.fillStyle = "#fff";
+      ctx.font = "bold 14px Arial";
+      ctx.fillText(count > 9 ? "9+" : String(count), 50, 15);
+    }
+
+    let link = document.querySelector("link[rel='icon']");
+    if(!link){
+      link = document.createElement("link");
+      link.rel = "icon";
+      document.head.appendChild(link);
+    }
+    link.href = canvas.toDataURL("image/png");
+  }catch(e){
+    console.warn("fcDrawFaviconBadge:", e);
   }
-  link.href = canvas.toDataURL("image/png");
 }
 
 function fcUpdateNotificationBadge(){
@@ -8598,8 +8607,6 @@ function renderStep(){
     };
   });
   bindGuidedAnomalyDialogV27();
-
-  bindNavigation();
 }
 
 let activeGuidedAnomalyV27 = null;
