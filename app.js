@@ -335,7 +335,12 @@ function showScreen(id){
   if(id === "interventionReport" && typeof renderInterventionReportV36 === "function") renderInterventionReportV36();
   if(id === "tech" && typeof fcAskNotificationPermission === "function") fcAskNotificationPermission();
 }
-document.querySelectorAll("[data-go]").forEach(btn => btn.addEventListener("click", () => showScreen(btn.dataset.go)));
+// Délégation d'événement : fonctionne aussi pour les boutons [data-go] créés
+// dynamiquement plus tard (ex: dans renderStep(), regénéré via innerHTML).
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-go]");
+  if(btn) showScreen(btn.dataset.go);
+});
 
 /* ============================================================
    V36 — Choix post-scan + rapport de relève sur intervention (hors-ligne)
