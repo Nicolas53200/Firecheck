@@ -7143,6 +7143,7 @@ renderReports = function(){
           r.status = "Clôturé";
           r.history = r.history || [];
           r.history.push("Dossier clôturé par le service technique.");
+          if(typeof updateRemonteeStatusSupabase === "function") updateRemonteeStatusSupabase(r.id, "Clôturé", {history: r.history});
         }
         renderAll();
       };
@@ -7185,6 +7186,7 @@ function bindTakeChargeDialog(){
     report.takenDate = date;
     report.history = report.history || [];
     report.history.push(`Pris en charge le ${date} par ${name}. ${comment}`);
+    if(typeof updateRemonteeStatusSupabase === "function") updateRemonteeStatusSupabase(report.id, "Pris en compte", {history: report.history, takenBy: name, takenDate: date});
     document.getElementById("takeChargeDialog").close();
     renderAll();
     toast("Dossier pris en charge");

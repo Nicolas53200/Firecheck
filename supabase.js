@@ -290,19 +290,26 @@ async function syncRemontees(){
     const { data, error } = await sb.from("fc_remontees").select("*").order("created_at", {ascending: false});
     if(error) throw error;
     if(data && data.length > 0){
-      const local = data.map(r => ({
-        id: r.id,
-        asset: r.asset,
-        zone: r.zone,
-        origin: r.origin,
-        type: r.type,
-        item: r.item,
-        comment: r.comment,
-        status: r.status,
-        priority: r.priority,
-        author: r.author,
-        time: r.time
-      }));
+      const local = data.map(r => {
+        let history = [];
+        try{ history = r.history ? JSON.parse(r.history) : []; }catch(e){ history = []; }
+        return {
+          id: r.id,
+          asset: r.asset,
+          zone: r.zone,
+          origin: r.origin,
+          type: r.type,
+          item: r.item,
+          comment: r.comment,
+          status: r.status,
+          priority: r.priority,
+          author: r.author,
+          time: r.time,
+          history,
+          takenBy: r.taken_by || "",
+          takenDate: r.taken_date || ""
+        };
+      });
       reports.length = 0;
       reports.push(...local);
       if(typeof renderAll === "function") renderAll();
@@ -313,8 +320,8 @@ async function syncRemontees(){
 async function saveRemonteeSupabase(report){
   if(!sb || !report) return;
   try{
-    await sb.from("fc_remontees").upsert({
-      id: report.id,
+    const payload = {
+      id: String(report.id),
       asset: report.asset || "",
       zone: report.zone || "",
       origin: report.origin || "",
@@ -324,17 +331,50 @@ async function saveRemonteeSupabase(report){
       status: report.status || "Nouveau",
       priority: report.priority || "Normale",
       author: report.author || "",
-      time: report.time || ""
-    });
-    console.log("✅ Remontée sauvegardée:", report.id);
+      time: report.time || "",
+      history: JSON.stringify(report.history || []),
+      taken_by: report.takenBy || "",
+      taken_date: report.takenDate || ""
+    };
+    let { error } = await sb.from("fc_remontees").upsert(payload);
+    if(error){
+      console.warn("saveRemonteeSupabase erreur:", error.message);
+      const msg = String(error.message || "").toLowerCase();
+      ["history","taken_by","taken_date","priority","author","time","origin","item","asset"].forEach(col => {
+        if(msg.includes(col) && col in payload) delete payload[col];
+      });
+      const retry = await sb.from("fc_remontees").upsert(payload);
+      if(retry.error){
+        console.warn("saveRemonteeSupabase erreur (retry):", retry.error.message);
+        if(typeof toast === "function") toast("⚠️ Remontée non enregistrée : " + retry.error.message);
+      } else {
+        console.log("✅ Remontée enregistrée (colonnes manquantes ignorées — vérifie le schéma de fc_remontees)");
+      }
+    } else {
+      console.log("✅ Remontée sauvegardée:", report.id);
+    }
   }catch(e){ console.warn("saveRemonteeSupabase:", e); }
 }
 
-async function updateRemonteeStatusSupabase(id, status){
+async function updateRemonteeStatusSupabase(id, status, extra){
   if(!sb) return;
   try{
-    await sb.from("fc_remontees").update({status}).eq("id", String(id));
-    console.log("✅ Statut remontée mis à jour:", id, status);
+    const payload = {status};
+    if(extra && extra.history) payload.history = JSON.stringify(extra.history);
+    if(extra && extra.takenBy) payload.taken_by = extra.takenBy;
+    if(extra && extra.takenDate) payload.taken_date = extra.takenDate;
+    let { error } = await sb.from("fc_remontees").update(payload).eq("id", String(id));
+    if(error){
+      console.warn("updateRemonteeStatusSupabase erreur:", error.message);
+      // Réessaye avec uniquement le statut si les colonnes étendues n'existent pas
+      const retry = await sb.from("fc_remontees").update({status}).eq("id", String(id));
+      if(retry.error){
+        console.warn("updateRemonteeStatusSupabase erreur (retry):", retry.error.message);
+        if(typeof toast === "function") toast("⚠️ Statut non enregistré : " + retry.error.message);
+      }
+    } else {
+      console.log("✅ Statut remontée mis à jour:", id, status);
+    }
   }catch(e){ console.warn("updateRemonteeStatusSupabase:", e); }
 }
 
