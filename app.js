@@ -336,8 +336,107 @@ function showScreen(id){
   $(id).classList.add("active");
   window.scrollTo(0,0);
   renderAll();
+  if(id === "tech" && typeof fcAskNotificationPermission === "function") fcAskNotificationPermission();
 }
 document.querySelectorAll("[data-go]").forEach(btn => btn.addEventListener("click", () => showScreen(btn.dataset.go)));
+
+/* ============================================================
+   V35 — Badge de notification (onglet + favicon + notification système)
+   Signale : nouvelles remontées + remontées urgentes non traitées + péremptions proches
+   ============================================================ */
+const fcOriginalTitle = document.title;
+let fcLastNotifiedCount = 0;
+let fcNotifPermissionAsked = false;
+
+function fcComputeAlertCount(){
+  let count = 0;
+  // Remontées nouvelles ou urgentes/bloquantes non clôturées
+  if(typeof reports !== "undefined"){
+    count += reports.filter(r => r.status === "Nouveau").length;
+    count += reports.filter(r => r.status !== "Nouveau" && r.status !== "Clôturé" &&
+      (r.priority === "Urgente" || r.priority === "Bloquant départ")).length;
+  }
+  // Produits pharmacie expirant dans 30 jours ou moins (ou déjà périmés)
+  if(typeof pharmData !== "undefined" && typeof pharmDaysLeft === "function"){
+    count += pharmData.filter(p => {
+      const d = pharmDaysLeft(p.expiry);
+      return d !== null && d <= 30;
+    }).length;
+  }
+  return count;
+}
+
+function fcDrawFaviconBadge(count){
+  const canvas = document.createElement("canvas");
+  canvas.width = 64; canvas.height = 64;
+  const ctx = canvas.getContext("2d");
+
+  // Base : carré rouge arrondi avec un casque/flamme simplifié (cohérent identité FireCheck)
+  ctx.fillStyle = "#d71920";
+  ctx.beginPath();
+  ctx.roundRect ? ctx.roundRect(4,4,56,56,14) : ctx.rect(4,4,56,56);
+  ctx.fill();
+  ctx.fillStyle = "#fff";
+  ctx.font = "bold 34px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText("F", 32, 34);
+
+  if(count > 0){
+    // Pastille badge en haut à droite
+    ctx.beginPath();
+    ctx.arc(50, 14, 14, 0, Math.PI*2);
+    ctx.fillStyle = "#fff";
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(50, 14, 11, 0, Math.PI*2);
+    ctx.fillStyle = "#111827";
+    ctx.fill();
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 14px Arial";
+    ctx.fillText(count > 9 ? "9+" : String(count), 50, 15);
+  }
+
+  let link = document.querySelector("link[rel='icon']");
+  if(!link){
+    link = document.createElement("link");
+    link.rel = "icon";
+    document.head.appendChild(link);
+  }
+  link.href = canvas.toDataURL("image/png");
+}
+
+function fcUpdateNotificationBadge(){
+  const count = fcComputeAlertCount();
+
+  // Titre de l'onglet
+  document.title = count > 0 ? `(${count > 99 ? "99+" : count}) ${fcOriginalTitle}` : fcOriginalTitle;
+
+  // Favicon avec pastille
+  fcDrawFaviconBadge(count);
+
+  // Notification système si le nombre d'alertes a augmenté
+  if(count > fcLastNotifiedCount && typeof Notification !== "undefined" && Notification.permission === "granted" && document.visibilityState !== "visible"){
+    try{
+      new Notification("FireCheck — Nouvelle alerte", {
+        body: `${count} élément${count > 1 ? "s" : ""} à traiter (remontées / péremptions).`,
+        icon: document.querySelector("link[rel='icon']")?.href
+      });
+    }catch(e){ /* notifications non supportées, ignore */ }
+  }
+  fcLastNotifiedCount = count;
+}
+
+function fcAskNotificationPermission(){
+  if(fcNotifPermissionAsked) return;
+  fcNotifPermissionAsked = true;
+  if(typeof Notification !== "undefined" && Notification.permission === "default"){
+    Notification.requestPermission().catch(() => {});
+  }
+}
+
+// Rafraîchit le badge périodiquement même sans interaction (ex: après un sync Supabase en arrière-plan)
+setInterval(() => { if(typeof fcUpdateNotificationBadge === "function") fcUpdateNotificationBadge(); }, 60000);
 
 function toast(message){
   const t = $("toast");
@@ -7136,8 +7235,19 @@ renderReports = function(){
   if(urgentStatCard){
     urgentStatCard.style.cursor = "pointer";
     urgentStatCard.title = "Cliquer pour filtrer";
-    urgentStatCard.onclick = () => setTechFilter("urgent");
+    urgentStatCard.onclick = (e) => {
+      if(e.target.closest("#urgentInfoBtn")) return;
+      setTechFilter("urgent");
+    };
     urgentStatCard.classList.toggle("active-filter", techReportFilter === "urgent");
+  }
+
+  const urgentInfoBtn = document.getElementById("urgentInfoBtn");
+  if(urgentInfoBtn){
+    urgentInfoBtn.onclick = (e) => {
+      e.stopPropagation();
+      openUrgentInfoDialogV34();
+    };
   }
 
   const tech = document.getElementById("techReportsList");
@@ -7216,6 +7326,43 @@ renderReports = function(){
     select.value = ["Nouveau","Pris en compte","Corrigé par SP","Clôturé"].includes(techReportFilter) ? techReportFilter : "all";
   }
 };
+
+function openUrgentInfoDialogV34(){
+  let dialog = document.getElementById("urgentInfoDialogV34");
+  if(!dialog){
+    dialog = document.createElement("dialog");
+    dialog.id = "urgentInfoDialogV34";
+    dialog.className = "dialog";
+    document.body.appendChild(dialog);
+  }
+
+  dialog.innerHTML = `
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Service technique</p>
+          <h2>Échéances proches — comment ça fonctionne</h2>
+        </div>
+        <button class="round" id="closeUrgentInfoV34">×</button>
+      </div>
+      <p>Ce compteur regroupe les remontées <strong>non clôturées</strong> dont la priorité est <strong>Urgente</strong> ou <strong>Bloquant départ</strong>.</p>
+      <ul style="padding-left:18px; margin:14px 0;">
+        <li>Une remontée en priorité <strong>Normale</strong> n'est jamais comptée, quelle que soit son ancienneté.</li>
+        <li>Une remontée <strong>Urgente</strong> ou <strong>Bloquant départ</strong> reste comptée tant qu'elle n'est pas <strong>Clôturée</strong>.</li>
+        <li>Dès qu'elle passe au statut <strong>Clôturé</strong>, elle sort automatiquement du compteur.</li>
+      </ul>
+      <p class="muted">Ce n'est pas une date limite calendaire : il n'y a pas de champ « date d'échéance » dans l'application aujourd'hui. C'est un indicateur de priorité non traitée.</p>
+      <p class="muted">Clique sur le chiffre pour afficher uniquement ces dossiers prioritaires.</p>
+      <div class="modal-actions">
+        <button class="btn primary" id="closeUrgentInfoV34Btn">Compris</button>
+      </div>
+    </div>
+  `;
+
+  dialog.querySelector("#closeUrgentInfoV34").onclick = () => dialog.close();
+  dialog.querySelector("#closeUrgentInfoV34Btn").onclick = () => dialog.close();
+  dialog.showModal();
+}
 
 function openReportDetailV34(id){
   const r = reports.find(x => x.id === id);
@@ -7299,7 +7446,15 @@ function bindTakeChargeDialog(){
   if(confirm) confirm.onclick = () => {
     const report = reports.find(r => r.id === activeTakeChargeId);
     if(!report) return;
-    const name = document.getElementById("takeChargeName").value || "Service technique";
+    const nameInput = document.getElementById("takeChargeName");
+    const name = (nameInput.value || "").trim();
+    if(!name){
+      nameInput.focus();
+      nameInput.style.borderColor = "var(--red)";
+      toast("Indique le nom du SP qui prend en charge le dossier");
+      return;
+    }
+    nameInput.style.borderColor = "";
     const date = document.getElementById("takeChargeDate").value || new Date().toISOString().slice(0,10);
     const comment = document.getElementById("takeChargeComment").value || "";
     report.status = "Pris en compte";
@@ -7991,6 +8146,7 @@ renderAll = function(){
   renderAllBeforeV26();
   renderPersonnelCisTab();
   bindPersonnelCisTab();
+  if(typeof fcUpdateNotificationBadge === "function") fcUpdateNotificationBadge();
 };
 
 
