@@ -7091,53 +7091,110 @@ function setTechFilter(filter){
   renderReports();
 }
 
+function isUrgentReportV34(r){
+  return r.status !== "Clôturé" && (r.priority === "Urgente" || r.priority === "Bloquant départ");
+}
+
+function statusCardClassV34(status){
+  if(status === "Clôturé" || status === "Corrigé par SP") return "tech-report-done";
+  if(status === "Pris en compte" || status === "En cours") return "tech-report-progress";
+  return "tech-report-new";
+}
+
 const renderReportsBeforeV18 = renderReports;
 renderReports = function(){
   enhanceReportsForV18();
   renderReportsBeforeV18();
 
-  const filterMap = {
-    statNew:"Nouveau",
-    statProgress:"Pris en compte",
-    statSp:"Corrigé par SP",
-    statLate:"due"
-  };
+  // Compteurs cliquables (Nouveaux / En cours / Corrigés / Échéances proches)
+  const newCountEl = document.getElementById("newCount");
+  const progressCountEl = document.getElementById("progressCount");
+  const spFixedCountEl = document.getElementById("spFixedCount");
+  if(newCountEl) newCountEl.textContent = reports.filter(r => r.status === "Nouveau").length;
+  if(progressCountEl) progressCountEl.textContent = reports.filter(r => r.status === "Pris en compte").length;
+  if(spFixedCountEl) spFixedCountEl.textContent = reports.filter(r => r.status === "Corrigé par SP").length;
 
+  const urgentCount = reports.filter(isUrgentReportV34).length;
+  const urgentStat = document.querySelector(".stat.urgent strong");
+  if(urgentStat) urgentStat.textContent = urgentCount;
+
+  const filterMap = {
+    newCount:"Nouveau",
+    progressCount:"Pris en compte",
+    spFixedCount:"Corrigé par SP"
+  };
   Object.entries(filterMap).forEach(([id, filter]) => {
-    const el = document.getElementById(id);
-    if(el){
-      el.onclick = () => setTechFilter(filter === "due" ? "all" : filter);
-      el.classList.toggle("active-filter", techReportFilter === filter);
-      el.title = "Cliquer pour filtrer";
+    const stat = document.getElementById(id)?.closest(".stat");
+    if(stat){
+      stat.style.cursor = "pointer";
+      stat.title = "Cliquer pour filtrer";
+      stat.onclick = () => setTechFilter(filter);
+      stat.classList.toggle("active-filter", techReportFilter === filter);
     }
   });
+  const urgentStatCard = document.querySelector(".stat.urgent");
+  if(urgentStatCard){
+    urgentStatCard.style.cursor = "pointer";
+    urgentStatCard.title = "Cliquer pour filtrer";
+    urgentStatCard.onclick = () => setTechFilter("urgent");
+    urgentStatCard.classList.toggle("active-filter", techReportFilter === "urgent");
+  }
 
   const tech = document.getElementById("techReportsList");
   if(tech){
     const effectiveFilter = techReportFilter;
-    const filteredReports = reports.filter(r => effectiveFilter === "all" || r.status === effectiveFilter);
-    tech.innerHTML = filteredReports.map(r => `
-      <article class="tech-report">
+    const filteredReports = reports.filter(r => {
+      if(effectiveFilter === "all") return true;
+      if(effectiveFilter === "urgent") return isUrgentReportV34(r);
+      return r.status === effectiveFilter;
+    });
+    tech.innerHTML = filteredReports.length ? filteredReports.map(r => `
+      <article class="tech-report ${statusCardClassV34(r.status)}" data-open-report="${r.id}">
         <div>
-          <strong>${r.asset}</strong><br>
-          <span class="muted">${r.zone}</span>
-          ${r.history?.length ? `<small class="history">${r.history[r.history.length - 1]}</small>` : ""}
+          <strong>${fcEsc(r.asset)}</strong><br>
+          <span class="muted">${fcEsc(r.zone)}</span>
+          ${r.history?.length ? `<small class="history">${fcEsc(r.history[r.history.length - 1])}</small>` : ""}
         </div>
-        <div><strong>${r.type}</strong><br><span class="muted">${r.item}</span></div>
-        <div>${r.author}<br><span class="muted">${r.time}</span></div>
+        <div>
+          <strong>${fcEsc(r.type)}</strong><br>
+          <span class="muted">${r.item && r.item !== "—" ? fcEsc(r.item) : ""}</span>
+          ${r.comment ? `<small class="tech-report-comment">${fcEsc(r.comment)}</small>` : ""}
+        </div>
+        <div class="tech-report-people">
+          <div class="tech-report-people-row">
+            <span class="tech-report-people-label">Signalé par :</span>
+            <strong>${fcEsc(r.author || "Inconnu")}</strong>
+            <span class="muted">${fcEsc(r.time)}</span>
+          </div>
+          <div class="tech-report-people-row">
+            <span class="tech-report-people-label">Pris en compte par :</span>
+            ${r.takenBy ? `<strong>${fcEsc(r.takenBy)}</strong>${r.takenDate ? `<span class="muted">le ${fcEsc(r.takenDate)}</span>` : ""}` : `<span class="muted">— Non pris en charge —</span>`}
+          </div>
+        </div>
         <div class="tech-report-actions">
-          <span class="pill ${statusClass(r.status)}">${r.status}</span>
+          <span class="pill ${statusClass(r.status)}">${fcEsc(r.status)}</span>
+          ${isUrgentReportV34(r) ? `<span class="pill red">⚠ ${fcEsc(r.priority)}</span>` : ""}
           <button class="btn ghost take-btn-v18" data-id="${r.id}">Prendre en charge</button>
           <button class="btn primary close-btn-v18" data-id="${r.id}">Clôturer</button>
         </div>
       </article>
-    `).join("");
+    `).join("") : `<p class="muted" style="padding:18px;">Aucune remontée pour ce filtre.</p>`;
+
+    // Ouvrir la fiche en détail (sans la prendre en charge) — clic sur la carte,
+    // mais pas si on a cliqué sur un bouton d'action à l'intérieur.
+    document.querySelectorAll("[data-open-report]").forEach(card => {
+      card.onclick = (e) => {
+        if(e.target.closest(".tech-report-actions")) return;
+        openReportDetailV34(Number(card.dataset.openReport));
+      };
+    });
 
     document.querySelectorAll(".take-btn-v18").forEach(btn => {
-      btn.onclick = () => openTakeChargeDialog(Number(btn.dataset.id));
+      btn.onclick = (e) => { e.stopPropagation(); openTakeChargeDialog(Number(btn.dataset.id)); };
     });
     document.querySelectorAll(".close-btn-v18").forEach(btn => {
-      btn.onclick = () => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
         const r = reports.find(x => x.id === Number(btn.dataset.id));
         if(r){
           r.status = "Clôturé";
@@ -7156,9 +7213,73 @@ renderReports = function(){
       techReportFilter = select.value;
       renderReports();
     };
-    select.value = techReportFilter;
+    select.value = ["Nouveau","Pris en compte","Corrigé par SP","Clôturé"].includes(techReportFilter) ? techReportFilter : "all";
   }
 };
+
+function openReportDetailV34(id){
+  const r = reports.find(x => x.id === id);
+  if(!r) return;
+
+  let dialog = document.getElementById("reportDetailDialogV34");
+  if(!dialog){
+    dialog = document.createElement("dialog");
+    dialog.id = "reportDetailDialogV34";
+    dialog.className = "dialog";
+    document.body.appendChild(dialog);
+  }
+
+  dialog.innerHTML = `
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Service technique</p>
+          <h2>Détail de la remontée</h2>
+        </div>
+        <button class="round" id="closeReportDetailV34">×</button>
+      </div>
+
+      <div class="print-info-grid" style="margin-bottom:14px;">
+        <div class="print-info-item"><span>Engin / matériel</span><strong>${fcEsc(r.asset)}</strong></div>
+        <div class="print-info-item"><span>Zone</span><strong>${fcEsc(r.zone || "—")}</strong></div>
+        <div class="print-info-item"><span>Type</span><strong>${fcEsc(r.type || "—")}</strong></div>
+        <div class="print-info-item"><span>Statut</span><strong>${fcEsc(r.status)}</strong></div>
+        <div class="print-info-item"><span>Priorité</span><strong>${fcEsc(r.priority || "Normale")}</strong></div>
+        <div class="print-info-item"><span>Origine</span><strong>${fcEsc(r.origin || "—")}</strong></div>
+      </div>
+      ${r.item && r.item !== "—" ? `<p><strong>Matériel concerné :</strong> ${fcEsc(r.item)}</p>` : ""}
+      <p><strong>Commentaire :</strong><br>${fcEsc(r.comment || "Aucun commentaire.")}</p>
+      <p class="muted">Signalé par : <strong>${fcEsc(r.author || "Inconnu")}</strong> · ${fcEsc(r.time || "")}</p>
+      <p class="muted">Pris en compte par : ${r.takenBy ? `<strong>${fcEsc(r.takenBy)}</strong>${r.takenDate ? " le " + fcEsc(r.takenDate) : ""}` : "— Non pris en charge —"}</p>
+      ${r.history?.length ? `
+        <h3 style="margin-top:18px;">Historique</h3>
+        <ul style="padding-left:18px;">
+          ${r.history.map(h => `<li class="muted">${fcEsc(h)}</li>`).join("")}
+        </ul>
+      ` : ""}
+
+      ${r.status !== "Clôturé" ? `
+        <div class="modal-actions">
+          <button class="btn ghost" id="reportDetailTakeChargeV34">Prendre en charge</button>
+          <button class="btn primary" id="reportDetailCloseRepV34">Clôturer</button>
+        </div>
+      ` : ""}
+    </div>
+  `;
+
+  dialog.querySelector("#closeReportDetailV34").onclick = () => dialog.close();
+  dialog.querySelector("#reportDetailTakeChargeV34")?.addEventListener("click", () => { dialog.close(); openTakeChargeDialog(r.id); });
+  dialog.querySelector("#reportDetailCloseRepV34")?.addEventListener("click", () => {
+    r.status = "Clôturé";
+    r.history = r.history || [];
+    r.history.push("Dossier clôturé par le service technique.");
+    if(typeof updateRemonteeStatusSupabase === "function") updateRemonteeStatusSupabase(r.id, "Clôturé", {history: r.history});
+    dialog.close();
+    renderAll();
+  });
+
+  dialog.showModal();
+}
 
 function openTakeChargeDialog(id){
   activeTakeChargeId = id;
