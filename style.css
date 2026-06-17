@@ -2194,17 +2194,20 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
     display: grid;
     grid-template-columns: 45mm 1fr;
     gap: 0;
+    align-items: start;
   }
   .print-step-photo{
     border-right: 1px solid #e5e7eb;
     display: grid;
     place-items: center;
-    min-height: 32mm;
+    height: 32mm;
     background: #f8fafc;
     color: #9ca3af;
     font-size: 8pt;
     text-align: center;
     padding: 2mm;
+    box-sizing: border-box;
+    overflow: hidden;
   }
   .print-step-photo.has-photo{
     padding: 0;
@@ -2214,7 +2217,6 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
     height: 100%;
     object-fit: cover;
     display: block;
-    min-height: 32mm;
   }
   .print-step-items{
     padding: 2mm;
