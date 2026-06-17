@@ -8159,8 +8159,8 @@ renderAll = function(){
 
 /* V27 - vérification terrain avec carousel + contrôle guidé */
 let checkV27 = {
-  view:"avant",
-  currentZone:"Cabine avant",
+  view:"gauche",
+  currentZone:"Cabine avant gauche",
   done:{},
   issues:{}
 };
@@ -8212,6 +8212,12 @@ function zoneMatchesV27(itemZone, aliases){
 function getZoneItemsV27(vehicleId, step){
   if(typeof fcInventory === "undefined") return [];
   return fcInventory.filter(i => i.vehicleId === vehicleId && zoneMatchesV27(i.zone, step.aliases));
+}
+
+function fcGuidedStepPhotoV27(vehicle, zoneId){
+  if(!vehicle || typeof getMediaV30 !== "function") return "";
+  const stepName = (typeof fcStepNameForZone === "function") ? fcStepNameForZone(vehicle, zoneId) : zoneId;
+  return getMediaV30(vehicle.id, `step:${stepName}`) || "";
 }
 
 function getCurrentStepV27(vehicleId){
@@ -8323,8 +8329,8 @@ function renderStep(){
           <span class="step-pill-v27">Étape ${order.indexOf(step) + 1}</span>
         </div>
 
-        <div class="guided-zone-photo-placeholder">
-          📷 Emplacement photo détaillée — ${step.zone}
+        <div class="guided-zone-photo-placeholder ${fcGuidedStepPhotoV27(vehicle, step.zone) ? "has-zone-photo" : ""}" style="${fcGuidedStepPhotoV27(vehicle, step.zone) ? `background-image:url('${fcGuidedStepPhotoV27(vehicle, step.zone)}')` : ""}">
+          <span>${fcGuidedStepPhotoV27(vehicle, step.zone) ? "" : `📷 Aucune photo détaillée pour ${fcEsc(step.zone)}`}</span>
         </div>
 
         <div class="guided-items-v27">
@@ -8359,12 +8365,95 @@ function renderStep(){
   });
   document.getElementById("guidedDoneV27").onclick = () => markZoneDoneV27(false);
   document.getElementById("guidedIssueV27").onclick = () => {
-    toast("Anomalie enregistrée sur la zone");
-    markZoneDoneV27(true);
+    openGuidedAnomalyDialogV27(vehicle, step, null);
   };
+  document.querySelectorAll("[data-guided-item]").forEach(el => {
+    el.onclick = () => {
+      const itemId = el.dataset.guidedItem;
+      const item = items.find(i => i.id === itemId);
+      if(item) openGuidedAnomalyDialogV27(vehicle, step, item);
+    };
+  });
+  bindGuidedAnomalyDialogV27();
 
   bindNavigation();
 }
+
+let activeGuidedAnomalyV27 = null;
+
+function openGuidedAnomalyDialogV27(vehicle, step, item){
+  activeGuidedAnomalyV27 = {vehicle, step, item};
+  const dialog = document.getElementById("guidedAnomalyDialogV27");
+  if(!dialog) return;
+
+  const title = document.getElementById("guidedAnomalyTitleV27");
+  const subtitle = document.getElementById("guidedAnomalySubtitleV27");
+  if(item){
+    title.textContent = `Anomalie — ${item.name}`;
+    subtitle.textContent = `${step.zone} · quantité attendue : ${item.qty}`;
+  } else {
+    title.textContent = `Anomalie — ${step.zone}`;
+    subtitle.textContent = "Signalement général sur l’ensemble de la zone.";
+  }
+
+  document.getElementById("guidedAnomalyType").value = "Manquant";
+  document.getElementById("guidedAnomalyPriority").value = "Normale";
+  document.getElementById("guidedAnomalyComment").value = "";
+
+  dialog.showModal();
+}
+
+function bindGuidedAnomalyDialogV27(){
+  const dialog = document.getElementById("guidedAnomalyDialogV27");
+  if(!dialog || dialog.dataset.boundV27) return;
+  dialog.dataset.boundV27 = "1";
+
+  document.getElementById("closeGuidedAnomalyV27").onclick = () => dialog.close();
+  document.getElementById("cancelGuidedAnomalyV27").onclick = () => dialog.close();
+
+  document.getElementById("saveGuidedAnomalyV27").onclick = () => {
+    if(!activeGuidedAnomalyV27) return;
+    const {vehicle, step, item} = activeGuidedAnomalyV27;
+    const type = document.getElementById("guidedAnomalyType").value;
+    const priority = document.getElementById("guidedAnomalyPriority").value;
+    const comment = document.getElementById("guidedAnomalyComment").value.trim();
+
+    const author = currentUser ? `${currentUser.grade} ${currentUser.prenom} ${currentUser.nom}` : "SP non identifié";
+    const report = {
+      id: Date.now(),
+      asset: vehicle.name,
+      zone: step.zone,
+      origin: "Vérification terrain",
+      type: type,
+      item: item ? item.name : "—",
+      comment: comment || `${type} signalé sur ${step.zone}.`,
+      status: "Nouveau",
+      priority: priority,
+      author: author,
+      time: "À l’instant",
+      history: []
+    };
+
+    if(typeof reports !== "undefined") reports.unshift(report);
+    if(typeof saveRemonteeSupabase === "function") saveRemonteeSupabase(report);
+
+    checkV27.issues[step.zone] = true;
+    checkV27.done[step.zone] = true;
+
+    dialog.close();
+    toast("Anomalie envoyée au service technique");
+
+    const next = guidedOrderV27(vehicle.id).find(s => !checkV27.done[s.zone]);
+    if(next){
+      checkV27.currentZone = next.zone;
+      const views = checkViewsV27(vehicle.id);
+      const foundView = views.find(v => v.zones.some(z => next.aliases.some(a => String(a).toLowerCase() === String(z.id).toLowerCase())));
+      if(foundView) checkV27.view = foundView.id;
+    }
+    renderStep();
+  };
+}
+bindGuidedAnomalyDialogV27();
 
 
 /* V28 - photo générale par vue + photo détaillée par zone */

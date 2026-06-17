@@ -947,9 +947,48 @@
           <input id="pharmFormPhotoInput" type="file" accept="image/*" style="display:none;">
         </label>
       </div>
+  <dialog id="guidedAnomalyDialogV27">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Vérification terrain</p>
+          <h2 id="guidedAnomalyTitleV27">Signaler une anomalie</h2>
+        </div>
+        <button class="round" id="closeGuidedAnomalyV27">×</button>
+      </div>
+
+      <p class="muted" id="guidedAnomalySubtitleV27">Choisis ce qui ne va pas, puis valide.</p>
+
+      <div class="field-row">
+        <label>Type de problème
+          <select id="guidedAnomalyType">
+            <option>Manquant</option>
+            <option>Cassé</option>
+            <option>Sale</option>
+            <option>Détérioré</option>
+            <option>Défectueux</option>
+            <option>Non conforme</option>
+            <option>Périmé</option>
+            <option>À contrôler</option>
+            <option>Autre</option>
+          </select>
+        </label>
+
+        <label>Priorité
+          <select id="guidedAnomalyPriority">
+            <option>Normale</option>
+            <option>Urgente</option>
+            <option>Bloquant départ</option>
+          </select>
+        </label>
+      </div>
+
+      <label>Commentaire</label>
+      <textarea id="guidedAnomalyComment" placeholder="Précise le problème constaté..."></textarea>
+
       <div class="modal-actions">
-        <button class="btn ghost" id="pharmFormCancel">Annuler</button>
-        <button class="btn primary" id="pharmFormSave">Ajouter</button>
+        <button class="btn ghost" id="cancelGuidedAnomalyV27">Annuler</button>
+        <button class="btn primary" id="saveGuidedAnomalyV27">Enregistrer l’anomalie</button>
       </div>
     </div>
   </dialog>
