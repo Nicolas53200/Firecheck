@@ -45,30 +45,38 @@ function createClient(url, key){
     const chain = {
       select: function(cols){ _select = cols || "*"; return chain; },
       order: function(col, opts){ _order = col + (opts && opts.ascending === false ? ".desc" : ".asc"); return chain; },
-      eq: function(col, val){ _filters.push(`${col}=eq.${val}`); return chain; },
-      neq: function(col, val){ _filters.push(`${col}=neq.${val}`); return chain; },
-      insert: async function(data){
+      eq: function(col, val){ _filters.push(`${col}=eq.${val}`); return execIfTerminal(); },
+      neq: function(col, val){ _filters.push(`${col}=neq.${val}`); return execIfTerminal(); },
+      insert: function(data){
         _method = "POST"; _body = data;
-        return exec();
+        return execIfTerminal();
       },
-      upsert: async function(data, opts){
+      upsert: function(data, opts){
         _method = "POST";
         _body = data;
         _prefer = "resolution=merge-duplicates,return=representation";
-        return exec();
+        return execIfTerminal();
       },
-      update: async function(data){
+      update: function(data){
         _method = "PATCH"; _body = data;
-        return exec();
+        return execIfTerminal();
       },
-      delete: async function(){
+      delete: function(){
         _method = "DELETE";
-        return exec();
+        return execIfTerminal();
       },
       then: function(resolve, reject){
         return exec().then(resolve, reject);
       }
     };
+
+    // Pour insert/upsert (pas besoin de filtre), exécute directement mais reste chaînable
+    // (eq/neq peuvent encore s'ajouter après pour update/delete). On expose un objet hybride :
+    // à la fois "thenable" (awaitable directement) et muni de eq()/neq() pour pouvoir filtrer
+    // avant la résolution de la promesse.
+    function execIfTerminal(){
+      return chain;
+    }
 
     async function exec(){
       try{
