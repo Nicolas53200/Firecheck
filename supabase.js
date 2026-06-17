@@ -284,6 +284,65 @@ async function savePersonnelSupabase(){
    SYNC — Remontées
    ============================================================ */
 
+/* ============================================================
+   SYNC — Fiches de passation entre relèves (par véhicule)
+   ============================================================ */
+
+async function syncHandovers(){
+  if(!sb) return;
+  try{
+    const { data, error } = await sb.from("fc_handovers").select("*").order("created_at", {ascending: false});
+    if(error) throw error;
+    if(typeof fcHandovers !== "undefined"){
+      fcHandovers.length = 0;
+      (data || []).forEach(h => {
+        fcHandovers.push({
+          id: h.id,
+          vehicleId: h.vehicle_id,
+          vehicleName: h.vehicle_name,
+          comment: h.comment,
+          priority: h.priority,
+          author: h.author,
+          time: h.time,
+          read: !!h.read
+        });
+      });
+    }
+  }catch(e){ console.warn("syncHandovers:", e); }
+}
+
+async function saveHandoverSupabase(handover){
+  if(!sb || !handover) return;
+  try{
+    const payload = {
+      id: handover.id,
+      vehicle_id: handover.vehicleId,
+      vehicle_name: handover.vehicleName,
+      comment: handover.comment,
+      priority: handover.priority,
+      author: handover.author,
+      time: handover.time,
+      read: handover.read || false
+    };
+    const { error } = await sb.from("fc_handovers").upsert(payload);
+    if(error){
+      console.warn("saveHandoverSupabase erreur:", error.message);
+      if(typeof toast === "function") toast("⚠️ Fiche de passation non envoyée : " + error.message);
+    } else {
+      if(typeof fcHandovers !== "undefined") fcHandovers.push(handover);
+      console.log("✅ Fiche de passation enregistrée:", handover.id);
+    }
+  }catch(e){ console.warn("saveHandoverSupabase:", e); }
+}
+
+async function markHandoverReadSupabase(id){
+  if(!sb) return;
+  try{
+    await sb.from("fc_handovers").update({read: true}).eq("id", id);
+    console.log("✅ Fiche de passation marquée comme lue:", id);
+  }catch(e){ console.warn("markHandoverReadSupabase:", e); }
+}
+
 async function syncRemontees(){
   if(!sb) return;
   try{
@@ -464,8 +523,17 @@ async function saveInventaireItemSupabase(item){
 async function deleteInventaireItemSupabase(id){
   if(!sb) return;
   try{
-    await sb.from("fc_inventaire").delete().eq("id", id);
-  }catch(e){ console.warn("deleteInventaireItemSupabase:", e); }
+    const { error } = await sb.from("fc_inventaire").delete().eq("id", id);
+    if(error){
+      console.warn("deleteInventaireItemSupabase erreur:", error.message);
+      if(typeof toast === "function") toast("⚠️ Suppression non enregistrée : " + error.message);
+    } else {
+      console.log("✅ Matériel supprimé sur Supabase:", id);
+    }
+  }catch(e){
+    console.warn("deleteInventaireItemSupabase:", e);
+    if(typeof toast === "function") toast("⚠️ Erreur lors de la suppression du matériel");
+  }
 }
 
 /* ============================================================
@@ -536,6 +604,7 @@ async function syncAll(){
   await syncPharmacie();
   await syncPersonnel();
   await syncRemontees();
+  await syncHandovers();
   await syncInventaires();
   await syncMedias();
   await syncLayouts();
