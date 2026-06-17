@@ -8191,6 +8191,23 @@ function bindStAccessAdmin(){
   };
 }
 
+// Si l'URL contient ?check=xxx au chargement de la page (vrai scan QR avec
+// l'appareil photo du téléphone), rediriger automatiquement vers l'écran de
+// choix post-scan au lieu de rester sur l'accueil.
+let fcAutoRedirectDoneV36 = false;
+function fcAutoRedirectFromQrV36(){
+  if(fcAutoRedirectDoneV36) return;
+  const params = new URLSearchParams(location.search);
+  if(params.get("check")){
+    fcAutoRedirectDoneV36 = true;
+    applyScannedContext();
+    showScreen("scanChoice");
+  }
+}
+window.addEventListener("load", fcAutoRedirectFromQrV36);
+// Au cas où le script se charge après l'événement "load" (cache/ordre de chargement)
+if(document.readyState === "complete") fcAutoRedirectFromQrV36();
+
 const renderAllBeforeV23 = renderAll;
 renderAll = function(){
   renderAllBeforeV23();
