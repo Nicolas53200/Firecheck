@@ -8915,11 +8915,12 @@ renderFcDetail = function(root){
   if(zoneInput) zoneInput.insertAdjacentElement("afterend", card);
   else panel.prepend(card);
 
-  card.querySelector("#zoneDetailPhotoInput").onchange = async e => {
+    card.querySelector("#zoneDetailPhotoInput").onchange = async e => {
     const file = e.target.files[0];
     if(!file) return;
     const preview = card.querySelector("#zoneDetailPhotoPreview");
-    if(preview) preview.textContent = "Compression...";
+    const lbl = card.querySelector(".zone-photo-label");
+    if(preview) preview.textContent = "Compression en cours...";
     try{
       const value = await compressImageV32(file, 1000, 0.7);
       if(preview){
@@ -8927,20 +8928,24 @@ renderFcDetail = function(root){
         preview.style.backgroundImage = `url('${value}')`;
         preview.textContent = "";
       }
+      if(lbl) lbl.textContent = "Remplacer la photo de cette zone";
       if(typeof setMediaSupabase === "function"){
         await setMediaSupabase(vehicle.id, slot, value);
       } else {
         safeSetMediaV32(vehicle.id, slot, value);
       }
-      toast("Photo détaillée ajoutée à la zone");
-      renderCheckSheets();
+      const existingCard = document.getElementById("zoneDetailPhotoCard");
+      if(existingCard) existingCard.remove();
+      const root = document.getElementById("fcView");
+      if(root && typeof renderFcDetail === "function") renderFcDetail(root);
+      toast("Photo détaillée enregistrée");
     }catch(err){
       console.error(err);
-      toast("Impossible d’enregistrer cette photo");
+      if(preview) preview.textContent = "Erreur — réessaie";
+      toast("Impossible d'enregistrer cette photo");
     }
   };
 };
-
 const renderStepBeforeV28 = renderStep;
 renderStep = function(){
   renderStepBeforeV28();
