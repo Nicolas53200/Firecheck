@@ -5963,17 +5963,6 @@ renderInventoryDetailV8 = function(container){
    V11 - FICHES VÉRIFICATION STABLE
    ========================= */
 
-// Charge les articles personnalisés depuis localStorage
-(function(){
-  try {
-    const custom = JSON.parse(localStorage.getItem("fc_library_custom") || "[]");
-    if(Array.isArray(custom) && custom.length) {
-      // On les injectera après la déclaration via setTimeout pour éviter TDZ
-      window._fcLibraryCustom = custom;
-    }
-  } catch(e) {}
-})();
-
 const FC_LIBRARY = [
   // INCENDIE
   ["ARI complet avec masque","INCENDIE","ARI",1],["Bouteille ARI","INCENDIE","ARI",1],["Ligne guide","INCENDIE","ARI",1],["Tableau de contrôleur","INCENDIE","ARI",1],
@@ -6104,11 +6093,6 @@ const FC_LIBRARY = [
   ["Pioche","DIVERS","Outillage",1],["Hache","DIVERS","Outillage",1],["Masse","DIVERS","Outillage",1]
 ].map(x => ({name:x[0], family:x[1], sub:x[2], qty:x[3]}));
 
-// Réinjecte les articles personnalisés sauvegardés
-if(window._fcLibraryCustom && window._fcLibraryCustom.length){
-  window._fcLibraryCustom.forEach(item => FC_LIBRARY.push(item));
-  delete window._fcLibraryCustom;
-}
 
 let fcVehicles = [
   {id:"fpt-53", category:"rolling", name:"FPT 53", plate:"GL-485-CL", type:"Fourgon pompe tonne"},
@@ -8023,19 +8007,19 @@ function bindLibraryItemDialog(){
     const dlg = document.getElementById("libraryItemDialog");
     const editIdx = dlg.dataset.editIdx !== "" ? parseInt(dlg.dataset.editIdx) : NaN;
     if(!isNaN(editIdx) && editIdx >= 0 && FC_LIBRARY[editIdx]){
-      FC_LIBRARY[editIdx] = {...FC_LIBRARY[editIdx], name, family, sub, qty};
+      const existing = FC_LIBRARY[editIdx];
+      FC_LIBRARY[editIdx] = {...existing, name, family, sub, qty};
       fcState.family = family;
-      const customItems1 = FC_LIBRARY.filter(i => i.custom);
-      localStorage.setItem("fc_library_custom", JSON.stringify(customItems1));
+      if(typeof saveLibraryItemSupabase === "function") saveLibraryItemSupabase(FC_LIBRARY[editIdx]);
       dlg.dataset.editIdx = "";
       dlg.close();
       renderCheckSheets();
       toast(`${name} déplacé vers ${family} · ${sub}`);
     } else {
-      FC_LIBRARY.push({name, family, sub, qty, custom:true});
+      const newItem = {id:"lib-" + Date.now(), name, family, sub, qty, custom:true};
+      FC_LIBRARY.push(newItem);
       fcState.family = family;
-      const customItems2 = FC_LIBRARY.filter(i => i.custom);
-      localStorage.setItem("fc_library_custom", JSON.stringify(customItems2));
+      if(typeof saveLibraryItemSupabase === "function") saveLibraryItemSupabase(newItem);
       dlg.dataset.editIdx = "";
       dlg.close();
       renderCheckSheets();

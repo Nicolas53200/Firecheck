@@ -682,6 +682,57 @@ async function deleteAssetSupabase(id){
 }
 
 /* ============================================================
+   SYNC — Bibliothèque matériel personnalisée
+   ============================================================ */
+
+async function syncLibraryCustom(){
+  if(!sb) return;
+  try{
+    const { data, error } = await sb.from("fc_library").select("*");
+    if(error) throw error;
+    if(data && data.length > 0 && typeof FC_LIBRARY !== "undefined"){
+      data.forEach(item => {
+        if(!FC_LIBRARY.find(i => i.id === item.id)){
+          FC_LIBRARY.push({id:item.id, name:item.name, family:item.family, sub:item.sub, qty:item.qty, custom:true});
+        }
+      });
+      if(typeof renderFcLibrary === "function") renderFcLibrary();
+    }
+    console.log("✅ Bibliothèque personnalisée synchronisée");
+  }catch(e){ console.warn("syncLibraryCustom:", e); }
+}
+
+async function saveLibraryItemSupabase(item){
+  if(!sb || !item) return;
+  try{
+    const payload = {
+      id: item.id || ("lib-" + Date.now()),
+      name: item.name,
+      family: item.family,
+      sub: item.sub || "",
+      qty: item.qty || 1
+    };
+    if(!item.id) item.id = payload.id;
+    const { error } = await sb.from("fc_library").upsert(payload);
+    if(error){
+      console.warn("saveLibraryItemSupabase erreur:", error.message);
+      if(typeof toast === "function") toast("⚠️ Article non sauvegardé : " + error.message);
+    } else {
+      console.log("✅ Article bibliothèque sauvegardé:", item.name);
+    }
+  }catch(e){ console.warn("saveLibraryItemSupabase:", e); }
+}
+
+async function deleteLibraryItemSupabase(id){
+  if(!sb || !id) return;
+  try{
+    const { error } = await sb.from("fc_library").delete().eq("id", id);
+    if(error) console.warn("deleteLibraryItemSupabase:", error.message);
+    else console.log("✅ Article bibliothèque supprimé:", id);
+  }catch(e){ console.warn("deleteLibraryItemSupabase:", e); }
+}
+
+/* ============================================================
    SYNC GLOBAL — appelé au démarrage
    ============================================================ */
 
@@ -695,6 +746,7 @@ async function syncAll(){
   await syncMedias();
   await syncLayouts();
   await syncAssets();
+  await syncLibraryCustom();
 
   // Vérifier que l'utilisateur connecté existe toujours dans le personnel
   const storedUser = JSON.parse(localStorage.getItem("fc_current_user") || "null");
