@@ -2628,21 +2628,24 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
   background:rgba(255,255,255,.14);
   border:1px solid rgba(255,255,255,.22);
   border-radius:18px;
-  padding:10px 12px;
+  padding:10px 14px;
   font-weight:900;
   white-space:nowrap;
+  min-width:100px;
 }
 .check-progress-bar{
-  height:10px;
-  background:rgba(255,255,255,.14);
+  height:8px;
+  background:rgba(255,255,255,.2);
   border-radius:999px;
   overflow:hidden;
-  margin-top:8px;
+  margin-top:6px;
 }
 .check-progress-bar span{
   display:block;
   height:100%;
   background:#22c55e;
+  border-radius:999px;
+  transition:width .4s cubic-bezier(.22,1,.36,1);
 }
 .check-carousel-tabs{
   display:flex;
@@ -3530,3 +3533,56 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
   justify-content:center;
 }
 .fc-lightbox-close:hover{ background:rgba(255,255,255,.3); }
+
+
+/* Écran de fin de vérification */
+.check-complete-card{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:36px 24px;
+  gap:12px;
+  min-height:calc(100vh - 80px);
+}
+.check-complete-icon{
+  font-size:64px;
+  line-height:1;
+}
+.check-complete-card h2{
+  font-size:24px;
+  margin:0;
+}
+.check-complete-card p{
+  margin:0;
+  color:#374151;
+}
+.check-complete-issues{
+  color:#d97706;
+  font-weight:700;
+}
+.check-complete-ok{
+  color:var(--green);
+  font-weight:700;
+}
+.check-complete-bar{
+  width:100%;
+  max-width:280px;
+  height:10px;
+  background:#e5e7eb;
+  border-radius:9999px;
+  overflow:hidden;
+  margin:8px 0;
+}
+.check-complete-bar-fill{
+  height:100%;
+  width:100%;
+  background:var(--green);
+  border-radius:9999px;
+  animation: fc-bar-fill .8s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes fc-bar-fill{
+  from{ width:0%; }
+  to{ width:100%; }
+}

@@ -5963,6 +5963,17 @@ renderInventoryDetailV8 = function(container){
    V11 - FICHES VÉRIFICATION STABLE
    ========================= */
 
+// Charge les articles personnalisés depuis localStorage
+(function(){
+  try {
+    const custom = JSON.parse(localStorage.getItem("fc_library_custom") || "[]");
+    if(Array.isArray(custom) && custom.length) {
+      // On les injectera après la déclaration via setTimeout pour éviter TDZ
+      window._fcLibraryCustom = custom;
+    }
+  } catch(e) {}
+})();
+
 const FC_LIBRARY = [
   // INCENDIE
   ["ARI complet avec masque","INCENDIE","ARI",1],["Bouteille ARI","INCENDIE","ARI",1],["Ligne guide","INCENDIE","ARI",1],["Tableau de contrôleur","INCENDIE","ARI",1],
@@ -6093,6 +6104,12 @@ const FC_LIBRARY = [
   ["Pioche","DIVERS","Outillage",1],["Hache","DIVERS","Outillage",1],["Masse","DIVERS","Outillage",1]
 ].map(x => ({name:x[0], family:x[1], sub:x[2], qty:x[3]}));
 
+// Réinjecte les articles personnalisés sauvegardés
+if(window._fcLibraryCustom && window._fcLibraryCustom.length){
+  window._fcLibraryCustom.forEach(item => FC_LIBRARY.push(item));
+  delete window._fcLibraryCustom;
+}
+
 let fcVehicles = [
   {id:"fpt-53", category:"rolling", name:"FPT 53", plate:"GL-485-CL", type:"Fourgon pompe tonne"},
   {id:"fpt-go", category:"rolling", name:"FPT GO", plate:"GQ 311 JE", type:"Fourgon pompe tonne"},
@@ -6101,12 +6118,12 @@ let fcVehicles = [
 ]; // Véhicules de base — complétés par Supabase
 
 const fcDefaultViews = [
-  {id:"droite", label:"Côté droit"},
-  {id:"arriere", label:"Arrière"},
   {id:"gauche", label:"Côté gauche"},
-  {id:"toit", label:"Toit"},
+  {id:"arriere", label:"Arrière"},
+  {id:"droite", label:"Côté droit"},
   {id:"avant", label:"Devant"},
-  {id:"interieur", label:"Intérieur"}
+  {id:"interieur", label:"Intérieur"},
+  {id:"toit", label:"Toit"}
 ];
 
 // Vues personnalisées par véhicule, stockées en localStorage
@@ -6141,11 +6158,18 @@ function fcSaveVehicleViews(){
 }
 
 function fcGetViews(vehicleId){
-  if(!fcVehicleViews[vehicleId]){
-    fcVehicleViews[vehicleId] = fcDefaultViews.map(v => ({...v}));
-    fcSaveVehicleViews();
+  // Si des vues personnalisées existent pour ce véhicule (ST a ajouté/renommé/supprimé des vues),
+  // on les utilise. Sinon, on retourne toujours les vues par défaut fraîches (dans le bon ordre).
+  const custom = fcVehicleViews[vehicleId];
+  if(custom && custom.length > 0){
+    // Vérifie si ce sont juste les vues par défaut copiées sans modification —
+    // dans ce cas on ignore le localStorage et on repart des defaults à jour.
+    const isDefaultCopy = custom.length === fcDefaultViews.length &&
+      custom.every((v, i) => v.id === fcDefaultViews[i].id);
+    if(isDefaultCopy) return fcDefaultViews.map(v => ({...v}));
+    return custom;
   }
-  return fcVehicleViews[vehicleId];
+  return fcDefaultViews.map(v => ({...v}));
 }
 
 // Compatibilité ascendante
@@ -6944,6 +6968,36 @@ fcBindCreate();
 
 /* V33 - feuille d'impression unifiée : QR réel + photos + données complètes */
 
+function renderStepTwoCols(items){
+  const groups = {};
+  items.forEach(item => {
+    const key = item.subLocation || "";
+    (groups[key] = groups[key] || []).push(item);
+  });
+  const orderedKeys = Object.keys(groups).sort((a,b) => a === "" ? -1 : b === "" ? 1 : a.localeCompare(b));
+  const onlyGeneral = orderedKeys.length === 1 && orderedKeys[0] === "";
+
+  const allRows = [];
+  orderedKeys.forEach(key => {
+    if(!onlyGeneral){
+      allRows.push('<tr class="print-subloc-row"><td colspan="3">' + (key ? fcEsc(key) : "Emplacement général") + "</td></tr>");
+    }
+    groups[key].forEach(item => {
+      allRows.push("<tr><td>" + fcEsc(item.name) + '</td><td class="print-col-qty">' + fcEsc(String(item.qty)) + '</td><td class="print-col-check"></td></tr>');
+    });
+  });
+
+  const mid = Math.ceil(allRows.length / 2);
+  const leftRows = allRows.slice(0, mid);
+  const rightRows = allRows.slice(mid);
+
+  const makeTable = (rows) => rows.length
+    ? '<table class="print-table"><thead><tr><th>Désignation</th><th class="print-col-qty">Qté</th><th class="print-col-check">✓</th></tr></thead><tbody>' + rows.join("") + "</tbody></table>"
+    : "";
+
+  return '<div class="print-step-two-cols">' + makeTable(leftRows) + makeTable(rightRows) + "</div>";
+}
+
 function fcPrintInventory(){
   const vehicle = fcVehicles.find(v => v.id === fcState.vehicleId);
   if(!vehicle){ toast("Aucun inventaire sélectionné"); return; }
@@ -6997,36 +7051,7 @@ function fcPrintInventory(){
         ` : ""}
 
         <div class="print-step-table-wrap">
-          ${items.length ? `
-            <table class="print-table">
-              <thead><tr><th>Désignation</th><th class="print-col-qty">Qté</th><th class="print-col-check">✓</th></tr></thead>
-              <tbody>
-                ${(() => {
-                  const groups = {};
-                  items.forEach(item => {
-                    const key = item.subLocation || "";
-                    (groups[key] = groups[key] || []).push(item);
-                  });
-                  const orderedKeys = Object.keys(groups).sort((a,b) => a === "" ? -1 : b === "" ? 1 : a.localeCompare(b));
-                  const onlyGeneral = orderedKeys.length === 1 && orderedKeys[0] === "";
-                  return orderedKeys.map(key => `
-                    ${!onlyGeneral ? `
-                      <tr class="print-subloc-row">
-                        <td colspan="3">${key ? fcEsc(key) : "Emplacement général"}</td>
-                      </tr>
-                    ` : ""}
-                    ${groups[key].map(item => `
-                      <tr>
-                        <td>${fcEsc(item.name)}</td>
-                        <td class="print-col-qty">${fcEsc(String(item.qty))}</td>
-                        <td class="print-col-check"></td>
-                      </tr>
-                    `).join("")}
-                  `).join("");
-                })()}
-              </tbody>
-            </table>
-          ` : `<div class="print-empty-step"><em>Aucun matériel renseigné pour cette zone.</em></div>`}
+          ${items.length ? renderStepTwoCols(items) : `<div class="print-empty-step"><em>Aucun matériel renseigné pour cette zone.</em></div>`}
         </div>
       </section>
     `;
@@ -8000,6 +8025,8 @@ function bindLibraryItemDialog(){
     if(!isNaN(editIdx) && editIdx >= 0 && FC_LIBRARY[editIdx]){
       FC_LIBRARY[editIdx] = {...FC_LIBRARY[editIdx], name, family, sub, qty};
       fcState.family = family;
+      const customItems1 = FC_LIBRARY.filter(i => i.custom);
+      localStorage.setItem("fc_library_custom", JSON.stringify(customItems1));
       dlg.dataset.editIdx = "";
       dlg.close();
       renderCheckSheets();
@@ -8007,6 +8034,8 @@ function bindLibraryItemDialog(){
     } else {
       FC_LIBRARY.push({name, family, sub, qty, custom:true});
       fcState.family = family;
+      const customItems2 = FC_LIBRARY.filter(i => i.custom);
+      localStorage.setItem("fc_library_custom", JSON.stringify(customItems2));
       dlg.dataset.editIdx = "";
       dlg.close();
       renderCheckSheets();
@@ -8654,14 +8683,17 @@ function markZoneDoneV27(issue=false){
     if(foundView) checkV27.view = foundView.id;
     toast("Étape validée, passage à la suivante");
     renderStep();
+    // Scroll en haut de l'écran de vérification dès le changement d'étape
+    const checkEl = document.getElementById("check");
+    if(checkEl) checkEl.scrollTo ? checkEl.scrollTo(0,0) : window.scrollTo(0,0);
+    window.scrollTo(0,0);
   } else {
     // Toutes les zones sont faites : vérifie si le relevé mensuel km/heures a été fait
     const asset = fcFindAssetForVehicle(vehicle.name);
     if(asset && !fcMonthlyReadingDone(asset)){
       openMonthlyReadingDialogV37(vehicle, asset);
     } else {
-      toast("Vérification terminée");
-      renderStep();
+      renderStep(); // affiche l'écran de fin (percent=100)
     }
   }
 }
@@ -8721,6 +8753,36 @@ function renderStep(){
 
   const fcAssetForBanner = fcFindAssetForVehicle(vehicle.name);
   const fcShowMonthlyBanner = fcAssetForBanner && !fcMonthlyReadingDone(fcAssetForBanner);
+
+  // Écran de fin si toutes les zones sont validées
+  if(percent === 100){
+    const issueCount = Object.keys(checkV27.issues).length;
+    checkScreen.innerHTML = `
+      <div class="mobile-shell">
+        <header class="mobile-top">
+          <button class="round" data-go="home">←</button>
+          <div>
+            <p class="eyebrow">Vérification</p>
+            <h1>${fcEsc(vehicle.name)}</h1>
+          </div>
+        </header>
+        <div class="check-complete-card">
+          <div class="check-complete-icon">✅</div>
+          <h2>Vérification terminée</h2>
+          <p>Merci d'avoir effectué le contrôle journalier de <strong>${fcEsc(vehicle.name)}</strong>.</p>
+          ${issueCount > 0
+            ? `<p class="check-complete-issues">⚠️ ${issueCount} anomalie${issueCount > 1 ? "s" : ""} signalée${issueCount > 1 ? "s" : ""} — le service technique a été notifié.</p>`
+            : `<p class="check-complete-ok">Tous les éléments sont conformes.</p>`}
+          <div class="check-complete-bar">
+            <div class="check-complete-bar-fill"></div>
+          </div>
+          <p class="muted" style="font-size:13px;">${order.length} zones vérifiées</p>
+          <button class="btn primary full" data-go="home" style="margin-top:18px;">Retour à l'accueil</button>
+        </div>
+      </div>
+    `;
+    return;
+  }
 
   checkScreen.innerHTML = `
     <div class="mobile-shell">
@@ -9143,10 +9205,10 @@ function getInventoryStepStructureV30(vehicle){
         {name:"Cabine avant", aliases:["Cabine conducteur","Cabine chef d’agrès","Cabine chef d'agres","Cabine avant","Cabine avant gauche","Cabine avant droite"]},
         {name:"Cabine arrière", aliases:["Cabine arrière","Cabine arriere","Cabine arrière gauche","Cabine arrière droite"]}
       ]},
-      {title:"CÔTÉ DROIT", subtitle:"Contrôle des rideaux et coffres côté droit", steps:[
-        {name:"Rideau avant droit", aliases:["Rideau avant droit","Rideau av. D"]},
-        {name:"Rideau arrière droit", aliases:["Rideau arrière droit","Rideau ar. D"]},
-        {name:"Coffre arrière droit", aliases:["Coffre arrière droit","Coffre bas droit"]}
+      {title:"CÔTÉ GAUCHE", subtitle:"Contrôle des rideaux et coffres côté gauche", steps:[
+        {name:"Rideau avant gauche", aliases:["Rideau avant gauche","Rideau av. G"]},
+        {name:"Rideau arrière gauche", aliases:["Rideau arrière gauche","Rideau ar. G"]},
+        {name:"Coffre arrière gauche", aliases:["Coffre arrière gauche","Coffre bas gauche"]}
       ]},
       {title:"ARRIÈRE", subtitle:"Pompe, tableau de commande et dévidoirs", steps:[
         {name:"Compartiment pompe", aliases:["Pompe","Tableau de commande pompe","Rideau arrière"]},
@@ -9154,10 +9216,10 @@ function getInventoryStepStructureV30(vehicle){
         {name:"Dévidoir droit", aliases:["Dévidoir arrière droit"]},
         {name:"Échelles arrière", aliases:["Échelles arrière / toit"]}
       ]},
-      {title:"CÔTÉ GAUCHE", subtitle:"Contrôle des rideaux et coffres côté gauche", steps:[
-        {name:"Rideau avant gauche", aliases:["Rideau avant gauche","Rideau av. G"]},
-        {name:"Rideau arrière gauche", aliases:["Rideau arrière gauche","Rideau ar. G"]},
-        {name:"Coffre arrière gauche", aliases:["Coffre arrière gauche","Coffre bas gauche"]}
+      {title:"CÔTÉ DROIT", subtitle:"Contrôle des rideaux et coffres côté droit", steps:[
+        {name:"Rideau avant droit", aliases:["Rideau avant droit","Rideau av. D"]},
+        {name:"Rideau arrière droit", aliases:["Rideau arrière droit","Rideau ar. D"]},
+        {name:"Coffre arrière droit", aliases:["Coffre arrière droit","Coffre bas droit"]}
       ]},
       {title:"TOIT", subtitle:"Échelles et matériel de toit", steps:[
         {name:"Échelles et matériel de toit", aliases:["Toit","Toit / échelles","Échelles de toit","Équipements de toit"]}
