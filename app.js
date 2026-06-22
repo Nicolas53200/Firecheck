@@ -7504,6 +7504,262 @@ renderAll = function(){
 };
 
 
+
+/* ============================================================
+   TOUR GUIDÉ — Aide contextuelle par onglet ST
+   ============================================================ */
+
+const FC_TOURS = {
+  dashboard: [
+    {
+      target: ".stats-grid",
+      title: "Les compteurs",
+      text: "Ces 4 compteurs résument l'état des remontées terrain. Clique sur un compteur pour filtrer la liste en dessous."
+    },
+    {
+      target: "[data-tab='dashboard'].active, .tech-reports",
+      title: "Liste des remontées",
+      text: "Chaque carte représente une anomalie signalée par un SP pendant une vérification ou un scan QR. La bordure colorée indique l'état : rouge = Nouveau, orange = En cours, vert = Clôturé."
+    },
+    {
+      target: ".tech-report",
+      title: "Ouvrir une fiche",
+      text: "Clique sur une carte pour voir le détail complet : matériel concerné, commentaire du SP, historique des actions. Tu peux y prendre en charge ou clôturer le dossier."
+    },
+    {
+      target: ".take-btn-v18",
+      title: "Prendre en charge",
+      text: "Clique 'Prendre en charge' pour attribuer le dossier à un technicien et saisir une note. Le SP qui a signalé verra le dossier passer en 'En cours'."
+    },
+    {
+      target: ".close-btn-v18",
+      title: "Clôturer",
+      text: "Une fois le problème réglé, clique 'Clôturer'. Le dossier passe en vert et sort du compteur 'Échéances proches'."
+    }
+  ],
+  vehicles: [
+    {
+      target: "#vehicles .secondary",
+      title: "Ajouter un véhicule",
+      text: "Clique ici pour créer une fiche de suivi pour un véhicule. Tu renseignes le kilométrage actuel, le kilométrage au dernier entretien, et la périodicité (ex: tous les 15 000 km)."
+    },
+    {
+      target: ".asset-card",
+      title: "Fiche véhicule",
+      text: "Chaque carte affiche l'état du suivi : vert = à jour, orange = bientôt à faire, rouge = en retard. La barre de progression indique où tu en es dans l'intervalle."
+    },
+    {
+      target: ".asset-card .btn.secondary",
+      title: "Modifier",
+      text: "Clique 'Modifier' pour mettre à jour les valeurs (nouveau kilométrage, dernier entretien). Le SP mettra à jour le kilométrage mensuel automatiquement lors de la vérification terrain."
+    },
+    {
+      target: null,
+      title: "Relevé mensuel automatique",
+      text: "Lors de la vérification terrain, si un SP vérifie un véhicule qui n'a pas eu de relevé ce mois-ci, FireCheck lui demandera automatiquement de saisir le kilométrage ou les heures actuels."
+    }
+  ],
+  equipment: [
+    {
+      target: "#equipment .secondary",
+      title: "Ajouter un matériel",
+      text: "Crée une fiche de suivi pour n'importe quel matériel technique : motopompe, groupe électrogène, etc. Choisis un suivi par heures ou par date selon le matériel."
+    },
+    {
+      target: "#equipmentGrid .asset-card",
+      title: "Fiche matériel",
+      text: "Même principe que les véhicules : vert = à jour, orange = bientôt, rouge = en retard. L'alerte apparaît aussi dans le badge de notification de l'application."
+    },
+    {
+      target: "#equipmentGrid .asset-card .btn.secondary",
+      title: "Modifier",
+      text: "Mets à jour les heures ou la date après chaque entretien pour remettre le compteur à zéro."
+    }
+  ],
+  pharmacie: [
+    {
+      target: "#pharmAddBtn",
+      title: "Ajouter un produit",
+      text: "Clique ici pour ajouter un médicament ou consommable avec sa date de péremption."
+    },
+    {
+      target: ".pharm-card",
+      title: "Carte produit",
+      text: "Chaque produit affiche sa date de péremption. La couleur indique l'urgence : vert = OK, orange = moins de 30 jours, rouge = périmé."
+    },
+    {
+      target: null,
+      title: "Notification automatique",
+      text: "Les produits expirant dans moins de 30 jours sont comptés dans le badge de notification en haut de l'onglet. Surveille ce compteur régulièrement."
+    }
+  ],
+  checkSheets: [
+    {
+      target: ".fc-vehicle-card",
+      title: "Choisir un véhicule",
+      text: "Clique sur un véhicule pour accéder à sa fiche d'inventaire complète : matériel par zone, photos, emplacements précis."
+    },
+    {
+      target: ".fc-tab",
+      title: "Vues du véhicule",
+      text: "Navigue entre les côtés du véhicule (Gauche, Arrière, Droite, Devant...). Chaque vue correspond à un angle de photos et ses zones cliquables."
+    },
+    {
+      target: ".fc-sub-group",
+      title: "Emplacements précis",
+      text: "Dans chaque zone, tu peux créer des emplacements précis (ex: 'Sous la banquette', 'Coffre central'). Le matériel y est rangé par glisser-déposer depuis la bibliothèque."
+    },
+    {
+      target: "#fcLibraryList",
+      title: "Bibliothèque matériel",
+      text: "À gauche, la bibliothèque contient tout le matériel disponible, classé par famille. Glisse un article vers une zone pour l'ajouter à l'inventaire. Clique '+ Ajouter du matériel' pour enrichir la bibliothèque."
+    },
+    {
+      target: ".fc-print-btn, [onclick*='fcPrintInventory']",
+      title: "Imprimer la fiche",
+      text: "Génère la fiche papier de l'inventaire : page de couverture avec QR code, photos des zones, liste du matériel en 2 colonnes. À plastifier et fixer dans le véhicule."
+    }
+  ],
+  stAccess: [
+    {
+      target: null,
+      title: "Accès Service Technique",
+      text: "Cet onglet permet de définir quels agents ont accès à l'interface ST. Un agent sans accès ST ne voit que l'interface SP (vérification terrain)."
+    },
+    {
+      target: ".st-access-table, #stAccessList",
+      title: "Liste des accès",
+      text: "Chaque ligne correspond à un agent du CIS. Active ou désactive l'accès ST en un clic. L'agent devra se connecter avec son matricule pour accéder à ST."
+    }
+  ],
+  personnelCis: [
+    {
+      target: "#personnelSearchSt",
+      title: "Rechercher un agent",
+      text: "Tape un matricule, un nom ou un grade pour filtrer la liste du personnel."
+    },
+    {
+      target: ".personnel-table-st",
+      title: "Liste du personnel",
+      text: "Tous les agents du CIS enregistrés dans FireCheck. Ils peuvent s'identifier par matricule avant une vérification pour que leur nom apparaisse sur les remontées."
+    },
+    {
+      target: null,
+      title: "Importer du personnel",
+      text: "Tu peux importer la liste complète depuis un fichier Excel ou CSV. Utilise le bouton 'Importer' pour mettre à jour d'un coup toute la liste."
+    }
+  ]
+};
+
+let fcTourActive = false;
+let fcTourSteps = [];
+let fcTourIndex = 0;
+let fcTourOverlay = null;
+let fcTourBox = null;
+
+function fcStartTour(tabId){
+  const steps = FC_TOURS[tabId];
+  if(!steps || !steps.length){
+    toast("Aucune aide disponible pour cet onglet.");
+    return;
+  }
+  fcTourSteps = steps;
+  fcTourIndex = 0;
+  fcTourActive = true;
+  fcBuildTourUI();
+  fcShowTourStep();
+}
+
+function fcBuildTourUI(){
+  if(!fcTourOverlay){
+    fcTourOverlay = document.createElement("div");
+    fcTourOverlay.id = "fcTourOverlay";
+    fcTourOverlay.className = "fc-tour-overlay";
+    fcTourOverlay.onclick = e => { if(e.target === fcTourOverlay) fcEndTour(); };
+    document.body.appendChild(fcTourOverlay);
+  }
+  if(!fcTourBox){
+    fcTourBox = document.createElement("div");
+    fcTourBox.id = "fcTourBox";
+    fcTourBox.className = "fc-tour-box";
+    document.body.appendChild(fcTourBox);
+  }
+  fcTourOverlay.style.display = "flex";
+  fcTourBox.style.display = "block";
+}
+
+function fcShowTourStep(){
+  const step = fcTourSteps[fcTourIndex];
+  if(!step){ fcEndTour(); return; }
+
+  // Supprime le highlight précédent
+  document.querySelectorAll(".fc-tour-highlight").forEach(el => el.classList.remove("fc-tour-highlight"));
+
+  // Highlight l'élément cible
+  let targetEl = null;
+  if(step.target){
+    targetEl = document.querySelector(step.target);
+    if(targetEl) targetEl.classList.add("fc-tour-highlight");
+  }
+
+  // Contenu de la bulle
+  fcTourBox.innerHTML = `
+    <div class="fc-tour-step-indicator">${fcTourIndex + 1} / ${fcTourSteps.length}</div>
+    <div class="fc-tour-progress">
+      <div class="fc-tour-progress-fill" style="width:${((fcTourIndex + 1) / fcTourSteps.length) * 100}%"></div>
+    </div>
+    <h3 class="fc-tour-title">${step.title}</h3>
+    <p class="fc-tour-text">${step.text}</p>
+    <div class="fc-tour-actions">
+      <button class="fc-tour-skip" id="fcTourSkip">Passer le tour</button>
+      ${fcTourIndex > 0 ? `<button class="fc-tour-prev" id="fcTourPrev">← Précédent</button>` : ""}
+      <button class="fc-tour-next" id="fcTourNext">${fcTourIndex === fcTourSteps.length - 1 ? "Terminer ✓" : "Suivant →"}</button>
+    </div>
+  `;
+
+  // Positionner la bulle près de l'élément cible
+  if(targetEl){
+    const rect = targetEl.getBoundingClientRect();
+    const boxW = 340;
+    const boxH = 200;
+    let top = rect.bottom + 12 + window.scrollY;
+    let left = Math.max(12, Math.min(rect.left, window.innerWidth - boxW - 12));
+    if(top + boxH > window.innerHeight + window.scrollY - 20){
+      top = rect.top + window.scrollY - boxH - 12;
+    }
+    fcTourBox.style.position = "absolute";
+    fcTourBox.style.top = top + "px";
+    fcTourBox.style.left = left + "px";
+    targetEl.scrollIntoView({behavior:"smooth", block:"center"});
+  } else {
+    fcTourBox.style.position = "fixed";
+    fcTourBox.style.top = "50%";
+    fcTourBox.style.left = "50%";
+    fcTourBox.style.transform = "translate(-50%, -50%)";
+  }
+
+  document.getElementById("fcTourNext").onclick = () => { fcTourIndex++; fcShowTourStep(); };
+  document.getElementById("fcTourSkip").onclick = fcEndTour;
+  const prev = document.getElementById("fcTourPrev");
+  if(prev) prev.onclick = () => { fcTourIndex--; fcShowTourStep(); };
+}
+
+function fcEndTour(){
+  fcTourActive = false;
+  document.querySelectorAll(".fc-tour-highlight").forEach(el => el.classList.remove("fc-tour-highlight"));
+  if(fcTourOverlay) fcTourOverlay.style.display = "none";
+  if(fcTourBox){ fcTourBox.style.display = "none"; fcTourBox.style.transform = ""; }
+}
+
+// Bind le bouton ? au tab actif
+document.addEventListener("click", e => {
+  if(e.target.id === "stHelpBtn" || e.target.closest("#stHelpBtn")){
+    const activeTab = document.querySelector(".tech-nav.active");
+    const tabId = activeTab?.dataset?.tab || "dashboard";
+    fcStartTour(tabId);
+  }
+});
+
 /* V18 - remontées filtrables + prise en charge + ajout entretien */
 let techReportFilter = "all";
 let activeTakeChargeId = null;
@@ -7643,7 +7899,6 @@ renderReports = function(){
         if(r){
           r.status = "Clôturé";
           r.history = r.history || [];
-          r.history.push("Dossier clôturé par le service technique.");
           if(typeof updateRemonteeStatusSupabase === "function") updateRemonteeStatusSupabase(r.id, "Clôturé", {history: r.history});
         }
         renderAll();
@@ -7753,7 +8008,6 @@ function openReportDetailV34(id){
   dialog.querySelector("#reportDetailCloseRepV34")?.addEventListener("click", () => {
     r.status = "Clôturé";
     r.history = r.history || [];
-    r.history.push("Dossier clôturé par le service technique.");
     if(typeof updateRemonteeStatusSupabase === "function") updateRemonteeStatusSupabase(r.id, "Clôturé", {history: r.history});
     dialog.close();
     renderAll();
@@ -7769,7 +8023,7 @@ function openTakeChargeDialog(id){
   document.getElementById("takeChargeSummary").textContent = `${report.asset} · ${report.type} · ${report.item}`;
   document.getElementById("takeChargeName").value = currentUser ? `${currentUser.grade} ${currentUser.prenom} ${currentUser.nom}` : "";
   document.getElementById("takeChargeDate").value = new Date().toISOString().slice(0,10);
-  document.getElementById("takeChargeComment").value = `Dossier repris en main${currentUser ? " par " + currentUser.prenom + " " + currentUser.nom : ""}.`;
+  document.getElementById("takeChargeComment").value = "";
   document.getElementById("takeChargeDialog").showModal();
 }
 
@@ -7795,7 +8049,9 @@ function bindTakeChargeDialog(){
     report.takenBy = name;
     report.takenDate = date;
     report.history = report.history || [];
-    report.history.push(`Pris en charge le ${date} par ${name}. ${comment}`);
+    if(comment.trim()){
+      report.history.push(comment.trim());
+    }
     if(typeof updateRemonteeStatusSupabase === "function") updateRemonteeStatusSupabase(report.id, "Pris en compte", {history: report.history, takenBy: name, takenDate: date});
     document.getElementById("takeChargeDialog").close();
     renderAll();
