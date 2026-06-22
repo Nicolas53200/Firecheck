@@ -6874,6 +6874,36 @@ function fcZoneEvents(el, vehicleId){
   if(resize) resize.onmousedown = e => begin(e, true);
 }
 
+function fcOpenLightbox(src, alt){
+  let lb = document.getElementById("fcLightbox");
+  if(!lb){
+    lb = document.createElement("div");
+    lb.id = "fcLightbox";
+    lb.className = "fc-lightbox";
+    lb.innerHTML = '<button class="fc-lightbox-close" id="fcLightboxClose">×</button><img id="fcLightboxImg">';
+    document.body.appendChild(lb);
+    lb.addEventListener("click", e => {
+      if(e.target === lb || e.target.id === "fcLightboxClose") lb.style.display = "none";
+    });
+  }
+  document.getElementById("fcLightboxImg").src = src;
+  document.getElementById("fcLightboxImg").alt = alt || "";
+  lb.style.display = "flex";
+}
+
+// Délégation globale pour ouvrir le lightbox au clic sur les aperçus photo
+document.addEventListener("click", e => {
+  const preview = e.target.closest(".media-preview-v30, .media-preview-v31, .zone-detail-photo.has-photo");
+  if(preview){
+    const img = preview.querySelector("img");
+    if(img && img.src) fcOpenLightbox(img.src, img.alt);
+    else if(preview.style.backgroundImage){
+      const url = preview.style.backgroundImage.replace(/url\(['"]?(.+?)['"]?\)/,'$1');
+      if(url) fcOpenLightbox(url, "");
+    }
+  }
+});
+
 function fcEsc(value){
   return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 }
