@@ -5390,12 +5390,12 @@ const inventoryVehiclesV8 = [
 ];
 
 const vehicleViewsV8 = [
-  {id:"droite", label:"Côté droit"},
-  {id:"arriere", label:"Arrière"},
   {id:"gauche", label:"Côté gauche"},
-  {id:"toit", label:"Toit"},
+  {id:"arriere", label:"Arrière"},
+  {id:"droite", label:"Côté droit"},
   {id:"avant", label:"Devant"},
-  {id:"interieur", label:"Intérieur"}
+  {id:"interieur", label:"Intérieur"},
+  {id:"toit", label:"Toit"}
 ];
 
 let selectedInventoryCategoryV8 = "rolling";
@@ -6505,8 +6505,16 @@ function renderFcDetail(root){
                     ${items.length ? items.map(i=>`
                       <div class="fc-zone-item" draggable="true" data-move-item="${i.id}">
                         <div><strong>${i.name}</strong><small>${i.category || "Sans catégorie"}</small></div>
-                        <input type="number" min="1" value="${i.qty}" data-qty="${i.id}" draggable="false">
-                        <button class="delete-mini" data-delete="${i.id}" draggable="false">Suppr.</button>
+                        <div class="fc-item-controls" draggable="false">
+                          ${!subName && fcGetSubZones(vehicle.id, selectedZone.id).length ? `
+                            <select class="fc-move-select" data-move-item-to="${i.id}" draggable="false">
+                              <option value="">Déplacer vers…</option>
+                              ${fcGetSubZones(vehicle.id, selectedZone.id).map(s => `<option value="${fcEsc(s)}">${fcEsc(s)}</option>`).join("")}
+                            </select>
+                          ` : ""}
+                          <input type="number" min="1" value="${i.qty}" data-qty="${i.id}" draggable="false">
+                          <button class="delete-mini" data-delete="${i.id}" draggable="false">Suppr.</button>
+                        </div>
                       </div>`).join("") : `<div class="fc-sub-empty">Glisse du matériel ici${subName ? "" : " depuis la bibliothèque"}.</div>`}
                   </div>
                   ${isCollapsed ? `<div class="fc-sub-collapsed-drop-hint">Dépose ici pour ajouter à « ${subName ? fcEsc(subName) : "Emplacement général"} »</div>` : ""}
@@ -6692,6 +6700,21 @@ function renderFcDetail(root){
       fcInventory.push(newItem);
       if(typeof saveInventaireItemSupabase === "function") saveInventaireItemSupabase(newItem);
       toast(`${data.name} ajouté${subName ? " à " + subName : " à " + fcState.zone}`);
+      renderCheckSheets();
+    };
+  });
+
+  // Déplacer un matériel vers un emplacement précis via le menu déroulant
+  document.querySelectorAll("[data-move-item-to]").forEach(sel => {
+    sel.onchange = () => {
+      const targetSub = sel.value;
+      if(!targetSub) return;
+      const itemId = sel.dataset.moveItemTo;
+      const item = fcInventory.find(i => i.id === itemId);
+      if(item){
+        item.subLocation = targetSub;
+        if(typeof saveInventaireItemSupabase === "function") saveInventaireItemSupabase(item);
+      }
       renderCheckSheets();
     };
   });
@@ -6935,43 +6958,45 @@ function fcPrintInventory(){
           <div class="print-step-name">${fcEsc(step.name)}</div>
           <div class="print-step-count">${items.length} matériel${items.length === 1 ? "" : "s"}</div>
         </div>
-        <div class="print-step-body">
-          <div class="print-step-photo ${photo ? "has-photo" : ""}">
-            ${photo ? `<img src="${photo}" alt="Photo ${fcEsc(step.name)}">` : `<span>📷 Aucune photo pour cette zone</span>`}
+
+        ${photo ? `
+          <div class="print-step-photo-top">
+            <img src="${photo}" alt="Photo ${fcEsc(step.name)}">
+            <span class="print-step-photo-label">${fcEsc(step.name)}</span>
           </div>
-          <div class="print-step-items">
-            ${items.length ? `
-              <table class="print-table">
-                <thead><tr><th>Désignation</th><th class="print-col-qty">Qté</th><th class="print-col-check">✓</th></tr></thead>
-                <tbody>
-                  ${(() => {
-                    // Regrouper par emplacement précis (sous-zone) — "Emplacement général" en premier
-                    const groups = {};
-                    items.forEach(item => {
-                      const key = item.subLocation || "";
-                      (groups[key] = groups[key] || []).push(item);
-                    });
-                    const orderedKeys = Object.keys(groups).sort((a,b) => a === "" ? -1 : b === "" ? 1 : a.localeCompare(b));
-                    const onlyGeneral = orderedKeys.length === 1 && orderedKeys[0] === "";
-                    return orderedKeys.map(key => `
-                      ${!onlyGeneral ? `
-                        <tr class="print-subloc-row">
-                          <td colspan="3">${key ? fcEsc(key) : "Emplacement général"}</td>
-                        </tr>
-                      ` : ""}
-                      ${groups[key].map(item => `
-                        <tr>
-                          <td>${fcEsc(item.name)}</td>
-                          <td class="print-col-qty">${fcEsc(String(item.qty))}</td>
-                          <td class="print-col-check"></td>
-                        </tr>
-                      `).join("")}
-                    `).join("");
-                  })()}
-                </tbody>
-              </table>
-            ` : `<div class="print-empty-step">Aucun matériel renseigné pour cette zone.</div>`}
-          </div>
+        ` : ""}
+
+        <div class="print-step-table-wrap">
+          ${items.length ? `
+            <table class="print-table">
+              <thead><tr><th>Désignation</th><th class="print-col-qty">Qté</th><th class="print-col-check">✓</th></tr></thead>
+              <tbody>
+                ${(() => {
+                  const groups = {};
+                  items.forEach(item => {
+                    const key = item.subLocation || "";
+                    (groups[key] = groups[key] || []).push(item);
+                  });
+                  const orderedKeys = Object.keys(groups).sort((a,b) => a === "" ? -1 : b === "" ? 1 : a.localeCompare(b));
+                  const onlyGeneral = orderedKeys.length === 1 && orderedKeys[0] === "";
+                  return orderedKeys.map(key => `
+                    ${!onlyGeneral ? `
+                      <tr class="print-subloc-row">
+                        <td colspan="3">${key ? fcEsc(key) : "Emplacement général"}</td>
+                      </tr>
+                    ` : ""}
+                    ${groups[key].map(item => `
+                      <tr>
+                        <td>${fcEsc(item.name)}</td>
+                        <td class="print-col-qty">${fcEsc(String(item.qty))}</td>
+                        <td class="print-col-check"></td>
+                      </tr>
+                    `).join("")}
+                  `).join("");
+                })()}
+              </tbody>
+            </table>
+          ` : `<div class="print-empty-step"><em>Aucun matériel renseigné pour cette zone.</em></div>`}
         </div>
       </section>
     `;
@@ -7004,13 +7029,18 @@ function fcPrintInventory(){
               <div class="print-info-item"><span>Référence / immatriculation</span><strong>${fcEsc(vehicle.plate || "—")}</strong></div>
               <div class="print-info-item"><span>Type</span><strong>${fcEsc(vehicle.type || "—")}</strong></div>
               <div class="print-info-item"><span>Total matériels</span><strong>${totalItems}</strong></div>
-              <div class="print-info-item"><span>Nombre d’étapes</span><strong>${structure.reduce((n,s)=>n+s.steps.length,0)}</strong></div>
             </div>
             <div class="print-qr">
-              <div id="invCoverQrBox" class="print-qr-box"></div>
-              <div class="print-qr-text">
-                <strong>QR Code FireCheck</strong>
-                <span>Scanner pour ouvrir la vérification numérique</span>
+              <div class="print-qr-write-field">
+                <span class="print-qr-write-label">N° de véhicule :</span>
+                <div class="print-qr-write-line"></div>
+              </div>
+              <div class="print-qr-bottom">
+                <div id="invCoverQrBox" class="print-qr-box"></div>
+                <div class="print-qr-text">
+                  <strong>QR Code FireCheck</strong>
+                  <span>Scanner pour ouvrir la vérification numérique</span>
+                </div>
               </div>
             </div>
           </div>

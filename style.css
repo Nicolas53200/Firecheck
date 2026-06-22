@@ -1321,7 +1321,7 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
 }
 .fc-zone-item{
   display:grid;
-  grid-template-columns:1fr 70px auto;
+  grid-template-columns:1fr auto;
   gap:10px;
   align-items:center;
   border:1px solid var(--line);
@@ -1333,6 +1333,33 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
 .fc-zone-item:active{ cursor:grabbing; }
 .fc-zone-item strong{display:block}
 .fc-zone-item small{color:var(--muted)}
+.fc-item-controls{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+.fc-item-controls input[data-qty]{
+  width:60px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:8px;
+}
+.fc-move-select{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:7px 10px;
+  font-size:12px;
+  color:var(--muted);
+  cursor:pointer;
+  background:#fff;
+  max-width:160px;
+}
+.fc-move-select:focus{
+  outline:2px solid var(--red);
+  outline-offset:-1px;
+}
 .fc-zone-item input[data-qty]{
   width:64px;
   border:1px solid var(--line);
@@ -2112,13 +2139,36 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
   }
   .print-qr{
     display: flex;
-    align-items: center;
-    gap: 3mm;
+    flex-direction: column;
+    gap: 2mm;
     border: 1px solid #e5e7eb;
     border-radius: 6px;
-    padding: 2.5mm 3mm;
+    padding: 3mm;
     background: #f9fafb;
     margin-top: auto;
+  }
+  .print-qr-write-field{
+    display: flex;
+    align-items: center;
+    gap: 2mm;
+    padding-bottom: 2mm;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .print-qr-write-label{
+    font-size: 8pt;
+    color: #6b7280;
+    white-space: nowrap;
+    font-weight: 700;
+  }
+  .print-qr-write-line{
+    flex: 1;
+    border-bottom: 1.5px solid #374151;
+    height: 4mm;
+  }
+  .print-qr-bottom{
+    display: flex;
+    align-items: center;
+    gap: 3mm;
   }
   .print-qr-box{
     width: 24mm;
@@ -2203,7 +2253,7 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
   .print-step{
     border: 1px solid #d1d5db;
     border-radius: 8px;
-    margin-bottom: 4mm;
+    margin-bottom: 5mm;
     break-inside: avoid;
     overflow: hidden;
   }
@@ -2212,7 +2262,7 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
     align-items: center;
     gap: 3mm;
     background: #f3f4f6;
-    padding: 2mm 4mm;
+    padding: 2.5mm 4mm;
     border-bottom: 1px solid #d1d5db;
   }
   .print-step-number{
@@ -2221,9 +2271,13 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
     color: #d71920;
     letter-spacing: .5px;
     white-space: nowrap;
+    background: #fff1f2;
+    border: 1px solid #fecaca;
+    border-radius: 4px;
+    padding: 0.5mm 2mm;
   }
   .print-step-name{
-    font-size: 11pt;
+    font-size: 11.5pt;
     font-weight: 900;
     flex: 1;
   }
@@ -2232,36 +2286,29 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
     color: #6b7280;
     white-space: nowrap;
   }
-  .print-step-body{
-    display: grid;
-    grid-template-columns: 45mm 1fr;
-    gap: 0;
-    align-items: start;
-  }
-  .print-step-photo{
-    border-right: 1px solid #e5e7eb;
-    display: grid;
-    place-items: center;
-    height: 32mm;
-    background: #f8fafc;
-    color: #9ca3af;
-    font-size: 8pt;
-    text-align: center;
-    padding: 2mm;
-    box-sizing: border-box;
+
+  /* Photo petite en haut, pleine largeur, hauteur fixe */
+  .print-step-photo-top{
+    width: 100%;
+    height: 36mm;
     overflow: hidden;
+    position: relative;
+    background: #f1f5f9;
+    border-bottom: 1px solid #e5e7eb;
   }
-  .print-step-photo.has-photo{
-    padding: 0;
-  }
-  .print-step-photo img{
+  .print-step-photo-top img{
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
   }
-  .print-step-items{
-    padding: 2mm;
+  .print-step-photo-label{
+    display: none; /* pas besoin du label répété en dessous de la photo */
+  }
+
+  /* Tableau pleine largeur en dessous */
+  .print-step-table-wrap{
+    padding: 0;
   }
   .print-table{
     width: 100%;
@@ -2274,11 +2321,12 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
     text-transform: uppercase;
     letter-spacing: .4px;
     color: #6b7280;
-    padding: 1mm 2mm;
+    padding: 1.5mm 3mm;
     border-bottom: 1.5px solid #d1d5db;
+    background: #fafafa;
   }
   .print-table td{
-    padding: 1.3mm 2mm;
+    padding: 1.4mm 3mm;
     border-bottom: 1px solid #f1f5f9;
   }
   .print-table tr:last-child td{
@@ -2867,10 +2915,10 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
   margin-bottom:8px;
 }
 .media-preview-v30{
-  height:126px;
+  height:160px;
   border-radius:14px;
-  border:1px dashed #cbd5e1;
-  background:#f8fafc;
+  border:1px solid #cbd5e1;
+  background:#0f172a;
   display:grid;
   place-items:center;
   color:#64748b;
@@ -2880,7 +2928,7 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
 .media-preview-v30 img{
   width:100%;
   height:100%;
-  object-fit:cover;
+  object-fit:contain;
 }
 .media-slot-v30 input[type=file]{display:none}
 .media-label-v30{
@@ -2917,10 +2965,10 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
   font-size:14px;
 }
 .media-preview-v31{
-  height:115px;
+  height:150px;
   border-radius:14px;
-  border:1px dashed #cbd5e1;
-  background:#f8fafc;
+  border:1px solid #cbd5e1;
+  background:#0f172a;
   display:grid;
   place-items:center;
   color:#64748b;
@@ -2930,7 +2978,7 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
 .media-preview-v31 img{
   width:100%;
   height:100%;
-  object-fit:cover;
+  object-fit:contain;
 }
 .media-slot-v31 input[type=file]{display:none}
 .media-label-v31{
