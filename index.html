@@ -443,58 +443,6 @@
         </section>
 
 
-        <!-- ===== HABILLEMENT ===== -->
-        <section id="habillement" class="tech-tab">
-          <div class="panel" style="padding-bottom:0">
-
-            <!-- En-tête avec sélecteur agent + aide -->
-            <div class="panel-head" style="flex-wrap:wrap;gap:10px;margin-bottom:16px;">
-              <div>
-                <h2 style="margin:0 0 2px">Habillement</h2>
-                <p class="muted" style="margin:0">Sélectionnez un agent pour voir ses échéances, ou consultez le référentiel général.</p>
-              </div>
-              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-                <input id="habAgentSearch" class="fc-search" style="min-width:200px" placeholder="🔍 Matricule ou nom…">
-                <select id="habFilterType" class="fc-select">
-                  <option value="">SPP + SPV</option>
-                  <option value="SPP">SPP</option>
-                  <option value="SPV">SPV</option>
-                </select>
-                <button id="habHelpBtn" class="help-btn" title="Aide &amp; Annexe VI">?</button>
-              </div>
-            </div>
-
-            <!-- Sélecteur agent (liste déroulante résultats) -->
-            <div id="habAgentPickerWrap" style="position:relative;margin-bottom:16px;display:none;">
-              <div id="habAgentPicker" class="hab-picker-list"></div>
-            </div>
-
-            <!-- Bandeau agent sélectionné -->
-            <div id="habSelectedBanner" class="hab-selected-banner" style="display:none;">
-              <div id="habSelectedInfo"></div>
-              <button id="habClearAgent" class="hab-clear-btn" title="Revenir au référentiel">✕ Désélectionner</button>
-            </div>
-
-            <!-- Compteurs (visibles seulement quand agent sélectionné) -->
-            <div id="habStatsBar" class="hab-stats-bar" style="display:none;">
-              <div class="hab-stat hab-stat-red"><strong id="habCountRenew">0</strong><span>Renouvelables</span></div>
-              <div class="hab-stat hab-stat-orange"><strong id="habCountSoon">0</strong><span>Bientôt (&lt;30j)</span></div>
-              <div class="hab-stat hab-stat-green"><strong id="habCountOk">0</strong><span>À jour</span></div>
-              <div class="hab-stat"><strong id="habCountManuel">0</strong><span>Manuel</span></div>
-            </div>
-
-            <!-- Tableau principal (référentiel ou agent) -->
-            <div id="habTableWrap" style="overflow-x:auto;padding-bottom:20px;">
-              <table id="habMainTable" class="hab-main-table">
-                <thead id="habMainThead"></thead>
-                <tbody id="habMainTbody"></tbody>
-              </table>
-            </div>
-
-          </div>
-        </section>
-        <!-- ===== FIN HABILLEMENT ===== -->
-
         <section id="personnelCis" class="tech-tab">
           <div class="panel">
             <div class="panel-head">
@@ -519,6 +467,86 @@
             <div id="personnelTableSt" class="personnel-table-st"></div>
           </div>
         </section>
+
+        <!-- ===== HABILLEMENT ===== -->
+        <section id="habillement" class="tech-tab">
+          <div class="panel" style="padding-bottom:0">
+
+            <!-- En-tête -->
+            <div class="panel-head" style="flex-wrap:wrap;gap:10px;margin-bottom:14px;">
+              <div>
+                <h2 style="margin:0 0 2px">Habillement</h2>
+                <p class="muted" style="margin:0">Suivi des renouvellements d'effets — Annexe VI</p>
+              </div>
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                <input id="habAgentSearch" class="fc-search" style="min-width:200px" placeholder="🔍 Matricule ou nom…">
+                <select id="habFilterType" class="fc-select">
+                  <option value="">SPP + SPV</option>
+                  <option value="SPP">SPP</option>
+                  <option value="SPV">SPV</option>
+                </select>
+                <button id="habHelpBtn" class="help-btn" title="Aide &amp; Annexe VI">?</button>
+              </div>
+            </div>
+
+            <!-- Badges globaux cliquables -->
+            <div class="hab-global-stats">
+              <div class="hab-gstat hab-gstat-red"   id="habGstatRenew"  title="Voir agents avec effets renouvelables" style="cursor:pointer">
+                <strong id="habGcountRenew">0</strong><span>Renouvelables</span>
+              </div>
+              <div class="hab-gstat hab-gstat-orange" id="habGstatSoon"  title="Voir agents avec échéances proches" style="cursor:pointer">
+                <strong id="habGcountSoon">0</strong><span>Bientôt (&lt;30j)</span>
+              </div>
+              <div class="hab-gstat hab-gstat-green"  id="habGstatOk">
+                <strong id="habGcountOk">0</strong><span>À jour</span>
+              </div>
+              <div class="hab-gstat" id="habGstatManuel">
+                <strong id="habGcountManuel">0</strong><span>Manuel C.RH</span>
+              </div>
+              <div class="hab-gstat" style="border-left:4px solid #1976d2">
+                <strong id="habGcountAgents" style="color:#1976d2">0</strong><span>Agents suivis</span>
+              </div>
+            </div>
+
+            <!-- Panneau liste agents (visible quand filtre global actif) -->
+            <div id="habAgentListPanel" style="display:none;margin-bottom:14px;">
+              <div class="hab-panel-agents-head">
+                <span id="habAgentListTitle">Agents avec effets renouvelables</span>
+                <button id="habCloseAgentList" class="hab-clear-btn">✕ Fermer</button>
+              </div>
+              <div id="habAgentListItems" class="hab-agent-chips"></div>
+            </div>
+
+            <!-- Picker recherche agent -->
+            <div id="habPickerWrap" style="position:relative;margin-bottom:14px;display:none;">
+              <div id="habPickerList" class="hab-picker-list"></div>
+            </div>
+
+            <!-- Bannière agent sélectionné -->
+            <div id="habSelectedBanner" class="hab-selected-banner" style="display:none;">
+              <div id="habSelectedInfo"></div>
+              <button id="habClearAgent" class="hab-clear-btn">✕ Désélectionner</button>
+            </div>
+
+            <!-- Compteurs agent (visibles quand agent sélectionné) -->
+            <div id="habAgentStats" class="hab-stats-bar" style="display:none;">
+              <div class="hab-stat hab-stat-red">   <strong id="habAcountRenew">0</strong><span>Renouvelables</span></div>
+              <div class="hab-stat hab-stat-orange"> <strong id="habAcountSoon">0</strong><span>Bientôt</span></div>
+              <div class="hab-stat hab-stat-green">  <strong id="habAcountOk">0</strong><span>À jour</span></div>
+              <div class="hab-stat">                 <strong id="habAcountManuel">0</strong><span>Manuel</span></div>
+            </div>
+
+            <!-- Tableau principal -->
+            <div id="habTableWrap" style="overflow-x:auto;padding-bottom:24px;">
+              <table id="habMainTable" class="hab-main-table">
+                <thead id="habMainThead"></thead>
+                <tbody id="habMainTbody"></tbody>
+              </table>
+            </div>
+
+          </div>
+        </section>
+        <!-- ===== FIN HABILLEMENT ===== -->
 
         <section id="stAccess" class="tech-tab">
           <div class="panel">
