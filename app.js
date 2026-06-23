@@ -10072,7 +10072,8 @@ function renderHabAgentListPanel(mode) {
 
   // Clic sur chip → sélectionner l'agent
   items.querySelectorAll("[data-hab-chip-mat]").forEach(chip => {
-    chip.onclick = () => {
+    chip.onmousedown = (e) => {
+      e.preventDefault();
       const a = habAgents().find(x => x.matricule === chip.dataset.habChipMat);
       if (a) habSelectAgent(a);
     };
@@ -10304,7 +10305,9 @@ function renderHabPicker(q) {
   }).join("");
 
   list.querySelectorAll("[data-hpick]").forEach(item => {
-    item.onclick = () => {
+    // mousedown au lieu de onclick : s'exécute avant que le blur/click global ne ferme le picker
+    item.onmousedown = (e) => {
+      e.preventDefault(); // empêche le blur sur le champ de recherche
       const a = habAgents().find(x => x.matricule === item.dataset.hpick);
       if (a) habSelectAgent(a);
     };
@@ -10386,7 +10389,7 @@ function initHabillement() {
         const w = document.getElementById("habPickerWrap");
         if (w) w.style.display = "none";
       }
-    }, {capture:true});
+    });
   }
 
   // Filtre type
@@ -10454,7 +10457,14 @@ document.querySelectorAll(".tech-nav").forEach(btn => {
   }
 });
 
-loadHabillement();
+// Attendre que supabase soit initialisé avant de charger les données
+(function habWaitForSupabase() {
+  if (typeof supabase !== "undefined" && supabase && typeof supabase.from === "function") {
+    loadHabillement();
+  } else {
+    setTimeout(habWaitForSupabase, 200);
+  }
+})();
 
 /* ============================================================
    FIN HABILLEMENT V3
