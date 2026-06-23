@@ -4,14 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FireCheck — V3</title>
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="icon-192.png" />
-  <link rel="apple-touch-icon" href="icon-192.png" />
-  <meta name="theme-color" content="#d71920" />
   <link rel="stylesheet" href="style.css" />
-  <!-- Supabase SDK -->
-  <script src="supabase-sdk.js"></script>
-  <script src="qrcode.min.js"></script>
 </head>
 <body>
   <div id="toast" class="toast"></div>
@@ -57,10 +50,10 @@
 
       <div class="profile-card hidden" id="profileCard">
         <p class="eyebrow">Utilisateur connecté</p>
-        <h2 id="profileName"></h2>
+        <h2 id="profileName">Caporal Nicolas Morel</h2>
         <div class="profile-grid">
-          <span>Grade</span><strong id="profileGrade"></strong>
-          <span>Matricule</span><strong id="profileMatricule"></strong>
+          <span>Grade</span><strong id="profileGrade">Caporal</strong>
+          <span>Matricule</span><strong id="profileMatricule">SP-45821</strong>
           <span>Garde</span><strong id="profileService">Jour</strong>
         </div>
         <button class="link-btn" id="changeUser">Changer d’utilisateur</button>
@@ -167,77 +160,6 @@
         <h3>Positionne le QR code dans le cadre</h3>
         <p>L’application ouvrira directement la fiche de contrôle correspondante.</p>
         <button class="btn primary full" id="simulateScan">Simuler scan FPT GO</button>
-      </div>
-    </div>
-  </section>
-
-  <section id="scanChoice" class="screen">
-    <div class="mobile-shell">
-      <header class="mobile-top">
-        <button class="round" data-go="home">←</button>
-        <div>
-          <p class="eyebrow" id="scanChoiceEyebrow">QR scanné</p>
-          <h2 id="scanChoiceTitle">Que veux-tu faire ?</h2>
-        </div>
-      </header>
-
-      <div class="scan-choice-grid">
-        <button class="scan-choice-card" id="scanChoiceVerif">
-          <span class="scan-choice-icon">✅</span>
-          <strong>Vérification du véhicule</strong>
-          <span class="muted">Contrôle journalier guidé, zone par zone.</span>
-        </button>
-
-        <button class="scan-choice-card scan-choice-anomaly" id="scanChoiceAnomaly">
-          <span class="scan-choice-icon">⚠️</span>
-          <strong>Signaler une anomalie</strong>
-          <span class="muted">Envoie un signalement directement au service technique.</span>
-        </button>
-
-        <button class="scan-choice-card scan-choice-intervention" id="scanChoiceIntervention">
-          <span class="scan-choice-icon">🚨</span>
-          <strong>Relève sur intervention</strong>
-          <span class="muted">Note le matériel sorti, cassé ou abîmé pour la relève suivante.</span>
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <section id="interventionReport" class="screen">
-    <div class="mobile-shell">
-      <header class="mobile-top">
-        <button class="round" data-go="home">←</button>
-        <div>
-          <p class="eyebrow">Relève sur intervention</p>
-          <h2 id="interventionVehicleTitle">Véhicule</h2>
-        </div>
-      </header>
-
-      <div class="card">
-        <p class="muted">Décris le matériel sorti, manquant, cassé ou abîmé. Le SP qui prend la relève pourra vérifier avant de quitter les lieux.</p>
-
-        <label>Matériel sorti / état constaté</label>
-        <textarea id="interventionComment" rows="8" placeholder="Ex : 2 tuyaux Ø70 sortis et non rangés, 1 lance déployée, ARI n°4 bouteille à recharger, projecteur cassé..."></textarea>
-
-        <label>Priorité</label>
-        <select id="interventionPriority">
-          <option>Normale</option>
-          <option>Urgente</option>
-          <option>Bloquant départ</option>
-        </select>
-
-        <div id="interventionOfflineNotice" class="intervention-offline-notice hidden">
-          📡 Pas de connexion détectée — ce rapport sera enregistré localement et envoyé automatiquement dès le retour du réseau.
-        </div>
-
-        <div class="modal-actions">
-          <button class="btn ghost" data-go="home">Annuler</button>
-          <button class="btn primary" id="saveInterventionReport">Envoyer le rapport</button>
-        </div>
-      </div>
-
-      <div id="pendingReportsBanner" class="pending-reports-banner hidden">
-        <span>📡 <strong id="pendingReportsCount">0</strong> rapport(s) en attente d’envoi — seront synchronisés automatiquement.</span>
       </div>
     </div>
   </section>
@@ -415,15 +337,12 @@
           <button class="tech-nav active" data-tab="dashboard">Remontées</button>
           <button class="tech-nav" data-tab="vehicles">Entretien véhicules</button>
           <button class="tech-nav" data-tab="equipment">Matériel technique</button>
-          <button class="tech-nav" data-tab="pharmacie">Pharmacie</button>
           <button class="tech-nav" data-tab="checkSheets">Fiches vérification</button>
+          <button class="tech-nav" data-tab="habillement">Habillement</button>
           <button class="tech-nav" data-tab="stAccess">Accès ST</button>
           <button class="tech-nav" data-tab="personnelCis">Personnel CIS</button>
         </nav>
-        <div class="tech-sidebar-actions">
-          <button class="fc-help-btn" id="stHelpBtn" title="Aide sur cet onglet">?</button>
-          <button class="btn ghost full" data-go="home">Retour interface SP</button>
-        </div>
+        <button class="btn ghost full" data-go="home">Retour interface SP</button>
       </aside>
 
       <main class="workspace">
@@ -440,7 +359,7 @@
             <div class="stat"><strong id="newCount">0</strong><span>Nouveaux</span></div>
             <div class="stat"><strong id="progressCount">1</strong><span>En cours</span></div>
             <div class="stat"><strong id="spFixedCount">0</strong><span>Corrigés par SP</span></div>
-            <div class="stat urgent"><strong>2</strong><span>Échéances proches <button type="button" class="stat-info-btn" id="urgentInfoBtn" title="Comment ça fonctionne ?">ⓘ</button></span></div>
+            <div class="stat urgent"><strong>2</strong><span>Échéances proches</span></div>
           </div>
 
           <div class="panel">
@@ -472,21 +391,6 @@
           </div>
         </section>
 
-        <section id="pharmacie" class="tech-tab">
-          <div class="panel" id="pharmaciePanel">
-            <div class="panel-head">
-              <div>
-                <h2>Pharmacie — Dates de péremption</h2>
-                <p class="muted">Alerte automatique 1 mois avant péremption.</p>
-              </div>
-              <button class="btn primary" id="pharmAddBtn">+ Ajouter un produit</button>
-            </div>
-            <div id="pharmAlertBanner" class="pharm-alert-banner hidden"></div>
-            <div id="pharmEnginFilter" class="pharm-filter-bar"></div>
-            <div id="pharmList" class="pharm-list"></div>
-          </div>
-        </section>
-
         <section id="checkSheets" class="tech-tab">
           <div class="panel">
             <div class="panel-head">
@@ -507,8 +411,6 @@
                   <button class="fc-tab" data-fc-family="SSUAP">SSUAP</button>
                   <button class="fc-tab" data-fc-family="SR">SR</button>
                   <button class="fc-tab" data-fc-family="DIVERS">DIVERS</button>
-                  <button class="fc-tab" data-fc-family="PROTECTION">PROTECTION</button>
-                  <button class="fc-tab" data-fc-family="COMMUNICATION">COMMUNICATION</button>
                 </div>
 
                 <input id="fcSearch" class="fc-search" placeholder="Rechercher un matériel...">
@@ -565,6 +467,53 @@
             <div id="personnelTableSt" class="personnel-table-st"></div>
           </div>
         </section>
+
+        <!-- ===== ONGLET HABILLEMENT ===== -->
+        <section id="habillement" class="tech-tab">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Habillement</h2>
+                <p class="muted">Suivi individuel des renouvellements d'effets par agent.</p>
+              </div>
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                <input id="habillementSearch" class="fc-search" style="min-width:180px" placeholder="Rechercher agent, matricule...">
+                <select id="habillementFilterCis" class="fc-select">
+                  <option value="">Tous les CIS</option>
+                </select>
+                <select id="habillementFilterStatut" class="fc-select">
+                  <option value="">Tous statuts</option>
+                  <option value="SPP">SPP</option>
+                  <option value="SPV">SPV</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Compteurs -->
+            <div class="hab-stats-bar">
+              <div class="hab-stat hab-stat-red" id="habStatRenew" title="Cliquer pour filtrer" style="cursor:pointer">
+                <strong id="habCountRenew">0</strong>
+                <span>Renouvelables</span>
+              </div>
+              <div class="hab-stat hab-stat-orange" id="habStatSoon" title="Cliquer pour filtrer" style="cursor:pointer">
+                <strong id="habCountSoon">0</strong>
+                <span>Bientôt</span>
+              </div>
+              <div class="hab-stat hab-stat-green">
+                <strong id="habCountOk">0</strong>
+                <span>À jour</span>
+              </div>
+              <div class="hab-stat">
+                <strong id="habCountAgents">0</strong>
+                <span>Agents suivis</span>
+              </div>
+            </div>
+
+            <!-- Tableau agents -->
+            <div id="habAgentList" class="hab-agent-list"></div>
+          </div>
+        </section>
+        <!-- ===== FIN HABILLEMENT ===== -->
 
         <section id="stAccess" class="tech-tab">
           <div class="panel">
@@ -932,14 +881,10 @@
             <option>SSUAP</option>
             <option>SR</option>
             <option>DIVERS</option>
-            <option>PROTECTION</option>
-            <option>COMMUNICATION</option>
           </select>
         </label>
         <label>Sous-catégorie
-          <select id="newLibraryItemSub">
-            <option value="">-- Choisir --</option>
-          </select>
+          <input id="newLibraryItemSub" placeholder="Ex : Hydraulique">
         </label>
         <label>Quantité par défaut
           <input id="newLibraryItemQty" type="number" min="1" value="1">
@@ -994,103 +939,5 @@
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="app.js"></script>
-
-  <!-- Dialog Pharmacie -->
-  <dialog id="pharmDialog">
-    <div class="modal">
-      <div class="modal-head">
-        <h2 id="pharmDialogTitle">Ajouter un produit</h2>
-        <button class="btn ghost" id="pharmDialogClose">✕</button>
-      </div>
-      <div class="form-group">
-        <label>Nom du produit *</label>
-        <input id="pharmFormName" class="input" placeholder="Ex: Adrénaline 1mg, Aspégic 500…">
-      </div>
-      <div class="form-group">
-        <label>Engin / matériel *</label>
-        <input id="pharmFormEngin" class="input" list="pharmEnginList" placeholder="Ex: VSAV 1">
-        <datalist id="pharmEnginList"></datalist>
-      </div>
-      <div class="form-group">
-        <label>Date de péremption *</label>
-        <input id="pharmFormExpiry" class="input" type="month">
-      </div>
-      <div class="form-group">
-        <label>Photo du produit</label>
-        <div id="pharmFormPhotoPreview" class="pharm-form-photo-preview">📷</div>
-        <label class="btn secondary" style="cursor:pointer;display:inline-block;margin-top:8px;">
-          Ajouter / remplacer
-          <input id="pharmFormPhotoInput" type="file" accept="image/*" style="display:none;">
-        </label>
-      </div>
-      <div class="modal-actions">
-        <button class="btn ghost" id="pharmFormCancel">Annuler</button>
-        <button class="btn primary" id="pharmFormSave">Ajouter</button>
-      </div>
-    </div>
-  </dialog>
-
-  <dialog id="guidedAnomalyDialogV27">
-    <div class="modal">
-      <div class="modal-head">
-        <div>
-          <p class="eyebrow">Vérification terrain</p>
-          <h2 id="guidedAnomalyTitleV27">Signaler une anomalie</h2>
-        </div>
-        <button class="round" id="closeGuidedAnomalyV27">×</button>
-      </div>
-
-      <p class="muted" id="guidedAnomalySubtitleV27">Choisis ce qui ne va pas, puis valide.</p>
-
-      <div class="field-row">
-        <label>Type de problème
-          <select id="guidedAnomalyType">
-            <option>Manquant</option>
-            <option>Cassé</option>
-            <option>Sale</option>
-            <option>Détérioré</option>
-            <option>Défectueux</option>
-            <option>Non conforme</option>
-            <option>Périmé</option>
-            <option>À contrôler</option>
-            <option>Autre</option>
-          </select>
-        </label>
-
-        <label>Priorité
-          <select id="guidedAnomalyPriority">
-            <option>Normale</option>
-            <option>Urgente</option>
-            <option>Bloquant départ</option>
-          </select>
-        </label>
-      </div>
-
-      <label>Commentaire</label>
-      <textarea id="guidedAnomalyComment" placeholder="Précise le problème constaté..."></textarea>
-
-      <div class="modal-actions">
-        <button class="btn ghost" id="cancelGuidedAnomalyV27">Annuler</button>
-        <button class="btn primary" id="saveGuidedAnomalyV27">Enregistrer l’anomalie</button>
-      </div>
-    </div>
-  </dialog>
-  <dialog id="monthlyReadingDialogV37">
-    <div class="modal">
-      <div class="modal-head">
-        <div>
-          <p class="eyebrow">Relevé mensuel</p>
-          <h2 id="monthlyReadingTitleV37">Kilométrage / heures</h2>
-        </div>
-      </div>
-      <p class="muted">Ce relevé n’a pas encore été fait ce mois-ci pour ce véhicule. Il est nécessaire pour terminer la vérification.</p>
-      <label id="monthlyReadingLabelV37">Valeur actuelle (km)</label>
-      <input id="monthlyReadingValue" type="number" min="0" placeholder="Ex : 48230">
-      <div class="modal-actions">
-        <button class="btn primary full" id="saveMonthlyReadingV37">Enregistrer et terminer la vérification</button>
-      </div>
-    </div>
-  </dialog>
-  <script src="supabase.js"></script>
 </body>
 </html>
