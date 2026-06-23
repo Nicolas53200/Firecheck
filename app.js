@@ -9882,385 +9882,451 @@ if(setZonePhotoBeforeV32){
 renderAll();
 
 /* ============================================================
-   HABILLEMENT V1 — Suivi individuel des renouvellements
+   HABILLEMENT V2
+   - Tableau unique visible dès l'ouverture (référentiel Annexe VI)
+   - Sélection d'un agent → le tableau se met à jour avec ses dates
+   - ST clique "Enregistrer" lors de la remise physique
    ============================================================ */
 
-// --- Référentiel des périodicités (Annexe VI — effets à périodicité fixe uniquement) ---
-// format: { label, periode_jours, categorie }
-// periode_jours = null => pas de compteur auto (C.EPI / C.RH manuel)
-const HAB_REFERENTIEL = [
-  // Tenue de service et d'intervention
-  { id:"veste_tsi",         label:"Veste TSI",                 periode_jours: 730,  categorie:"Tenue S&I",  profils:["SPP_op","SPP_enc","SPV_op","SPV_enc","chef_cis","officier"] },
-  { id:"pantalon_tsi",      label:"Pantalon TSI",              periode_jours: 548,  categorie:"Tenue S&I",  profils:["SPP_op","SPP_enc","SPV_op","SPV_enc","chef_cis","officier"] },
-  { id:"polo_mc",           label:"Polo manches courtes",      periode_jours: 183,  categorie:"Tenue S&I",  profils:["SPP_op","SPP_enc","SPV_op","SPV_enc","chef_cis","officier"] },
-  { id:"polo_ml",           label:"Polo manches longues",      periode_jours: 365,  categorie:"Tenue S&I",  profils:["SPP_op","SPP_enc","SPV_op","SPV_enc","chef_cis","officier"] },
-  { id:"bonnet",            label:"Bonnet",                    periode_jours: null, categorie:"Tenue S&I",  profils:["SPP_op","SPP_enc","SPV_op","SPV_enc","chef_cis","officier"] },
-  { id:"sweat_shirt",       label:"Sweat-shirt",               periode_jours: 365,  categorie:"Tenue S&I",  profils:["SPP_op","SPP_enc","SPV_op","SPV_enc"] },
-  { id:"chaussettes_rangers",label:"Chaussettes rangers (paire)",periode_jours: 183, categorie:"Tenue S&I", profils:["SPP_op","SPP_enc","SPV_op","SPV_enc","chef_cis","officier"] },
-  { id:"coupe_vent",        label:"Coupe-vent",                periode_jours: 1095, categorie:"Tenue S&I",  profils:["SPP_op","SPP_enc","SPV_op","SPV_enc"] },
-  // Sport SPP
-  { id:"sweat_sport",       label:"Sweat de sport",            periode_jours: 1095, categorie:"Sport",      profils:["SPP_op","SPP_enc"] },
-  { id:"pantalon_sport",    label:"Pantalon de sport",         periode_jours: 1095, categorie:"Sport",      profils:["SPP_op","SPP_enc"] },
-  { id:"collant_sport",     label:"Collant long",              periode_jours: 1095, categorie:"Sport",      profils:["SPP_op","SPP_enc"] },
-  { id:"cuissard_sport",    label:"Cuissard de sport",         periode_jours: 1095, categorie:"Sport",      profils:["SPP_op","SPP_enc"] },
-  { id:"maillot_sport",     label:"Maillot sport / running",   periode_jours: 1095, categorie:"Sport",      profils:["SPP_op","SPP_enc"] },
-  { id:"short_sport",       label:"Short sport / running",     periode_jours: 1095, categorie:"Sport",      profils:["SPP_op","SPP_enc"] },
-  { id:"chaussettes_sport", label:"Chaussettes de sport (2p)", periode_jours: 365,  categorie:"Sport",      profils:["SPP_op","SPP_enc"] },
-  { id:"maillot_bain",      label:"Maillot bain / bonnet / lunettes", periode_jours: 1095, categorie:"Sport", profils:["SPP_op","SPP_enc"] },
-  { id:"chaussures_sport",  label:"Chaussures de sport (2p)",  periode_jours: 730,  categorie:"Sport",      profils:["SPP_op","SPP_enc"] },
-  // Tenue de sortie (C.RH = manuel, on les met sans periode)
-  { id:"calot",             label:"Calot",                     periode_jours: null, categorie:"Sortie",     profils:["SPP_op","SPP_enc","SPV_op","SPV_enc","chef_cis","officier"] },
-  { id:"chaussures_basses", label:"Chaussures basses noires",  periode_jours: null, categorie:"Sortie",     profils:["SPP_op","SPP_enc","SPV_op","SPV_enc","chef_cis","officier"] },
-  { id:"socquettes_sortie", label:"Socquettes chaussures basses (3p)", periode_jours: 548, categorie:"Sortie", profils:["SPP_op","SPP_enc","SPV_op","SPV_enc","chef_cis","officier"] },
+// ── Référentiel Annexe VI — effets à périodicité fixe ──────────
+// periode_jours : null = contrôle C.RH / C.EPI (manuel)
+// spp / spv : applicabilité par type
+const HAB_REF = [
+  // Tenue de Service & Intervention
+  { id:"veste_tsi",     label:"Veste TSI",                        periode_jours:730,  cat:"Tenue de Service & Intervention", spp:true,  spv:true  },
+  { id:"pantalon_tsi",  label:"Pantalon TSI",                     periode_jours:548,  cat:"Tenue de Service & Intervention", spp:true,  spv:true  },
+  { id:"polo_mc",       label:"Polo manches courtes",             periode_jours:183,  cat:"Tenue de Service & Intervention", spp:true,  spv:true  },
+  { id:"polo_ml",       label:"Polo manches longues",             periode_jours:365,  cat:"Tenue de Service & Intervention", spp:true,  spv:true  },
+  { id:"sweat_shirt",   label:"Sweat-shirt",                      periode_jours:365,  cat:"Tenue de Service & Intervention", spp:true,  spv:true  },
+  { id:"coupe_vent",    label:"Coupe-vent",                       periode_jours:1095, cat:"Tenue de Service & Intervention", spp:true,  spv:true  },
+  { id:"chss_rangers",  label:"Chaussettes rangers (2 paires/an)",periode_jours:183,  cat:"Tenue de Service & Intervention", spp:true,  spv:true  },
+  { id:"bonnet",        label:"Bonnet",                           periode_jours:null, cat:"Tenue de Service & Intervention", spp:true,  spv:true  },
+  // Tenue de Sortie
+  { id:"socquettes",    label:"Socquettes chaussures basses (3p)",periode_jours:548,  cat:"Tenue de Sortie", spp:true, spv:true  },
+  { id:"calot",         label:"Calot",                            periode_jours:null, cat:"Tenue de Sortie", spp:true, spv:true  },
+  { id:"chaussures_b",  label:"Chaussures basses noires",         periode_jours:null, cat:"Tenue de Sortie", spp:true, spv:true  },
+  // Sport SPP uniquement
+  { id:"sweat_sport",   label:"Sweat de sport",                   periode_jours:1095, cat:"Équipements Sport (SPP)",  spp:true, spv:false },
+  { id:"pant_sport",    label:"Pantalon de sport",                periode_jours:1095, cat:"Équipements Sport (SPP)",  spp:true, spv:false },
+  { id:"collant_sport", label:"Collant long",                     periode_jours:1095, cat:"Équipements Sport (SPP)",  spp:true, spv:false },
+  { id:"cuissard",      label:"Cuissard de sport",                periode_jours:1095, cat:"Équipements Sport (SPP)",  spp:true, spv:false },
+  { id:"maillot_sport", label:"Maillot sport / running",          periode_jours:1095, cat:"Équipements Sport (SPP)",  spp:true, spv:false },
+  { id:"short_sport",   label:"Short sport / running",            periode_jours:1095, cat:"Équipements Sport (SPP)",  spp:true, spv:false },
+  { id:"chss_sport",    label:"Chaussettes de sport (2 paires)",  periode_jours:365,  cat:"Équipements Sport (SPP)",  spp:true, spv:false },
+  { id:"maillot_bain",  label:"Maillot bain / bonnet / lunettes", periode_jours:1095, cat:"Équipements Sport (SPP)",  spp:true, spv:false },
+  { id:"chaussures_sp", label:"Chaussures de sport (2 paires)",   periode_jours:730,  cat:"Équipements Sport (SPP)",  spp:true, spv:false },
 ];
 
-// Seuil d'alerte "bientôt" en jours
 const HAB_SEUIL_BIENTOT = 30;
 
-// --- Données habillement en mémoire (chargées depuis Supabase fc_habillement) ---
-let fcHabillement = []; // [{agent_matricule, effet_id, date_renouvellement, renouvelé_par}]
+// ── Données Supabase ────────────────────────────────────────────
+let fcHabillement = [];
+let habAgentSelectionne = null; // objet agent courant ou null
 
-// --- Chargement Supabase ---
 async function loadHabillement() {
   try {
     const res = await supabase.from("fc_habillement").select("*");
     if (res.data) fcHabillement = res.data;
-  } catch(e) {
-    console.warn("fc_habillement non disponible", e);
-  }
+  } catch(e) { console.warn("fc_habillement non dispo", e); }
 }
 
-async function saveHabillement(matricule, effet_id, renouvele_par) {
+async function saveHabillement(matricule, effetId) {
   const today = new Date().toISOString().split("T")[0];
-  // Chercher si entrée existante
-  const existing = fcHabillement.find(h => h.agent_matricule === matricule && h.effet_id === effet_id);
+  const existing = fcHabillement.find(h => h.agent_matricule === matricule && h.effet_id === effetId);
   if (existing) {
     existing.date_renouvellement = today;
-    existing.renouvele_par = renouvele_par;
+    existing.renouvele_par = "ST";
     try {
-      await supabase.from("fc_habillement").update({
-        date_renouvellement: today, renouvele_par
-      }).eq("id", existing.id);
-    } catch(e) { console.warn("Erreur save habillement", e); }
+      await supabase.from("fc_habillement")
+        .update({ date_renouvellement: today, renouvele_par: "ST" })
+        .eq("id", existing.id);
+    } catch(e) { console.warn("Err update hab", e); }
   } else {
-    const newRow = { agent_matricule: matricule, effet_id, date_renouvellement: today, renouvele_par };
-    fcHabillement.push(newRow);
+    const row = { agent_matricule: matricule, effet_id: effetId, date_renouvellement: today, renouvele_par: "ST" };
+    fcHabillement.push(row);
     try {
-      const res = await supabase.from("fc_habillement").insert(newRow);
-      if (res.data && res.data[0]) newRow.id = res.data[0].id;
-    } catch(e) { console.warn("Erreur insert habillement", e); }
+      const res = await supabase.from("fc_habillement").insert(row);
+      if (res.data && res.data[0]) row.id = res.data[0].id;
+    } catch(e) { console.warn("Err insert hab", e); }
   }
 }
 
-// --- Logique de calcul ---
-function habGetDernierRenouvellement(matricule, effet_id) {
-  const h = fcHabillement.find(h => h.agent_matricule === matricule && h.effet_id === effet_id);
+// ── Calcul ──────────────────────────────────────────────────────
+function habDernier(matricule, effetId) {
+  const h = fcHabillement.find(h => h.agent_matricule === matricule && h.effet_id === effetId);
   return h ? h.date_renouvellement : null;
 }
 
-// Retourne: "ok" | "bientot" | "renouvelable" | "inconnu"
-function habGetStatut(matricule, effet_id) {
-  const ref = HAB_REFERENTIEL.find(r => r.id === effet_id);
-  if (!ref) return "inconnu";
-  if (!ref.periode_jours) return "manuel"; // C.RH / C.EPI
-  const derniere = habGetDernierRenouvellement(matricule, effet_id);
-  if (!derniere) return "renouvelable"; // jamais enregistré = potentiellement éligible
-  const days = Math.floor((Date.now() - new Date(derniere)) / 86400000);
-  const restant = ref.periode_jours - days;
+function habStatut(matricule, effetId) {
+  const ref = HAB_REF.find(r => r.id === effetId);
+  if (!ref || !ref.periode_jours) return "manuel";
+  const derniere = habDernier(matricule, effetId);
+  if (!derniere) return "renouvelable";
+  const jours = Math.floor((Date.now() - new Date(derniere)) / 86400000);
+  const restant = ref.periode_jours - jours;
   if (restant <= 0) return "renouvelable";
   if (restant <= HAB_SEUIL_BIENTOT) return "bientot";
   return "ok";
 }
 
-function habFormatDate(dateStr) {
-  if (!dateStr) return "—";
-  const d = new Date(dateStr);
-  return d.toLocaleDateString("fr-FR");
-}
-
-function habProchainRenouvellement(matricule, effet_id) {
-  const ref = HAB_REFERENTIEL.find(r => r.id === effet_id);
+function habProchain(matricule, effetId) {
+  const ref = HAB_REF.find(r => r.id === effetId);
   if (!ref || !ref.periode_jours) return null;
-  const derniere = habGetDernierRenouvellement(matricule, effet_id);
-  if (!derniere) return null;
-  const d = new Date(derniere);
-  d.setDate(d.getDate() + ref.periode_jours);
-  return d;
+  const d = habDernier(matricule, effetId);
+  if (!d) return null;
+  const dt = new Date(d);
+  dt.setDate(dt.getDate() + ref.periode_jours);
+  return dt;
 }
 
-// Retourne les effets applicables selon le grade/statut
-function habEffetsPourAgent(agent) {
-  // On détermine le profil selon grade et statut
-  const grade = (agent.grade || "").toLowerCase();
-  let profil = "SPV_op";
-  if ((agent.statut || "SPV") === "SPP") {
-    profil = grade.includes("lieutenant") || grade.includes("capitaine") || grade.includes("commandant") || grade.includes("colonel") ? "SPP_enc" : "SPP_op";
+function habFmt(s) {
+  if (!s) return "—";
+  return new Date(s).toLocaleDateString("fr-FR");
+}
+
+function habPeriodeLabel(jours) {
+  if (!jours) return null;
+  if (jours <= 183) return "2×/an";
+  if (jours <= 365) return "1×/an";
+  if (jours <= 548) return "1× / 18 mois";
+  if (jours <= 730) return "1× / 2 ans";
+  return "1× / 3 ans";
+}
+
+// Effets applicables selon type SPP/SPV
+function habEffetsPour(agent) {
+  const isSPP = (agent.type || "SPV").toUpperCase() === "SPP";
+  return HAB_REF.filter(r => isSPP ? r.spp : r.spv);
+}
+
+// ── Rendu tableau ────────────────────────────────────────────────
+function renderHabTable() {
+  const thead = document.getElementById("habMainThead");
+  const tbody = document.getElementById("habMainTbody");
+  if (!thead || !tbody) return;
+
+  const agent = habAgentSelectionne;
+
+  if (!agent) {
+    // ── MODE RÉFÉRENTIEL (aucun agent) ──────────────────────────
+    thead.innerHTML = `<tr>
+      <th>Catégorie</th>
+      <th>Effet</th>
+      <th>Applicable</th>
+      <th>Périodicité</th>
+      <th>Référence Annexe VI</th>
+    </tr>`;
+
+    const cats = [...new Set(HAB_REF.map(r => r.cat))];
+    tbody.innerHTML = cats.map(cat => {
+      const effets = HAB_REF.filter(r => r.cat === cat);
+      return effets.map((ef, i) => `
+        <tr>
+          ${i === 0 ? `<td rowspan="${effets.length}" style="font-weight:700;border-right:2px solid var(--border,#e0e0e0);color:#444;font-size:.82rem;vertical-align:top;padding-top:10px">${cat}</td>` : ""}
+          <td>${ef.label}</td>
+          <td style="text-align:center">
+            ${ef.spp ? `<span style="font-size:.7rem;background:#e3f2fd;color:#1565c0;border-radius:4px;padding:1px 6px;font-weight:700;margin-right:3px">SPP</span>` : ""}
+            ${ef.spv ? `<span style="font-size:.7rem;background:#f3e5f5;color:#6a1b9a;border-radius:4px;padding:1px 6px;font-weight:700">SPV</span>` : ""}
+          </td>
+          <td>
+            ${ef.periode_jours
+              ? `<span class="hab-periode-chip">${habPeriodeLabel(ef.periode_jours)}</span>`
+              : `<span class="hab-manuel-chip">Manuel C.RH</span>`}
+          </td>
+          <td style="font-size:.78rem;color:var(--muted,#888)">
+            ${ef.periode_jours ? `${ef.periode_jours} jours` : "Contrôle responsable habillement"}
+          </td>
+        </tr>`).join("");
+    }).join("");
+
   } else {
-    profil = grade.includes("lieutenant") || grade.includes("capitaine") || grade.includes("commandant") || grade.includes("colonel") ? "officier"
-            : grade.includes("chef de centre") || grade.includes("cdc") ? "chef_cis"
-            : grade.includes("sergent") || grade.includes("adjudant") || grade.includes("major") ? "SPV_enc"
-            : "SPV_op";
+    // ── MODE AGENT ──────────────────────────────────────────────
+    const effets = habEffetsPour(agent);
+
+    // Compteurs
+    let cR = 0, cS = 0, cOk = 0, cM = 0;
+    effets.forEach(ef => {
+      const s = habStatut(agent.matricule, ef.id);
+      if (s === "renouvelable") cR++;
+      else if (s === "bientot") cS++;
+      else if (s === "ok") cOk++;
+      else cM++;
+    });
+    const $id = id => document.getElementById(id);
+    if ($id("habCountRenew")) $id("habCountRenew").textContent = cR;
+    if ($id("habCountSoon"))  $id("habCountSoon").textContent  = cS;
+    if ($id("habCountOk"))    $id("habCountOk").textContent    = cOk;
+    if ($id("habCountManuel"))$id("habCountManuel").textContent= cM;
+
+    thead.innerHTML = `<tr>
+      <th>Catégorie</th>
+      <th>Effet</th>
+      <th>Périodicité</th>
+      <th>Dernier renouvellement</th>
+      <th>Prochain prévu</th>
+      <th>Statut</th>
+      <th>Action</th>
+    </tr>`;
+
+    const cats = [...new Set(effets.map(r => r.cat))];
+    tbody.innerHTML = cats.map(cat => {
+      const effCat = effets.filter(r => r.cat === cat);
+      return effCat.map((ef, i) => {
+        const s = habStatut(agent.matricule, ef.id);
+        const derniere = habDernier(agent.matricule, ef.id);
+        const prochain = habProchain(agent.matricule, ef.id);
+
+        const dotCls = s === "renouvelable" ? "hab-dot-red" : s === "bientot" ? "hab-dot-orange" : s === "ok" ? "hab-dot-green" : "hab-dot-grey";
+        const chipCls = s === "renouvelable" ? "hab-chip-red" : s === "bientot" ? "hab-chip-orange" : s === "ok" ? "hab-chip-green" : "hab-chip-grey";
+        const slabel  = s === "renouvelable" ? "Renouvelable" : s === "bientot" ? "Bientôt" : s === "ok" ? "À jour" : "Manuel";
+
+        // Prochain : si jamais enregistré, montrer "Non renseigné" en orange
+        let prochainStr;
+        if (!ef.periode_jours) {
+          prochainStr = `<span style="color:#bbb;font-size:.8rem">—</span>`;
+        } else if (!derniere) {
+          prochainStr = `<span style="color:#fb8c00;font-size:.8rem">Non renseigné</span>`;
+        } else {
+          const pr = prochain ? prochain.toLocaleDateString("fr-FR") : "—";
+          const isLate = prochain && prochain < new Date();
+          prochainStr = `<span style="${isLate ? "color:#e53935;font-weight:600" : ""}">${pr}</span>`;
+        }
+
+        const canReg = s !== "ok";
+
+        return `<tr>
+          ${i === 0 ? `<td rowspan="${effCat.length}" style="font-weight:700;border-right:2px solid var(--border,#e0e0e0);color:#444;font-size:.8rem;vertical-align:top;padding-top:10px">${cat}</td>` : ""}
+          <td>${ef.label}</td>
+          <td>
+            ${ef.periode_jours
+              ? `<span class="hab-periode-chip">${habPeriodeLabel(ef.periode_jours)}</span>`
+              : `<span class="hab-manuel-chip">Manuel C.RH</span>`}
+          </td>
+          <td style="font-size:.84rem">${habFmt(derniere)}</td>
+          <td>${prochainStr}</td>
+          <td><span class="hab-chip ${chipCls}"><span class="hab-dot ${dotCls}"></span>${slabel}</span></td>
+          <td>
+            ${ef.periode_jours || !derniere
+              ? `<button class="hab-reg-btn" data-hab-mat="${agent.matricule}" data-hab-ef="${ef.id}"
+                  ${!canReg ? "disabled" : ""}>
+                  Enregistrer
+                </button>`
+              : `<span style="font-size:.75rem;color:#bbb">—</span>`}
+          </td>
+        </tr>`;
+      }).join("");
+    }).join("");
+
+    // Bind boutons enregistrer
+    tbody.querySelectorAll("[data-hab-mat]").forEach(btn => {
+      btn.onclick = async () => {
+        if (btn.disabled) return;
+        btn.disabled = true; btn.textContent = "…";
+        await saveHabillement(btn.dataset.habMat, btn.dataset.habEf);
+        if (typeof toast === "function") toast("Renouvellement enregistré ✓");
+        renderHabTable();
+      };
+    });
   }
-  return HAB_REFERENTIEL.filter(r => r.profils.includes(profil));
 }
 
-// --- Rendu ST ---
-let habFilterMode = ""; // "" | "renouvelable" | "bientot"
+// ── Picker agent ─────────────────────────────────────────────────
+function renderHabPicker(q, fType) {
+  const agents = (typeof personnelList !== "undefined" ? personnelList : [])
+    .filter(p => (p.statut || "ACTIF").toUpperCase() !== "INACTIF");
 
-function renderHabillement() {
-  const agents = (typeof fcPersonnel !== "undefined" ? fcPersonnel : []);
-  const search = (document.getElementById("habillementSearch") || {}).value || "";
-  const filterCis = (document.getElementById("habillementFilterCis") || {}).value || "";
-  const filterStatut = (document.getElementById("habillementFilterStatut") || {}).value || "";
+  const filtered = agents.filter(a => {
+    if (fType && (a.type || "SPV").toUpperCase() !== fType) return false;
+    if (!q) return true;
+    const txt = `${a.matricule||""} ${a.nom||""} ${a.prenom||""} ${a.grade||""}`.toLowerCase();
+    return txt.includes(q.toLowerCase());
+  }).slice(0, 20);
 
-  // Filtre agents
-  let filtered = agents.filter(a => {
-    const q = search.toLowerCase();
-    const matchSearch = !q || (a.matricule||"").toLowerCase().includes(q)
-      || (a.nom||"").toLowerCase().includes(q)
-      || (a.prenom||"").toLowerCase().includes(q);
-    const matchCis = !filterCis || (a.cis||a.service||"") === filterCis;
-    const matchSt = !filterStatut || (a.statut||"SPV") === filterStatut;
-    return matchSearch && matchCis && matchSt;
-  });
+  const wrap = document.getElementById("habAgentPickerWrap");
+  const picker = document.getElementById("habAgentPicker");
+  if (!wrap || !picker) return;
 
-  // Compteurs globaux
-  let totalRenew = 0, totalBientot = 0, totalOk = 0;
-  agents.forEach(a => {
-    const effets = habEffetsPourAgent(a);
-    effets.forEach(ef => {
-      if (!ef.periode_jours) return;
-      const s = habGetStatut(a.matricule, ef.id);
-      if (s === "renouvelable") totalRenew++;
-      else if (s === "bientot") totalBientot++;
-      else if (s === "ok") totalOk++;
-    });
-  });
-  const el = id => document.getElementById(id);
-  if(el("habCountRenew")) el("habCountRenew").textContent = totalRenew;
-  if(el("habCountSoon")) el("habCountSoon").textContent = totalBientot;
-  if(el("habCountOk")) el("habCountOk").textContent = totalOk;
-  if(el("habCountAgents")) el("habCountAgents").textContent = agents.length;
-
-  // Filtre habFilterMode
-  if (habFilterMode === "renouvelable") {
-    filtered = filtered.filter(a => {
-      const effets = habEffetsPourAgent(a);
-      return effets.some(ef => ef.periode_jours && habGetStatut(a.matricule, ef.id) === "renouvelable");
-    });
-  } else if (habFilterMode === "bientot") {
-    filtered = filtered.filter(a => {
-      const effets = habEffetsPourAgent(a);
-      return effets.some(ef => ef.periode_jours && habGetStatut(a.matricule, ef.id) === "bientot");
-    });
-  }
-
-  // Remplir select CIS
-  const selCis = document.getElementById("habillementFilterCis");
-  if (selCis && selCis.options.length <= 1) {
-    const cisList = [...new Set(agents.map(a => a.cis || a.service || "").filter(Boolean))].sort();
-    cisList.forEach(c => {
-      const o = document.createElement("option"); o.value = c; o.textContent = c;
-      selCis.appendChild(o);
-    });
-  }
-
-  const list = document.getElementById("habAgentList");
-  if (!list) return;
-
-  if (filtered.length === 0) {
-    list.innerHTML = `<p class="muted" style="text-align:center;padding:32px">Aucun agent trouvé.</p>`;
+  if (!q || filtered.length === 0) {
+    wrap.style.display = "none";
+    picker.innerHTML = "";
     return;
   }
 
-  list.innerHTML = filtered.map(agent => {
-    const effets = habEffetsPourAgent(agent);
-    const nbRenew = effets.filter(ef => ef.periode_jours && habGetStatut(agent.matricule, ef.id) === "renouvelable").length;
-    const nbBientot = effets.filter(ef => ef.periode_jours && habGetStatut(agent.matricule, ef.id) === "bientot").length;
-    const initiales = ((agent.prenom||"?")[0] + (agent.nom||"?")[0]).toUpperCase();
-
-    const badgesHtml = [
-      nbRenew > 0 ? `<span class="hab-badge hab-badge-red">${nbRenew} renouvelable${nbRenew>1?"s":""}</span>` : "",
-      nbBientot > 0 ? `<span class="hab-badge hab-badge-orange">${nbBientot} bientôt</span>` : ""
-    ].filter(Boolean).join("");
-
-    // Grouper effets par catégorie
-    const cats = [...new Set(effets.map(e => e.categorie))];
-    const bodyHtml = cats.map(cat => {
-      const effCat = effets.filter(e => e.categorie === cat);
-      return `
-        <div style="margin-bottom:10px">
-          <p style="font-size:.75rem;font-weight:700;text-transform:uppercase;color:var(--muted);margin:8px 0 4px">${cat}</p>
-          <table class="hab-effets-table">
-            <thead><tr>
-              <th>Effet</th><th>Dernier</th><th>Prochain</th><th>Statut</th><th></th>
-            </tr></thead>
-            <tbody>
-              ${effCat.map(ef => {
-                const statut = habGetStatut(agent.matricule, ef.id);
-                const derniere = habGetDernierRenouvellement(agent.matricule, ef.id);
-                const prochain = habProchainRenouvellement(agent.matricule, ef.id);
-                const dotClass = statut === "renouvelable" ? "hab-dot-red"
-                  : statut === "bientot" ? "hab-dot-orange"
-                  : statut === "ok" ? "hab-dot-green"
-                  : "hab-dot-grey";
-                const statutLabel = statut === "renouvelable" ? "Renouvelable"
-                  : statut === "bientot" ? "Bientôt"
-                  : statut === "ok" ? "À jour"
-                  : "Manuel / C.RH";
-                const canRenew = statut === "renouvelable" || statut === "bientot" || statut === "inconnu" || statut === "manuel" || !derniere;
-                const prochainStr = prochain ? prochain.toLocaleDateString("fr-FR") : ef.periode_jours ? "Non renseigné" : "—";
-                return `<tr>
-                  <td>${ef.label}</td>
-                  <td>${habFormatDate(derniere)}</td>
-                  <td>${prochainStr}</td>
-                  <td><span class="hab-status-dot ${dotClass}"></span>${statutLabel}</td>
-                  <td>
-                    <button class="hab-renouveler-btn"
-                      data-hab-matricule="${agent.matricule}"
-                      data-hab-effet="${ef.id}"
-                      ${!canRenew ? "disabled" : ""}>
-                      Enregistrer
-                    </button>
-                  </td>
-                </tr>`;
-              }).join("")}
-            </tbody>
-          </table>
-        </div>`;
-    }).join("");
-
-    return `
-      <div class="hab-agent-card" id="habCard_${agent.matricule}">
-        <div class="hab-agent-head" data-hab-toggle="${agent.matricule}">
-          <div class="hab-agent-avatar">${initiales}</div>
-          <div class="hab-agent-info">
-            <div class="hab-agent-name">${agent.grade || ""} ${agent.nom || ""} ${agent.prenom || ""}</div>
-            <div class="hab-agent-meta">${agent.matricule} · ${agent.statut || "SPV"} · ${agent.cis || agent.service || "CIS"}</div>
-          </div>
-          <div class="hab-agent-badges">${badgesHtml}</div>
-          <span class="hab-agent-chevron">▶</span>
-        </div>
-        <div class="hab-agent-body">${bodyHtml}</div>
-      </div>`;
+  wrap.style.display = "block";
+  picker.innerHTML = filtered.map(a => {
+    const typeCls = (a.type||"SPV").toUpperCase() === "SPP" ? "hab-picker-type-spp" : "hab-picker-type-spv";
+    return `<div class="hab-picker-item" data-hab-pick="${a.matricule}">
+      <span class="hab-picker-mat">${a.matricule||"—"}</span>
+      <span class="hab-picker-type ${typeCls}">${(a.type||"SPV").toUpperCase()}</span>
+      <span>${a.grade||""} <strong>${a.nom||""}</strong> ${a.prenom||""}</span>
+    </div>`;
   }).join("");
 
-  // Bind events
-  list.querySelectorAll("[data-hab-toggle]").forEach(head => {
-    head.onclick = () => {
-      const card = head.closest(".hab-agent-card");
-      card.classList.toggle("open");
-    };
-  });
-
-  list.querySelectorAll("[data-hab-matricule]").forEach(btn => {
-    btn.onclick = async () => {
-      const matricule = btn.dataset.habMatricule;
-      const effetId = btn.dataset.habEffet;
-      btn.disabled = true;
-      btn.textContent = "...";
-      await saveHabillement(matricule, effetId, "ST");
-      toast("Renouvellement enregistré ✓");
-      renderHabillement();
+  picker.querySelectorAll("[data-hab-pick]").forEach(item => {
+    item.onclick = () => {
+      const mat = item.dataset.habPick;
+      habSelectAgent(agents.find(a => a.matricule === mat));
     };
   });
 }
 
-// --- Filtre par clic sur les compteurs ---
-function bindHabStats() {
-  const btnRenew = document.getElementById("habStatRenew");
-  const btnSoon = document.getElementById("habStatSoon");
-  if (btnRenew) btnRenew.onclick = () => {
-    habFilterMode = habFilterMode === "renouvelable" ? "" : "renouvelable";
-    btnRenew.classList.toggle("hab-filter-active", habFilterMode === "renouvelable");
-    if(btnSoon) btnSoon.classList.remove("hab-filter-active");
-    renderHabillement();
-  };
-  if (btnSoon) btnSoon.onclick = () => {
-    habFilterMode = habFilterMode === "bientot" ? "" : "bientot";
-    btnSoon.classList.toggle("hab-filter-active", habFilterMode === "bientot");
-    if(btnRenew) btnRenew.classList.remove("hab-filter-active");
-    renderHabillement();
-  };
-
-  const search = document.getElementById("habillementSearch");
-  if (search) search.oninput = () => renderHabillement();
-  const selCis = document.getElementById("habillementFilterCis");
-  if (selCis) selCis.onchange = () => renderHabillement();
-  const selSt = document.getElementById("habillementFilterStatut");
-  if (selSt) selSt.onchange = () => renderHabillement();
-}
-
-// --- Vue SP : afficher son propre état ---
-function renderHabillementSP(matricule) {
-  const agent = (typeof fcPersonnel !== "undefined" ? fcPersonnel : []).find(a => a.matricule === matricule);
+function habSelectAgent(agent) {
   if (!agent) return;
+  habAgentSelectionne = agent;
 
-  // Chercher ou créer zone d'affichage dans l'interface SP
-  let zone = document.getElementById("habSpView");
-  if (!zone) return;
+  // Masquer picker
+  const wrap = document.getElementById("habAgentPickerWrap");
+  if (wrap) wrap.style.display = "none";
+  const search = document.getElementById("habAgentSearch");
+  if (search) search.value = "";
 
-  const effets = habEffetsPourAgent(agent);
-  const cats = [...new Set(effets.map(e => e.categorie))];
+  // Afficher bannière
+  const banner = document.getElementById("habSelectedBanner");
+  const info = document.getElementById("habSelectedInfo");
+  const statsBar = document.getElementById("habStatsBar");
+  if (banner) banner.style.display = "flex";
+  if (statsBar) statsBar.style.display = "flex";
+  if (info) info.innerHTML = `
+    <strong>${agent.grade||""} ${agent.nom||""} ${agent.prenom||""}</strong>
+    <span class="muted" style="display:block">Mat. ${agent.matricule||"—"} · ${(agent.type||"SPV").toUpperCase()} · ${agent.equipe||agent.service||"CIS"}</span>`;
 
-  zone.innerHTML = `
-    <div class="hab-sp-view">
-      <h3 style="margin-bottom:12px">Mon habillement</h3>
-      ${cats.map(cat => {
-        const effCat = effets.filter(e => e.categorie === cat);
-        return `
-          <div class="hab-sp-card">
-            <h4>${cat}</h4>
-            ${effCat.map(ef => {
-              const statut = habGetStatut(matricule, ef.id);
-              const derniere = habGetDernierRenouvellement(matricule, ef.id);
-              const prochain = habProchainRenouvellement(matricule, ef.id);
-              const dotClass = statut === "renouvelable" ? "hab-dot-red"
-                : statut === "bientot" ? "hab-dot-orange"
-                : statut === "ok" ? "hab-dot-green" : "hab-dot-grey";
-              const statutLabel = statut === "renouvelable" ? "🔴 Renouvelable"
-                : statut === "bientot" ? "🟡 Bientôt"
-                : statut === "ok" ? "🟢 À jour" : "⚪ Manuel";
-              const prochainStr = prochain ? `Prochain : ${prochain.toLocaleDateString("fr-FR")}` : derniere ? "" : "Jamais renseigné";
-              return `
-                <div class="hab-sp-row">
-                  <div>
-                    <div style="font-weight:500">${ef.label}</div>
-                    <div style="font-size:.75rem;color:var(--muted)">${derniere ? "Dernier : " + habFormatDate(derniere) : ""} ${prochainStr}</div>
-                  </div>
-                  <div class="hab-sp-status">
-                    <span class="hab-status-dot ${dotClass}"></span>${statutLabel}
-                  </div>
-                </div>`;
-            }).join("")}
-          </div>`;
-      }).join("")}
-    </div>`;
+  renderHabTable();
 }
 
-// --- Intégration dans renderAll ---
-const renderAllBeforeHab = renderAll;
-renderAll = function() {
-  renderAllBeforeHab();
-  renderHabillement();
-};
+function habClearAgent() {
+  habAgentSelectionne = null;
+  const banner = document.getElementById("habSelectedBanner");
+  const statsBar = document.getElementById("habStatsBar");
+  if (banner) banner.style.display = "none";
+  if (statsBar) statsBar.style.display = "none";
+  renderHabTable();
+}
 
-// --- Bind onglet habillement au clic ---
+// ── Init & bindings ──────────────────────────────────────────────
+function initHabillement() {
+  // Recherche agent
+  const search = document.getElementById("habAgentSearch");
+  const fType  = document.getElementById("habFilterType");
+  if (search && !search._habBound) {
+    search._habBound = true;
+    search.oninput = () => {
+      const q = search.value.trim();
+      const ft = (fType || {}).value || "";
+      if (q.length === 0) {
+        const wrap = document.getElementById("habAgentPickerWrap");
+        if (wrap) wrap.style.display = "none";
+      } else {
+        renderHabPicker(q, ft);
+      }
+    };
+    // Fermer picker si clic ailleurs
+    document.addEventListener("click", e => {
+      if (!e.target.closest("#habAgentPickerWrap") && !e.target.closest("#habAgentSearch")) {
+        const wrap = document.getElementById("habAgentPickerWrap");
+        if (wrap) wrap.style.display = "none";
+      }
+    }, { capture: true });
+  }
+  if (fType && !fType._habBound) {
+    fType._habBound = true;
+    fType.onchange = () => {
+      const q = (search || {}).value || "";
+      if (q.length > 0) renderHabPicker(q, fType.value);
+    };
+  }
+
+  // Bouton désélectionner
+  const clearBtn = document.getElementById("habClearAgent");
+  if (clearBtn && !clearBtn._habBound) {
+    clearBtn._habBound = true;
+    clearBtn.onclick = habClearAgent;
+  }
+
+  // Bouton ?
+  initHabHelp();
+
+  // Rendu tableau initial (référentiel)
+  renderHabTable();
+}
+
+// ── Dialog aide ──────────────────────────────────────────────────
+function initHabHelp() {
+  const btn = document.getElementById("habHelpBtn");
+  if (!btn || btn._habHelpBound) return;
+  btn._habHelpBound = true;
+
+  if (!document.getElementById("habHelpDialog")) {
+    const dlg = document.createElement("dialog");
+    dlg.id = "habHelpDialog";
+    dlg.innerHTML = `
+      <div class="hab-help-hd">
+        <h3>📋 Habillement — Aide &amp; Rappel Annexe VI</h3>
+        <button onclick="document.getElementById('habHelpDialog').close()">✕</button>
+      </div>
+      <div class="hab-help-bd">
+
+        <h4>🔍 Comment utiliser cet onglet ?</h4>
+        <p><strong>Par défaut</strong>, vous voyez le <strong>référentiel général</strong> (Annexe VI) avec toutes les périodicités réglementaires pour SPP et SPV.</p>
+        <p>Pour suivre un agent précis, <strong>tapez son nom ou matricule</strong> dans la barre de recherche et cliquez sur son nom. Le tableau se met à jour avec ses dates de dernier renouvellement et la prochaine échéance pour chaque effet.</p>
+        <p>Lors de la remise physique d'un effet au magasin, cliquez sur <strong>"Enregistrer"</strong> sur la ligne concernée : la date du jour est sauvegardée et le compteur repart à zéro.</p>
+
+        <h4>🔴🟡🟢 Légende des statuts (mode agent)</h4>
+        <div class="hab-help-legend">
+          <div><span class="hab-dot" style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#e53935;margin-right:4px"></span><strong>Renouvelable</strong> — délai écoulé ou jamais renseigné</div>
+          <div><span class="hab-dot" style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#fb8c00;margin-right:4px"></span><strong>Bientôt</strong> — moins de 30 jours avant l'échéance</div>
+          <div><span class="hab-dot" style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#43a047;margin-right:4px"></span><strong>À jour</strong> — pas encore éligible</div>
+          <div><span class="hab-dot" style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#bdbdbd;margin-right:4px"></span><strong>Manuel</strong> — pas de compteur (décision C.RH)</div>
+        </div>
+
+        <h4>📌 Qui enregistre ?</h4>
+        <p>Le ST (magasin) clique <strong>"Enregistrer"</strong> au moment de la remise physique de l'effet à l'agent. La date du jour est enregistrée automatiquement.</p>
+
+        <h4>📋 Référentiel complet — Annexe VI</h4>
+        <table class="hab-help-tbl">
+          <thead><tr><th>Effet</th><th>SPP</th><th>SPV</th><th>Périodicité</th></tr></thead>
+          <tbody>
+            <tr><td colspan="4" style="background:#f0f4ff;font-weight:700;color:#1a237e">Tenue de Service &amp; Intervention</td></tr>
+            <tr><td>Veste TSI</td><td>✓</td><td>✓</td><td>1 tous les 2 ans</td></tr>
+            <tr><td>Pantalon TSI</td><td>4 ts les 18 mois</td><td>3 ts les 18 mois</td><td>~1 tous les 18 mois</td></tr>
+            <tr><td>Polo manches courtes</td><td>✓</td><td>✓</td><td>2 par an (tous les 6 mois)</td></tr>
+            <tr><td>Polo manches longues</td><td>✓</td><td>✓</td><td>1 par an</td></tr>
+            <tr><td>Sweat-shirt</td><td>✓</td><td>✓</td><td>1 par an</td></tr>
+            <tr><td>Coupe-vent</td><td>✓</td><td>✓</td><td>1 tous les 3 ans</td></tr>
+            <tr><td>Chaussettes rangers</td><td>✓</td><td>✓</td><td>2 paires / 6 mois</td></tr>
+            <tr><td>Bonnet</td><td>✓</td><td>✓</td><td>Manuel C.RH</td></tr>
+            <tr><td colspan="4" style="background:#f0f4ff;font-weight:700;color:#1a237e">Tenue de Sortie</td></tr>
+            <tr><td>Socquettes chaussures basses</td><td>✓</td><td>✓</td><td>3 tous les 18 mois</td></tr>
+            <tr><td>Calot</td><td>✓</td><td>✓</td><td>Manuel C.RH</td></tr>
+            <tr><td>Chaussures basses noires</td><td>✓</td><td>✓</td><td>Manuel C.RH</td></tr>
+            <tr><td colspan="4" style="background:#f0f4ff;font-weight:700;color:#1a237e">Équipements Sport — SPP uniquement</td></tr>
+            <tr><td>Sweat / Pantalon / Collant / Cuissard / Maillot / Short de sport</td><td>✓</td><td>—</td><td>1 tous les 3 ans</td></tr>
+            <tr><td>Chaussettes de sport</td><td>✓</td><td>—</td><td>2 paires par an</td></tr>
+            <tr><td>Maillot bain / bonnet / lunettes</td><td>✓</td><td>—</td><td>1 tous les 3 ans</td></tr>
+            <tr><td>Chaussures de sport (2 paires)</td><td>✓</td><td>—</td><td>2 paires tous les 2 ans</td></tr>
+          </tbody>
+        </table>
+
+        <h4>⚠️ Règle générale (Art. 18)</h4>
+        <p>Le statut "Renouvelable" indique que l'agent est <em>éligible</em>, pas qu'il est obligatoire de remplacer. Un effet en bon état n'est pas remplacé même si la périodicité est atteinte.</p>
+        <p>Les EPI collectivisés (casque, veste protection, surpantalon, cagoule, gants) ne sont pas gérés ici — ils dépendent du contrôle C.EPI.</p>
+      </div>`;
+    document.body.appendChild(dlg);
+  }
+
+  btn.onclick = () => document.getElementById("habHelpDialog").showModal();
+}
+
+// ── Intégration cycle de vie ─────────────────────────────────────
 document.querySelectorAll(".tech-nav").forEach(btn => {
   if (btn.dataset.tab === "habillement") {
     btn.addEventListener("click", () => {
-      bindHabStats();
-      renderHabillement();
+      setTimeout(initHabillement, 0);
     });
   }
 });
 
-// --- Chargement initial ---
-loadHabillement().then(() => {
-  bindHabStats();
-  renderHabillement();
-});
+loadHabillement();
 
 /* ============================================================
-   FIN HABILLEMENT V1
+   FIN HABILLEMENT V2
    ============================================================ */
