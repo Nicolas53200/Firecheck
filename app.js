@@ -9893,28 +9893,29 @@ renderAll();
 // ── Référentiel Annexe VI ───────────────────────────────────────
 const HAB_REF = [
   // Tenue de Service & Intervention
-  {id:"veste_tsi",    label:"Veste TSI",                        periode:730,  cat:"Tenue de Service & Intervention", spp:true, spv:true},
-  {id:"pantalon_tsi", label:"Pantalon TSI",                     periode:548,  cat:"Tenue de Service & Intervention", spp:true, spv:true},
-  {id:"polo_mc",      label:"Polo manches courtes",             periode:183,  cat:"Tenue de Service & Intervention", spp:true, spv:true},
-  {id:"polo_ml",      label:"Polo manches longues",             periode:365,  cat:"Tenue de Service & Intervention", spp:true, spv:true},
-  {id:"sweat_shirt",  label:"Sweat-shirt",                      periode:365,  cat:"Tenue de Service & Intervention", spp:true, spv:true},
-  {id:"coupe_vent",   label:"Coupe-vent",                       periode:1095, cat:"Tenue de Service & Intervention", spp:true, spv:true},
-  {id:"chss_rangers", label:"Chaussettes rangers (2 paires)",   periode:183,  cat:"Tenue de Service & Intervention", spp:true, spv:true},
-  {id:"bonnet",       label:"Bonnet",                           periode:null, cat:"Tenue de Service & Intervention", spp:true, spv:true},
+  // slots_spp / slots_spv : nombre de pièces distinctes à suivre individuellement
+  {id:"veste_tsi",    label:"Veste TSI",                        periode:730,  cat:"Tenue de Service & Intervention", spp:true, spv:true,  slots_spp:1, slots_spv:1},
+  {id:"pantalon_tsi", label:"Pantalon TSI",                     periode:548,  cat:"Tenue de Service & Intervention", spp:true, spv:true,  slots_spp:4, slots_spv:3},
+  {id:"polo_mc",      label:"Polo manches courtes",             periode:183,  cat:"Tenue de Service & Intervention", spp:true, spv:true,  slots_spp:2, slots_spv:2},
+  {id:"polo_ml",      label:"Polo manches longues",             periode:365,  cat:"Tenue de Service & Intervention", spp:true, spv:true,  slots_spp:1, slots_spv:1},
+  {id:"sweat_shirt",  label:"Sweat-shirt",                      periode:365,  cat:"Tenue de Service & Intervention", spp:true, spv:true,  slots_spp:1, slots_spv:1},
+  {id:"coupe_vent",   label:"Coupe-vent",                       periode:1095, cat:"Tenue de Service & Intervention", spp:true, spv:true,  slots_spp:1, slots_spv:1},
+  {id:"chss_rangers", label:"Chaussettes rangers",              periode:183,  cat:"Tenue de Service & Intervention", spp:true, spv:true,  slots_spp:2, slots_spv:2},
+  {id:"bonnet",       label:"Bonnet",                           periode:null, cat:"Tenue de Service & Intervention", spp:true, spv:true,  slots_spp:1, slots_spv:1},
   // Tenue de Sortie
-  {id:"socquettes",   label:"Socquettes chaussures basses (3p)",periode:548,  cat:"Tenue de Sortie", spp:true, spv:true},
-  {id:"calot",        label:"Calot",                            periode:null, cat:"Tenue de Sortie", spp:true, spv:true},
-  {id:"chaussures_b", label:"Chaussures basses noires",         periode:null, cat:"Tenue de Sortie", spp:true, spv:true},
+  {id:"socquettes",   label:"Socquettes chaussures basses",     periode:548,  cat:"Tenue de Sortie", spp:true, spv:true,  slots_spp:1, slots_spv:1},
+  {id:"calot",        label:"Calot",                            periode:null, cat:"Tenue de Sortie", spp:true, spv:true,  slots_spp:1, slots_spv:1},
+  {id:"chaussures_b", label:"Chaussures basses noires",         periode:null, cat:"Tenue de Sortie", spp:true, spv:true,  slots_spp:1, slots_spv:1},
   // Sport SPP uniquement
-  {id:"sweat_sport",  label:"Sweat de sport",                   periode:1095, cat:"Équipements Sport (SPP)", spp:true, spv:false},
-  {id:"pant_sport",   label:"Pantalon de sport",                periode:1095, cat:"Équipements Sport (SPP)", spp:true, spv:false},
-  {id:"collant_sport",label:"Collant long",                     periode:1095, cat:"Équipements Sport (SPP)", spp:true, spv:false},
-  {id:"cuissard",     label:"Cuissard de sport",                periode:1095, cat:"Équipements Sport (SPP)", spp:true, spv:false},
-  {id:"maillot_sport",label:"Maillot sport / running",          periode:1095, cat:"Équipements Sport (SPP)", spp:true, spv:false},
-  {id:"short_sport",  label:"Short sport / running",            periode:1095, cat:"Équipements Sport (SPP)", spp:true, spv:false},
-  {id:"chss_sport",   label:"Chaussettes de sport (2 paires)",  periode:365,  cat:"Équipements Sport (SPP)", spp:true, spv:false},
-  {id:"maillot_bain", label:"Maillot bain / bonnet / lunettes", periode:1095, cat:"Équipements Sport (SPP)", spp:true, spv:false},
-  {id:"chaussures_sp",label:"Chaussures de sport (2 paires)",   periode:730,  cat:"Équipements Sport (SPP)", spp:true, spv:false},
+  {id:"sweat_sport",  label:"Sweat de sport",                   periode:1095, cat:"Équipements Sport (SPP)", spp:true, spv:false, slots_spp:1, slots_spv:0},
+  {id:"pant_sport",   label:"Pantalon de sport",                periode:1095, cat:"Équipements Sport (SPP)", spp:true, spv:false, slots_spp:1, slots_spv:0},
+  {id:"collant_sport",label:"Collant long",                     periode:1095, cat:"Équipements Sport (SPP)", spp:true, spv:false, slots_spp:1, slots_spv:0},
+  {id:"cuissard",     label:"Cuissard de sport",                periode:1095, cat:"Équipements Sport (SPP)", spp:true, spv:false, slots_spp:1, slots_spv:0},
+  {id:"maillot_sport",label:"Maillot sport / running",          periode:1095, cat:"Équipements Sport (SPP)", spp:true, spv:false, slots_spp:1, slots_spv:0},
+  {id:"short_sport",  label:"Short sport / running",            periode:1095, cat:"Équipements Sport (SPP)", spp:true, spv:false, slots_spp:1, slots_spv:0},
+  {id:"chss_sport",   label:"Chaussettes de sport",             periode:365,  cat:"Équipements Sport (SPP)", spp:true, spv:false, slots_spp:2, slots_spv:0},
+  {id:"maillot_bain", label:"Maillot bain / bonnet / lunettes", periode:1095, cat:"Équipements Sport (SPP)", spp:true, spv:false, slots_spp:1, slots_spv:0},
+  {id:"chaussures_sp",label:"Chaussures de sport",              periode:730,  cat:"Équipements Sport (SPP)", spp:true, spv:false, slots_spp:2, slots_spv:0},
 ];
 
 const HAB_SEUIL = 30; // jours avant échéance = "bientôt"
@@ -9928,7 +9929,17 @@ let habGlobalFilter = "";     // "renouvelable" | "bientot" | ""
 async function loadHabillement() {
   try {
     const res = await supabase.from("fc_habillement").select("*");
-    if (res.data) fcHabillement = res.data;
+    if (res.error) { console.warn("fc_habillement erreur:", res.error); return; }
+    if (res.data) {
+      fcHabillement = res.data;
+      console.log(`Habillement : ${fcHabillement.length} entrées chargées`);
+      // Rafraîchir l'affichage si l'onglet est actif
+      const section = document.getElementById("habillement");
+      if (section && section.classList.contains("active")) {
+        renderHabGlobalStats();
+        if (habAgentActuel) renderHabTable();
+      }
+    }
   } catch(e) { console.warn("fc_habillement indisponible", e); }
 }
 
@@ -9939,28 +9950,36 @@ async function habSaveDate(matricule, effetId, dateStr) {
     existing.date_renouvellement = dateStr;
     existing.renouvele_par = "ST";
     try {
-      await supabase.from("fc_habillement")
+      const res = await supabase.from("fc_habillement")
         .update({date_renouvellement: dateStr, renouvele_par:"ST"})
         .eq("id", existing.id);
+      if (res.error) console.warn("Err update hab:", res.error);
     } catch(e) { console.warn("Err update hab", e); }
   } else {
     const row = {agent_matricule:matricule, effet_id:effetId, date_renouvellement:dateStr, renouvele_par:"ST"};
     fcHabillement.push(row);
     try {
       const res = await supabase.from("fc_habillement").insert(row);
+      if (res.error) { console.warn("Err insert hab:", res.error); return; }
       if (res.data && res.data[0]) row.id = res.data[0].id;
     } catch(e) { console.warn("Err insert hab", e); }
   }
 }
 
 // ── Calcul statuts ───────────────────────────────────────────────
+// Extraire la base d'un effetId avec slot (ex: "polo_mc_2" → "polo_mc")
+function habBaseId(effetId) {
+  return effetId.replace(/_\d+$/, "");
+}
+
 function habDernier(mat, effetId) {
+  // effetId peut être "polo_mc_1" (slot) ou "polo_mc" (base, legacy)
   const h = fcHabillement.find(h => h.agent_matricule === mat && h.effet_id === effetId);
   return h ? h.date_renouvellement : null;
 }
 
 function habStatut(mat, effetId) {
-  const ref = HAB_REF.find(r => r.id === effetId);
+  const ref = HAB_REF.find(r => r.id === habBaseId(effetId));
   if (!ref || !ref.periode) return "manuel";
   const d = habDernier(mat, effetId);
   if (!d) return "renouvelable";
@@ -9972,7 +9991,7 @@ function habStatut(mat, effetId) {
 }
 
 function habProchain(mat, effetId) {
-  const ref = HAB_REF.find(r => r.id === effetId);
+  const ref = HAB_REF.find(r => r.id === habBaseId(effetId));
   if (!ref || !ref.periode) return null;
   const d = habDernier(mat, effetId);
   if (!d) return null;
@@ -9994,27 +10013,47 @@ function habToISO(dateLocale) {
   return dateLocale;
 }
 
-function habPeriodeLabel(j) {
+function habPeriodeLabel(j, slots) {
   if (!j) return null;
-  if (j <= 183) return "2× / an";
-  if (j <= 365) return "1× / an";
-  if (j <= 548) return "1× / 18 mois";
-  if (j <= 730) return "1× / 2 ans";
-  return "1× / 3 ans";
+  const base = j <= 183 ? "2× / an" : j <= 365 ? "1× / an" : j <= 548 ? "1× / 18 mois" : j <= 730 ? "1× / 2 ans" : "1× / 3 ans";
+  return base;
 }
 
+// Génère la liste des slots pour un agent : chaque effet multi-slots devient N entrées
+// Retourne [{id:"polo_mc_1", label:"Polo MC #1", ref, slotNum:1}, ...]
 function habEffetsPour(agent) {
   const isSPP = (agent.type || "SPV").toUpperCase() === "SPP";
-  return HAB_REF.filter(r => isSPP ? r.spp : r.spv);
+  const rows = [];
+  HAB_REF.filter(r => isSPP ? r.spp : r.spv).forEach(ref => {
+    const nb = isSPP ? (ref.slots_spp || 1) : (ref.slots_spv || 1);
+    if (nb <= 1) {
+      rows.push({id: ref.id, label: ref.label, ref, slotNum: 0});
+    } else {
+      for (let i = 1; i <= nb; i++) {
+        rows.push({id: `${ref.id}_${i}`, label: `${ref.label} #${i}`, ref, slotNum: i});
+      }
+    }
+  });
+  return rows;
 }
 
-// Agents actifs
+// Retourne le filtre type actif (SPP | SPV | "")
+function habGetFType() {
+  return ((document.getElementById("habFilterType") || {}).value || "").toUpperCase();
+}
+
+// Agents actifs filtrés par type si sélectionné
 function habAgents() {
+  const fType = habGetFType();
   return (typeof personnelList !== "undefined" ? personnelList : [])
-    .filter(p => (p.statut || "ACTIF").toUpperCase() !== "INACTIF");
+    .filter(p => {
+      if ((p.statut || "ACTIF").toUpperCase() === "INACTIF") return false;
+      if (fType && (p.type || "SPV").toUpperCase() !== fType) return false;
+      return true;
+    });
 }
 
-// ── Compteurs globaux ───────────────────────────────────────────
+// ── Compteurs globaux (respectent le filtre type) ───────────────
 function habComputeGlobal() {
   let cR = 0, cS = 0, cOk = 0, cM = 0;
   habAgents().forEach(a => {
@@ -10031,12 +10070,19 @@ function habComputeGlobal() {
 
 function renderHabGlobalStats() {
   const {cR, cS, cOk, cM} = habComputeGlobal();
+  const fType = habGetFType();
   const $id = id => document.getElementById(id);
   if ($id("habGcountRenew")) $id("habGcountRenew").textContent = cR;
   if ($id("habGcountSoon"))  $id("habGcountSoon").textContent  = cS;
   if ($id("habGcountOk"))    $id("habGcountOk").textContent    = cOk;
   if ($id("habGcountManuel"))$id("habGcountManuel").textContent= cM;
-  if ($id("habGcountAgents"))$id("habGcountAgents").textContent= habAgents().length;
+  if ($id("habGcountAgents")){
+    const nbAgents = habAgents().length;
+    const suffix = fType ? ` ${fType}` : "";
+    $id("habGcountAgents").textContent = nbAgents;
+    const spanEl = $id("habGcountAgents").nextElementSibling;
+    if (spanEl) spanEl.textContent = `Agent${nbAgents > 1 ? "s" : ""}${suffix}`;
+  }
 }
 
 // ── Panneau liste agents filtrés ────────────────────────────────
@@ -10053,13 +10099,13 @@ function renderHabAgentListPanel(mode) {
   const dotCls = mode === "renouvelable" ? "hab-dot-red" : "hab-dot-orange";
 
   const concerned = habAgents().filter(a =>
-    habEffetsPour(a).some(ef => ef.periode && habStatut(a.matricule, ef.id) === mode)
+    habEffetsPour(a).some(ef => ef.ref.periode && habStatut(a.matricule, ef.id) === mode)
   ).sort((a, b) => (a.nom || "").localeCompare(b.nom || "", "fr"));
 
   if (title) title.textContent = `${label} (${concerned.length} agent${concerned.length > 1 ? "s" : ""})`;
 
   items.innerHTML = concerned.map(a => {
-    const nb = habEffetsPour(a).filter(ef => ef.periode && habStatut(a.matricule, ef.id) === mode).length;
+    const nb = habEffetsPour(a).filter(ef => ef.ref.periode && habStatut(a.matricule, ef.id) === mode).length;
     return `<div class="hab-agent-chip" data-hab-chip-mat="${a.matricule}">
       <span class="hab-agent-chip-dot ${dotCls}" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${mode==="renouvelable"?"#e53935":"#fb8c00"}"></span>
       <strong>${a.nom || ""} ${a.prenom || ""}</strong>
@@ -10169,7 +10215,7 @@ function renderHabTable() {
   }
 
   // MODE AGENT
-  const effets = habEffetsPour(agent);
+  const effets = habEffetsPour(agent); // [{id, label, ref, slotNum}, ...]
   renderHabAgentStats(agent);
 
   thead.innerHTML = `<tr>
@@ -10178,12 +10224,13 @@ function renderHabTable() {
     <th>Statut</th><th>Action</th>
   </tr>`;
 
-  const cats = [...new Set(effets.map(r => r.cat))];
+  const cats = [...new Set(effets.map(e => e.ref.cat))];
   tbody.innerHTML = cats.map(cat => {
-    const efs = effets.filter(r => r.cat === cat);
+    const efs = effets.filter(e => e.ref.cat === cat);
     return `
       <tr class="hab-row-group"><td colspan="7">${cat}</td></tr>
       ${efs.map(ef => {
+        const periode   = ef.ref.periode;
         const s         = habStatut(agent.matricule, ef.id);
         const derniere  = habDernier(agent.matricule, ef.id);
         const prochain  = habProchain(agent.matricule, ef.id);
@@ -10191,30 +10238,33 @@ function renderHabTable() {
         const chipCls   = s==="renouvelable"?"hab-chip-red":s==="bientot"?"hab-chip-orange":s==="ok"?"hab-chip-green":"hab-chip-grey";
         const slabel    = s==="renouvelable"?"Renouvelable":s==="bientot"?"Bientôt":s==="ok"?"À jour":"Manuel";
         const isLate    = prochain && prochain < new Date();
-        const prochainStr = !ef.periode ? `<span style="color:#bbb">—</span>`
+        const prochainStr = !periode ? `<span style="color:#bbb">—</span>`
           : !derniere ? `<span style="color:#fb8c00;font-size:.8rem;font-style:italic">Non renseigné</span>`
           : `<span${isLate?' style="color:#e53935;font-weight:600"':''}>${prochain.toLocaleDateString("fr-FR")}</span>`;
 
-        // Champ date inline (valeur ISO pour l'input, affichage fr)
         const dateVal = derniere || "";
+        // Chip de périodicité : pour les slots multiples, indiquer le numéro de pièce
+        const periodeLabel = ef.slotNum > 0
+          ? `<span class="hab-periode-chip">${habPeriodeLabel(periode)} · pièce ${ef.slotNum}</span>`
+          : periode ? `<span class="hab-periode-chip">${habPeriodeLabel(periode)}</span>` : `<span class="hab-manuel-chip">Manuel</span>`;
 
         return `<tr data-hab-row-mat="${agent.matricule}" data-hab-row-ef="${ef.id}">
           <td></td>
           <td>${ef.label}</td>
-          <td>${ef.periode ? `<span class="hab-periode-chip">${habPeriodeLabel(ef.periode)}</span>` : `<span class="hab-manuel-chip">Manuel</span>`}</td>
+          <td>${periodeLabel}</td>
           <td>
             <input type="date" class="hab-date-input${!dateVal?" hab-date-empty":""}"
               data-hab-date-mat="${agent.matricule}"
               data-hab-date-ef="${ef.id}"
               value="${dateVal}"
-              title="Cliquez pour modifier la date de dernier renouvellement">
+              title="Cliquer pour modifier la date du dernier renouvellement de cette pièce">
           </td>
           <td>${prochainStr}</td>
           <td><span class="hab-chip ${chipCls}"><span class="hab-dot ${dotCls}"></span>${slabel}</span></td>
           <td>
-            ${ef.periode || !derniere
+            ${periode || !derniere
               ? `<button class="hab-reg-btn" data-hab-today-mat="${agent.matricule}" data-hab-today-ef="${ef.id}"
-                  title="Enregistrer aujourd'hui comme date de renouvellement"
+                  title="Enregistrer aujourd'hui pour cette pièce"
                   ${s==="ok"?"disabled":""}>
                   Aujourd'hui
                 </button>`
@@ -10392,11 +10442,13 @@ function initHabillement() {
     });
   }
 
-  // Filtre type
+  // Filtre type — met à jour badges, panneau et picker
   const fType = document.getElementById("habFilterType");
   if (fType && !fType._hInit) {
     fType._hInit = true;
     fType.onchange = () => {
+      renderHabGlobalStats();
+      if (habGlobalFilter) renderHabAgentListPanel(habGlobalFilter);
       const q = (document.getElementById("habAgentSearch") || {}).value || "";
       if (q) renderHabPicker(q);
     };
