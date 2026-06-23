@@ -6274,23 +6274,55 @@ function renderFcLibrary(){
   const grouped = Object.entries(groups).sort(([a],[b]) => a.localeCompare(b, "fr"));
 
   list.innerHTML = addButton + grouped.map(([subName, subItems]) => `
-    <div class="fc-lib-subcat">${fcEsc(subName)}</div>
-    ${subItems.map(i => {
-      const libIdx = FC_LIBRARY.indexOf(i);
-      return `
-        <div class="fc-lib-item ${i.custom ? "fc-lib-custom" : ""}" draggable="true" data-name="${fcEsc(i.name)}" data-family="${i.family}" data-sub="${fcEsc(i.sub)}" data-qty="${i.qty}" data-lib-idx="${libIdx}">
-          <strong>${i.name}</strong>
-          <button class="fc-lib-edit-btn" data-lib-idx="${libIdx}" title="Modifier / déplacer" draggable="false">✏️</button>
-        </div>
-      `;
-    }).join("")}
+    <div class="fc-lib-subcat-wrap" data-lib-target-sub="${fcEsc(subName)}">
+      <div class="fc-lib-subcat">${fcEsc(subName)}</div>
+      ${subItems.map(i => {
+        const libIdx = FC_LIBRARY.indexOf(i);
+        return `
+          <div class="fc-lib-item ${i.custom ? "fc-lib-custom" : ""}" draggable="true"
+               data-name="${fcEsc(i.name)}" data-family="${i.family}" data-sub="${fcEsc(i.sub)}"
+               data-qty="${i.qty}" data-lib-idx="${libIdx}">
+            <strong>${i.name}</strong>
+            <button class="fc-lib-edit-btn" data-lib-idx="${libIdx}" title="Modifier / déplacer" draggable="false">✏️</button>
+          </div>
+        `;
+      }).join("")}
+    </div>
   `).join("");
+
   document.querySelectorAll(".fc-lib-item").forEach(el=>{
     el.ondragstart = e => {
-      e.dataTransfer.effectAllowed = "copy";
+      e.dataTransfer.effectAllowed = "copyMove";
       e.dataTransfer.setData("application/json", JSON.stringify({
         name:el.dataset.name, family:el.dataset.family, sub:el.dataset.sub, qty:Number(el.dataset.qty || 1)
       }));
+      // Marque aussi le drag comme provenant de la bibliothèque interne
+      e.dataTransfer.setData("text/lib-idx", el.dataset.libIdx);
+    };
+  });
+
+  // Drag interne bibliothèque : déposer un item sur une autre sous-catégorie
+  document.querySelectorAll(".fc-lib-subcat-wrap").forEach(wrap => {
+    wrap.ondragover = e => {
+      // N'accepte que les drags depuis la bibliothèque (pas depuis les zones inventaire)
+      e.preventDefault();
+      wrap.classList.add("fc-lib-drop-over");
+    };
+    wrap.ondragleave = () => wrap.classList.remove("fc-lib-drop-over");
+    wrap.ondrop = e => {
+      wrap.classList.remove("fc-lib-drop-over");
+      const libIdxStr = e.dataTransfer.getData("text/lib-idx");
+      if(!libIdxStr) return; // drop depuis zone inventaire → ignoré ici
+      e.stopPropagation(); // empêche le drop d'être traité par les zones inventaire
+      const libIdx = parseInt(libIdxStr);
+      const item = FC_LIBRARY[libIdx];
+      if(!item) return;
+      const targetSub = wrap.dataset.libTargetSub;
+      if(item.sub === targetSub) return; // déjà dans cette sous-cat
+      item.sub = targetSub;
+      if(item.custom && typeof saveLibraryItemSupabase === "function") saveLibraryItemSupabase(item);
+      toast(`${item.name} déplacé vers « ${targetSub} »`);
+      renderFcLibrary();
     };
   });
   document.querySelectorAll(".fc-lib-edit-btn").forEach(btn => {
