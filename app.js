@@ -362,6 +362,7 @@ function renderScanChoiceV36(){
       checkV27.done = {};
       checkV27.issues = {};
       checkV27.currentZone = null;
+      checkV27._viewManuallySet = false;
     }
     showScreen("check");
   };
@@ -6343,11 +6344,15 @@ function renderFcLibrary(){
     const saveBtn = document.getElementById("saveLibraryItem");
     if(saveBtn) saveBtn.textContent = "Ajouter à la bibliothèque";
     document.getElementById("newLibraryItemFamily").value = fcState.family;
-    document.getElementById("newLibraryItemSub").value = "";
     document.getElementById("newLibraryItemName").value = "";
     document.getElementById("newLibraryItemQty").value = 1;
+    fcPopulateSubCatSelect(fcState.family);
     dlg.showModal();
   };
+
+  // Re-populate sub-categories when family changes
+  const familySel = document.getElementById("newLibraryItemFamily");
+  if(familySel) familySel.onchange = () => fcPopulateSubCatSelect(familySel.value);
 }
 
 function renderFcList(root){
@@ -6708,11 +6713,22 @@ function renderFcDetail(root){
       }
 
       // Nouveau matériel depuis la bibliothèque
-      const newItem = {id:"fcitem-" + Date.now(), vehicleId:vehicle.id, zone:fcState.zone, name:data.name, category:data.family, qty:data.qty || 1, subLocation:subName};
-      fcInventory.push(newItem);
-      if(typeof saveInventaireItemSupabase === "function") saveInventaireItemSupabase(newItem);
-      toast(`${data.name} ajouté${subName ? " à " + subName : " à " + fcState.zone}`);
-      renderCheckSheets();
+      const subZones = fcGetSubZones(vehicle.id, selectedZone.id);
+      const placeItem = (targetSub) => {
+        const newItem = {id:"fcitem-" + Date.now(), vehicleId:vehicle.id, zone:fcState.zone, name:data.name, category:data.family, qty:data.qty || 1, subLocation:targetSub};
+        fcInventory.push(newItem);
+        if(typeof saveInventaireItemSupabase === "function") saveInventaireItemSupabase(newItem);
+        toast(`${data.name} ajouté${targetSub ? " à «\u00a0" + targetSub + "\u00a0»" : " à " + fcState.zone}`);
+        renderCheckSheets();
+      };
+
+      // Si on dépose sur l'emplacement général mais que des emplacements précis existent,
+      // demander où placer l'article
+      if(!subName && subZones.length > 0){
+        openSubZonePlacementDialogV37(data, subZones, placeItem);
+      } else {
+        placeItem(subName);
+      }
     };
   });
 
@@ -6978,13 +6994,78 @@ fcBindCreate();
 
 /* V33 - feuille d'impression unifiée : QR réel + photos + données complètes */
 
+function openSubZonePlacementDialogV37(data, subZones, callback){
+  let dialog = document.getElementById("subZonePlacementDialogV37");
+  if(!dialog){
+    dialog = document.createElement("dialog");
+    dialog.id = "subZonePlacementDialogV37";
+    dialog.className = "dialog";
+    document.body.appendChild(dialog);
+  }
+
+  dialog.innerHTML = `
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Placement du matériel</p>
+          <h2>${fcEsc(data.name)}</h2>
+        </div>
+        <button class="round" id="closePlacementDialogV37">×</button>
+      </div>
+      <p class="muted">Dans quel emplacement veux-tu placer ce matériel ?</p>
+      <div class="placement-choices">
+        <button class="btn ghost full placement-choice" data-sub="">Emplacement général</button>
+        ${subZones.map(s => `<button class="btn secondary full placement-choice" data-sub="${fcEsc(s)}">${fcEsc(s)}</button>`).join("")}
+      </div>
+    </div>
+  `;
+
+  dialog.querySelector("#closePlacementDialogV37").onclick = () => dialog.close();
+  dialog.querySelectorAll(".placement-choice").forEach(btn => {
+    btn.onclick = () => {
+      callback(btn.dataset.sub);
+      dialog.close();
+    };
+  });
+
+  dialog.showModal();
+}
+
 function renderStepTwoCols(items){
   const groups = {};
   items.forEach(item => {
     const key = item.subLocation || "";
     (groups[key] = groups[key] || []).push(item);
   });
-  const orderedKeys = Object.keys(groups).sort((a,b) => a === "" ? -1 : b === "" ? 1 : a.localeCompare(b));
+  // Respecte l'ordre défini par l'utilisateur dans fcSubZones (↑↓)
+  const vehicleId = Object.keys(groups).length ? null : null;
+  const allSubZones = (() => {
+    // Trouve le vehicleId et zoneId depuis fcSubZones pour respecter l'ordre
+    for(const vid in fcSubZones){
+      for(const zid in fcSubZones[vid]){
+        const zoneSubList = fcSubZones[vid][zid];
+        const hasMatch = Object.keys(groups).filter(k => k !== "").every(k => zoneSubList.includes(k));
+        if(hasMatch && zoneSubList.length > 0) return zoneSubList;
+      }
+    }
+    return [];
+  })();
+  const orderedKeys = (() => {
+    const keys = Object.keys(groups);
+    const general = keys.filter(k => k === "");
+    const named = keys.filter(k => k !== "");
+    // Tri selon l'ordre de fcSubZones si disponible, sinon alphabétique
+    if(allSubZones.length){
+      named.sort((a,b) => {
+        const ia = allSubZones.indexOf(a);
+        const ib = allSubZones.indexOf(b);
+        return (ia === -1 ? 9999 : ia) - (ib === -1 ? 9999 : ib);
+      });
+    } else {
+      named.sort((a,b) => a.localeCompare(b));
+    }
+    return [...general, ...named];
+  })();
   const onlyGeneral = orderedKeys.length === 1 && orderedKeys[0] === "";
 
   const allRows = [];
@@ -8278,7 +8359,8 @@ function bindLibraryItemDialog(){
   if(save) save.onclick = () => {
     const name = document.getElementById("newLibraryItemName").value.trim();
     const family = document.getElementById("newLibraryItemFamily").value;
-    const sub = document.getElementById("newLibraryItemSub").value.trim() || "Sans sous-catégorie";
+    const rawSub = document.getElementById("newLibraryItemSub").value;
+    const sub = (rawSub && rawSub !== "__new__") ? rawSub.trim() : "";
     const qty = Number(document.getElementById("newLibraryItemQty").value || 1);
 
     if(!name){
@@ -8310,6 +8392,52 @@ function bindLibraryItemDialog(){
   };
 }
 
+function fcPopulateSubCatSelect(family){
+  const sel = document.getElementById("newLibraryItemSub");
+  if(!sel) return;
+
+  // Collecte les sous-catégories existantes pour cette famille
+  const subs = [...new Set(
+    FC_LIBRARY
+      .filter(i => i.family === family && i.sub)
+      .map(i => i.sub)
+  )].sort((a,b) => a.localeCompare(b));
+
+  const currentVal = sel.value;
+  sel.innerHTML = '<option value="">-- Aucune sous-catégorie --</option>';
+  subs.forEach(s => {
+    const opt = document.createElement("option");
+    opt.value = s;
+    opt.textContent = s;
+    sel.appendChild(opt);
+  });
+  const newOpt = document.createElement("option");
+  newOpt.value = "__new__";
+  newOpt.textContent = "✚ Créer une nouvelle sous-catégorie...";
+  sel.appendChild(newOpt);
+
+  // Restore previous value if still valid
+  if(currentVal && subs.includes(currentVal)) sel.value = currentVal;
+
+  // Handle "Créer une nouvelle"
+  sel.onchange = () => {
+    if(sel.value === "__new__"){
+      const name = prompt("Nom de la nouvelle sous-catégorie :");
+      if(name && name.trim()){
+        const trimmed = name.trim();
+        // Add to select
+        const opt = document.createElement("option");
+        opt.value = trimmed;
+        opt.textContent = trimmed;
+        sel.insertBefore(opt, newOpt);
+        sel.value = trimmed;
+      } else {
+        sel.value = "";
+      }
+    }
+  };
+}
+
 function openLibraryEditDialog(idx, item){
   const dlg = document.getElementById("libraryItemDialog");
   if(!dlg) return;
@@ -8322,8 +8450,20 @@ function openLibraryEditDialog(idx, item){
 
   document.getElementById("newLibraryItemName").value = item.name;
   document.getElementById("newLibraryItemFamily").value = item.family;
-  document.getElementById("newLibraryItemSub").value = item.sub || "";
   document.getElementById("newLibraryItemQty").value = item.qty || 1;
+  fcPopulateSubCatSelect(item.family);
+  // Set the current sub after populating
+  const subSel = document.getElementById("newLibraryItemSub");
+  if(subSel && item.sub){
+    // Add if not present
+    if(![...subSel.options].find(o => o.value === item.sub)){
+      const opt = document.createElement("option");
+      opt.value = item.sub;
+      opt.textContent = item.sub;
+      subSel.insertBefore(opt, subSel.lastElementChild);
+    }
+    subSel.value = item.sub;
+  }
 
   dlg.dataset.editIdx = idx >= 0 ? idx : "";
   dlg.showModal();
@@ -9002,6 +9142,8 @@ function renderStep(){
   let views = checkViewsV27(vehicle.id);
   // Le contrôle visuel suit toujours cet ordre : Côté gauche, Arrière, Côté droit, Devant,
   // puis les autres vues éventuelles (toit, intérieur, vues personnalisées...).
+  // Ordre fixe pour la vérification SP : Côté gauche → Arrière → Côté droit → Devant
+  // Ce tri s'applique même aux vues personnalisées (sauvegardées dans Supabase avec l'ancien ordre)
   const fcCheckViewOrderV37 = ["gauche", "arriere", "droite", "avant"];
   views = views.slice().sort((a, b) => {
     const ia = fcCheckViewOrderV37.indexOf(a.id);
@@ -9010,6 +9152,9 @@ function renderStep(){
     const rb = ib === -1 ? fcCheckViewOrderV37.length : ib;
     return ra - rb;
   });
+  // Force la vue active à "gauche" si c'est le tout premier rendu (aucune zone encore cochée)
+  const isFirstRender = doneCount === 0 && !checkV27._viewManuallySet;
+  if(isFirstRender && views.length > 0) checkV27.view = views[0].id;
   const order = guidedOrderV27(vehicle.id);
   const step = getCurrentStepV27(vehicle.id);
   const doneCount = order.filter(s => checkV27.done[s.zone]).length;
@@ -9144,6 +9289,7 @@ function renderStep(){
   document.querySelectorAll("[data-check-view]").forEach(btn => {
     btn.onclick = () => {
       checkV27.view = btn.dataset.checkView;
+      checkV27._viewManuallySet = true;
       renderStep();
     };
   });
