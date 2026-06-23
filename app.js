@@ -6506,8 +6506,12 @@ function renderFcDetail(root){
                     <button class="fc-sub-toggle" data-sub-toggle="${fcEsc(subName)}" title="${isCollapsed ? "Déplier" : "Replier"}">${isCollapsed ? "▸" : "▾"}</button>
                     <span>${subName ? fcEsc(subName) : "Emplacement général"}</span>
                     <small class="fc-sub-count">${items.length} matériel${items.length===1?"":"s"}</small>
-                    ${subName ? `<button class="fc-sub-rename" data-sub-rename="${fcEsc(subName)}" title="Renommer cet emplacement">✏️</button>
-                             <button class="fc-sub-delete" data-sub-delete="${fcEsc(subName)}" title="Supprimer cet emplacement">🗑️</button>` : ""}
+                    ${subName ? `
+                      <button class="fc-sub-move-up" data-sub-move="${fcEsc(subName)}" data-sub-dir="up" title="Monter">↑</button>
+                      <button class="fc-sub-move-down" data-sub-move="${fcEsc(subName)}" data-sub-dir="down" title="Descendre">↓</button>
+                      <button class="fc-sub-rename" data-sub-rename="${fcEsc(subName)}" title="Renommer">✏️</button>
+                      <button class="fc-sub-delete" data-sub-delete="${fcEsc(subName)}" title="Supprimer">🗑️</button>
+                    ` : ""}
                   </div>
                   <div class="fc-sub-group-body">
                     ${items.length ? items.map(i=>`
@@ -6723,6 +6727,28 @@ function renderFcDetail(root){
         item.subLocation = targetSub;
         if(typeof saveInventaireItemSupabase === "function") saveInventaireItemSupabase(item);
       }
+      renderCheckSheets();
+    };
+  });
+
+  // Monter / descendre un emplacement précis
+  document.querySelectorAll("[data-sub-move]").forEach(btn => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const subName = btn.dataset.subMove;
+      const dir = btn.dataset.subDir;
+      const subZones = fcGetSubZones(vehicle.id, selectedZone.id);
+      const idx = subZones.indexOf(subName);
+      if(idx === -1) return;
+      if(dir === "up" && idx > 0){
+        subZones.splice(idx, 1);
+        subZones.splice(idx - 1, 0, subName);
+      } else if(dir === "down" && idx < subZones.length - 1){
+        subZones.splice(idx, 1);
+        subZones.splice(idx + 1, 0, subName);
+      }
+      fcSaveSubZones();
+      if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
       renderCheckSheets();
     };
   });
