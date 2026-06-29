@@ -287,7 +287,7 @@ let reports = [
     comment: "Jauge à 1/4.",
     status: "Nouveau",
     priority: "Normale",
-    author: "Inconnu",
+    author: "Caporal Nicolas Morel",
     time: "Aujourd’hui 08:12"
   },
   {
@@ -305,16 +305,16 @@ let reports = [
   }
 ];
 
-let vehicles = [
-  {id:"asset-veh-1", name:"FPT GO", detail:"GQ 311 JE", ct:"12/09/2026", oil:"18/07/2026", km:"48 230 km", state:"ok"},
-  {id:"asset-veh-2", name:"VSAV 02", detail:"Immat AB-123-CD", ct:"20/06/2026", oil:"02/07/2026", km:"82 110 km", state:"soon"},
-  {id:"asset-veh-3", name:"CCF 01", detail:"Immat EF-456-GH", ct:"04/06/2026", oil:"En retard", km:"61 400 km", state:"late"}
+const vehicles = [
+  {name:"FPT GO", detail:"GQ 311 JE", ct:"12/09/2026", oil:"18/07/2026", km:"48 230 km", state:"ok"},
+  {name:"VSAV 02", detail:"Immat AB-123-CD", ct:"20/06/2026", oil:"02/07/2026", km:"82 110 km", state:"soon"},
+  {name:"CCF 01", detail:"Immat EF-456-GH", ct:"04/06/2026", oil:"En retard", km:"61 400 km", state:"late"}
 ];
 
-let equipment = [
-  {id:"asset-eq-1", name:"MPR 02", detail:"Motopompe remorquable", ct:"—", oil:"Révision 14/08/2026", km:"128 h", state:"ok"},
-  {id:"asset-eq-2", name:"Motopompe 01", detail:"Pompe portable", ct:"—", oil:"Vidange 22/06/2026", km:"76 h", state:"soon"},
-  {id:"asset-eq-3", name:"Groupe électrogène", detail:"Lot éclairage", ct:"—", oil:"Révision en retard", km:"214 h", state:"late"}
+const equipment = [
+  {name:"MPR 02", detail:"Motopompe remorquable", ct:"—", oil:"Révision 14/08/2026", km:"128 h", state:"ok"},
+  {name:"Motopompe 01", detail:"Pompe portable", ct:"—", oil:"Vidange 22/06/2026", km:"76 h", state:"soon"},
+  {name:"Groupe électrogène", detail:"Lot éclairage", ct:"—", oil:"Révision en retard", km:"214 h", state:"late"}
 ];
 
 let serviceInventory = [{"id": "FPTGO-Z01-M001", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Côté conducteur", "zoneOrder": 1, "itemOrder": 1, "name": "Gilet haute visibilité conducteur", "qty": 1, "unit": "pièce", "category": "EPI", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M002", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Côté conducteur", "zoneOrder": 1, "itemOrder": 2, "name": "Carte carburant", "qty": 1, "unit": "pièce", "category": "Document / carte", "criticality": "Importante", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M003", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Côté conducteur", "zoneOrder": 1, "itemOrder": 3, "name": "Outil OFD", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M004", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Côté conducteur", "zoneOrder": 1, "itemOrder": 4, "name": "Clés gaz", "qty": 1, "unit": "lot", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M005", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Côté conducteur", "zoneOrder": 1, "itemOrder": 5, "name": "Rouleau de rubalise", "qty": 1, "unit": "rouleau", "category": "Balisage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M006", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Côté conducteur", "zoneOrder": 1, "itemOrder": 6, "name": "Boîte de craies", "qty": 1, "unit": "boîte", "category": "Balisage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M007", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 7, "name": "Double de clé", "qty": 1, "unit": "pièce", "category": "Clés / accès", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M008", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 8, "name": "Badge autoroute", "qty": 1, "unit": "pièce", "category": "Document / carte", "criticality": "Importante", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M009", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 9, "name": "Portatifs TPH 900", "qty": 2, "unit": "pièces", "category": "Communication", "criticality": "Importante", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M010", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 10, "name": "Projecteur", "qty": 1, "unit": "pièce", "category": "Éclairage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M011", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 11, "name": "Explosimètre", "qty": 1, "unit": "pièce", "category": "Détection", "criticality": "Importante", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M012", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 12, "name": "Kit radio", "qty": 1, "unit": "kit", "category": "Communication", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M013", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 13, "name": "Classeur cartographie", "qty": 1, "unit": "classeur", "category": "Documents", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M014", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 14, "name": "Classeur PI", "qty": 1, "unit": "classeur", "category": "Documents", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M015", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 15, "name": "Classeur opérationnel", "qty": 1, "unit": "classeur", "category": "Documents", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M016", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 16, "name": "Polycoise", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M017", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 17, "name": "Pochette véhicule", "qty": 1, "unit": "pochette", "category": "Documents", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M018", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Entre conducteur et chef d’agrès", "zoneOrder": 1, "itemOrder": 18, "name": "PNRPA", "qty": 1, "unit": "pochette", "category": "Documents", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M019", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Côté chef d’agrès", "zoneOrder": 1, "itemOrder": 19, "name": "Gilet haute visibilité chef d’agrès", "qty": 1, "unit": "pièce", "category": "EPI", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z01-M020", "vehicle": "FPT GO", "zone": "Cabine avant", "subzone": "Côté chef d’agrès", "zoneOrder": 1, "itemOrder": 20, "name": "ARI chef d’agrès avec BSL, liaison personnel et masque", "qty": 1, "unit": "ensemble", "category": "ARI", "criticality": "Critique", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z02-M001", "vehicle": "FPT GO", "zone": "Cabine arrière", "subzone": "Matériel cabine arrière", "zoneOrder": 2, "itemOrder": 1, "name": "ARI avec BSL, liaison personnel, Rhinoevac et masque", "qty": 4, "unit": "ensembles", "category": "ARI", "criticality": "Critique", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z02-M002", "vehicle": "FPT GO", "zone": "Cabine arrière", "subzone": "Matériel cabine arrière", "zoneOrder": 2, "itemOrder": 2, "name": "Projecteurs", "qty": 5, "unit": "pièces", "category": "Éclairage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z02-M003", "vehicle": "FPT GO", "zone": "Cabine arrière", "subzone": "Matériel cabine arrière", "zoneOrder": 2, "itemOrder": 3, "name": "Portatifs TPH 900", "qty": 2, "unit": "pièces", "category": "Communication", "criticality": "Importante", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z02-M004", "vehicle": "FPT GO", "zone": "Cabine arrière", "subzone": "Matériel cabine arrière", "zoneOrder": 2, "itemOrder": 4, "name": "Commandes en sac", "qty": 2, "unit": "sacs", "category": "Commandement", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z02-M005", "vehicle": "FPT GO", "zone": "Cabine arrière", "subzone": "Matériel cabine arrière", "zoneOrder": 2, "itemOrder": 5, "name": "Gilets haute visibilité", "qty": 4, "unit": "pièces", "category": "EPI", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z02-M006", "vehicle": "FPT GO", "zone": "Cabine arrière", "subzone": "Matériel cabine arrière", "zoneOrder": 2, "itemOrder": 6, "name": "Cagoules d’évacuation", "qty": 2, "unit": "pièces", "category": "Sauvetage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z02-M007", "vehicle": "FPT GO", "zone": "Cabine arrière", "subzone": "Matériel cabine arrière", "zoneOrder": 2, "itemOrder": 7, "name": "Spiraled rouges et vertes", "qty": 4, "unit": "pièces", "category": "Signalisation", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z02-M008", "vehicle": "FPT GO", "zone": "Cabine arrière", "subzone": "Matériel cabine arrière", "zoneOrder": 2, "itemOrder": 8, "name": "Caisse eau sous les sièges", "qty": 1, "unit": "caisse", "category": "Consommable", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z03-M001", "vehicle": "FPT GO", "zone": "Coffre arrière cabine", "subzone": "Coffre", "zoneOrder": 3, "itemOrder": 1, "name": "Aspiraux", "qty": 5, "unit": "pièces", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z03-M002", "vehicle": "FPT GO", "zone": "Coffre arrière cabine", "subzone": "Coffre", "zoneOrder": 3, "itemOrder": 2, "name": "Carquois avec tiges de ramonage", "qty": 1, "unit": "ensemble", "category": "Feux de cheminée", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z03-M003", "vehicle": "FPT GO", "zone": "Coffre arrière cabine", "subzone": "Coffre", "zoneOrder": 3, "itemOrder": 3, "name": "Barre de maintien cabine", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z04-M001", "vehicle": "FPT GO", "zone": "Rideau avant gauche", "subzone": "Haut", "zoneOrder": 4, "itemOrder": 1, "name": "Caisses vides pour tenues souillées", "qty": 2, "unit": "caisses", "category": "Rangement", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z04-M002", "vehicle": "FPT GO", "zone": "Rideau avant gauche", "subzone": "Haut", "zoneOrder": 4, "itemOrder": 2, "name": "Caisse lot de bord", "qty": 1, "unit": "caisse", "category": "Lot de bord", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z04-M003", "vehicle": "FPT GO", "zone": "Rideau avant gauche", "subzone": "Milieu", "zoneOrder": 4, "itemOrder": 3, "name": "Pulvérisateur dorsal souple", "qty": 1, "unit": "pièce", "category": "Extinction", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z04-M004", "vehicle": "FPT GO", "zone": "Rideau avant gauche", "subzone": "Milieu", "zoneOrder": 4, "itemOrder": 4, "name": "Lance feux de cheminée", "qty": 1, "unit": "pièce", "category": "Feux de cheminée", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z04-M005", "vehicle": "FPT GO", "zone": "Rideau avant gauche", "subzone": "Milieu", "zoneOrder": 4, "itemOrder": 5, "name": "Seau acier avec pelle, gants, hérisson, miroir, massette et burins", "qty": 1, "unit": "ensemble", "category": "Feux de cheminée", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z04-M006", "vehicle": "FPT GO", "zone": "Rideau avant gauche", "subzone": "Bas", "zoneOrder": 4, "itemOrder": 6, "name": "Ventilateur sur batterie", "qty": 1, "unit": "pièce", "category": "Ventilation", "criticality": "Importante", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z04-M007", "vehicle": "FPT GO", "zone": "Rideau avant gauche", "subzone": "Bas", "zoneOrder": 4, "itemOrder": 7, "name": "Extincteurs poudre 9 kg", "qty": 2, "unit": "pièces", "category": "Extinction", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z04-M008", "vehicle": "FPT GO", "zone": "Rideau avant gauche", "subzone": "Bas", "zoneOrder": 4, "itemOrder": 8, "name": "Extincteur CO2 5 kg", "qty": 1, "unit": "pièce", "category": "Extinction", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M001", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Haut", "zoneOrder": 5, "itemOrder": 1, "name": "Caisse vide", "qty": 1, "unit": "caisse", "category": "Rangement", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M002", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Haut", "zoneOrder": 5, "itemOrder": 2, "name": "Tuyau de 45 en couronne", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M003", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Haut", "zoneOrder": 5, "itemOrder": 3, "name": "Caisse vide avec caoutchoucs réserve Rhinoevac", "qty": 1, "unit": "caisse", "category": "Rangement", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M004", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 4, "name": "LM2", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M005", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 5, "name": "Lance queue de paon", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M006", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 6, "name": "LDMR 500", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M007", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 7, "name": "LDV 1000", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M008", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 8, "name": "Réduction 100 x 65", "qty": 1, "unit": "pièce", "category": "Raccord", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M009", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 9, "name": "Réduction 65 x 40", "qty": 1, "unit": "pièce", "category": "Raccord", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M010", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 10, "name": "Division 100 / 2 x 65", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M011", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 11, "name": "Division 65 / 2 x 40", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M012", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 12, "name": "Retenue", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M013", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 13, "name": "Coude de 100 raccord Keiser", "qty": 1, "unit": "pièce", "category": "Raccord", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M014", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 14, "name": "Tuyaux de 70 - 20 m en couronne", "qty": 2, "unit": "pièces", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z05-M015", "vehicle": "FPT GO", "zone": "Rideau milieu gauche", "subzone": "Bas", "zoneOrder": 5, "itemOrder": 15, "name": "Polycoises", "qty": 4, "unit": "pièces", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M001", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Haut", "zoneOrder": 6, "itemOrder": 1, "name": "Caisse accessoires hydrauliques", "qty": 1, "unit": "caisse", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M002", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Haut", "zoneOrder": 6, "itemOrder": 2, "name": "Caisse gaz", "qty": 1, "unit": "caisse", "category": "Gaz", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M003", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Milieu", "zoneOrder": 6, "itemOrder": 3, "name": "Échelle télescopique", "qty": 1, "unit": "pièce", "category": "Échelle", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M004", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Milieu", "zoneOrder": 6, "itemOrder": 4, "name": "LAT : tuyau Ø45 x20 m en O avec lance gâchette", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M005", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Milieu", "zoneOrder": 6, "itemOrder": 5, "name": "LAT : tuyaux Ø45 x20 m en Z", "qty": 2, "unit": "pièces", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M006", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Milieu", "zoneOrder": 6, "itemOrder": 6, "name": "LAT : tuyau Ø45 x20 m en O avec LDV 500", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M007", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Milieu", "zoneOrder": 6, "itemOrder": 7, "name": "LAT : tuyaux Ø45 x20 m en Z", "qty": 2, "unit": "pièces", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M008", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Milieu", "zoneOrder": 6, "itemOrder": 8, "name": "Canne plongeuse", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M009", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Milieu", "zoneOrder": 6, "itemOrder": 9, "name": "Espace désinfection / nettoyage", "qty": 1, "unit": "emplacement", "category": "Hygiène", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M010", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Bas", "zoneOrder": 6, "itemOrder": 10, "name": "Crépine", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M011", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Bas", "zoneOrder": 6, "itemOrder": 11, "name": "Commande", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M012", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Bas", "zoneOrder": 6, "itemOrder": 12, "name": "Flotteur", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M013", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Bas", "zoneOrder": 6, "itemOrder": 13, "name": "Manches d’alimentation Ø110 en écheveaux", "qty": 2, "unit": "pièces", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z06-M014", "vehicle": "FPT GO", "zone": "Rideau arrière gauche", "subzone": "Bas", "zoneOrder": 6, "itemOrder": 14, "name": "Cales de roues", "qty": 2, "unit": "pièces", "category": "Sécurité", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z07-M001", "vehicle": "FPT GO", "zone": "Arrière véhicule", "subzone": "Arrière", "zoneOrder": 7, "itemOrder": 1, "name": "Dévidoir avec 2 tuyaux Ø22 x20 m et LDT", "qty": 1, "unit": "ensemble", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z07-M002", "vehicle": "FPT GO", "zone": "Arrière véhicule", "subzone": "Arrière", "zoneOrder": 7, "itemOrder": 2, "name": "Tuyau 45 x20 m en couronne avec raccord GFR", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z07-M003", "vehicle": "FPT GO", "zone": "Arrière véhicule", "subzone": "Arrière", "zoneOrder": 7, "itemOrder": 3, "name": "Tuyau 70 x20 m en couronne", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z07-M004", "vehicle": "FPT GO", "zone": "Arrière véhicule", "subzone": "Arrière", "zoneOrder": 7, "itemOrder": 4, "name": "Projecteur amovible", "qty": 1, "unit": "pièce", "category": "Éclairage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z07-M005", "vehicle": "FPT GO", "zone": "Arrière véhicule", "subzone": "Arrière", "zoneOrder": 7, "itemOrder": 5, "name": "Tricoises Ø100", "qty": 2, "unit": "pièces", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z07-M006", "vehicle": "FPT GO", "zone": "Arrière véhicule", "subzone": "Arrière", "zoneOrder": 7, "itemOrder": 6, "name": "Manivelle pour enroulement DT", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z07-M007", "vehicle": "FPT GO", "zone": "Arrière véhicule", "subzone": "Arrière", "zoneOrder": 7, "itemOrder": 7, "name": "Clé fédérale", "qty": 1, "unit": "pièce", "category": "Clés / accès", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z07-M008", "vehicle": "FPT GO", "zone": "Arrière véhicule", "subzone": "Arrière", "zoneOrder": 7, "itemOrder": 8, "name": "Clé de barrage", "qty": 1, "unit": "pièce", "category": "Clés / accès", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z07-M009", "vehicle": "FPT GO", "zone": "Arrière véhicule", "subzone": "Arrière", "zoneOrder": 7, "itemOrder": 9, "name": "Collecteur d’alimentation", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z07-M010", "vehicle": "FPT GO", "zone": "Arrière véhicule", "subzone": "Arrière", "zoneOrder": 7, "itemOrder": 10, "name": "Tuyau de remplissage tonne", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z07-M011", "vehicle": "FPT GO", "zone": "Arrière véhicule", "subzone": "Arrière", "zoneOrder": 7, "itemOrder": 11, "name": "Dévidoirs avec 5 tuyaux Ø70 x40 m et tricoise", "qty": 2, "unit": "ensembles", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z08-M001", "vehicle": "FPT GO", "zone": "Toit", "subzone": "Toit", "zoneOrder": 8, "itemOrder": 1, "name": "Échelle à coulisse 2 plans", "qty": 1, "unit": "pièce", "category": "Échelle", "criticality": "Importante", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z08-M002", "vehicle": "FPT GO", "zone": "Toit", "subzone": "Toit", "zoneOrder": 8, "itemOrder": 2, "name": "Échelle à crochet", "qty": 1, "unit": "pièce", "category": "Échelle", "criticality": "Importante", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z09-M001", "vehicle": "FPT GO", "zone": "Rideau arrière droit", "subzone": "Haut", "zoneOrder": 9, "itemOrder": 1, "name": "Caisse ceinturon", "qty": 1, "unit": "caisse", "category": "EPI", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z09-M002", "vehicle": "FPT GO", "zone": "Rideau arrière droit", "subzone": "Haut", "zoneOrder": 9, "itemOrder": 2, "name": "Caisse tenue type 3", "qty": 1, "unit": "caisse", "category": "EPI", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z09-M003", "vehicle": "FPT GO", "zone": "Rideau arrière droit", "subzone": "Haut", "zoneOrder": 9, "itemOrder": 3, "name": "Combinaisons CAT3 type 5/6 XL et 2XL", "qty": 4, "unit": "pièces", "category": "EPI", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z09-M004", "vehicle": "FPT GO", "zone": "Rideau arrière droit", "subzone": "Milieu", "zoneOrder": 9, "itemOrder": 4, "name": "Division d’attaque DAT", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z09-M005", "vehicle": "FPT GO", "zone": "Rideau arrière droit", "subzone": "Milieu", "zoneOrder": 9, "itemOrder": 5, "name": "Tuyau Ø70 x20 m en Z avec division", "qty": 1, "unit": "pièce", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z09-M006", "vehicle": "FPT GO", "zone": "Rideau arrière droit", "subzone": "Milieu", "zoneOrder": 9, "itemOrder": 6, "name": "Tuyaux Ø70 x20 m en Z", "qty": 2, "unit": "pièces", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z09-M007", "vehicle": "FPT GO", "zone": "Rideau arrière droit", "subzone": "Bas", "zoneOrder": 9, "itemOrder": 7, "name": "DFT", "qty": 4, "unit": "pièces", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z09-M008", "vehicle": "FPT GO", "zone": "Rideau arrière droit", "subzone": "Bas", "zoneOrder": 9, "itemOrder": 8, "name": "Cônes de Lübeck", "qty": 4, "unit": "pièces", "category": "Balisage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M001", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Haut", "zoneOrder": 10, "itemOrder": 1, "name": "Cordage", "qty": 1, "unit": "pièce", "category": "Sauvetage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M002", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Haut", "zoneOrder": 10, "itemOrder": 2, "name": "Bâche", "qty": 1, "unit": "pièce", "category": "Protection", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M003", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Haut", "zoneOrder": 10, "itemOrder": 3, "name": "Récupérateur hydrocarbure", "qty": 1, "unit": "pièce", "category": "Pollution", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M004", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Haut", "zoneOrder": 10, "itemOrder": 4, "name": "Découpeuse à disque avec disques, fiche technique et clé", "qty": 1, "unit": "ensemble", "category": "Découpe", "criticality": "Importante", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M005", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Milieu", "zoneOrder": 10, "itemOrder": 5, "name": "ARI conducteur avec masque", "qty": 1, "unit": "ensemble", "category": "ARI", "criticality": "Critique", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M006", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Milieu", "zoneOrder": 10, "itemOrder": 6, "name": "Projecteur", "qty": 1, "unit": "pièce", "category": "Éclairage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M007", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Milieu", "zoneOrder": 10, "itemOrder": 7, "name": "Batterie projecteur", "qty": 1, "unit": "pièce", "category": "Éclairage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M008", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Milieu", "zoneOrder": 10, "itemOrder": 8, "name": "Batterie découpeuse", "qty": 1, "unit": "pièce", "category": "Découpe", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M009", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Milieu", "zoneOrder": 10, "itemOrder": 9, "name": "Stoppeur de fumées", "qty": 1, "unit": "pièce", "category": "Incendie", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M010", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Bas", "zoneOrder": 10, "itemOrder": 10, "name": "LSPCC avec commande", "qty": 2, "unit": "ensembles", "category": "Sauvetage", "criticality": "Critique", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M011", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Bas", "zoneOrder": 10, "itemOrder": 11, "name": "Halligan tool", "qty": 1, "unit": "pièce", "category": "Forcement", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M012", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Bas", "zoneOrder": 10, "itemOrder": 12, "name": "Merlin", "qty": 1, "unit": "pièce", "category": "Forcement", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M013", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Bas", "zoneOrder": 10, "itemOrder": 13, "name": "Tableau de contrôleur", "qty": 1, "unit": "pièce", "category": "ARI", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M014", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Bas", "zoneOrder": 10, "itemOrder": 14, "name": "Lignes guide", "qty": 2, "unit": "pièces", "category": "ARI", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z10-M015", "vehicle": "FPT GO", "zone": "Rideau milieu droit", "subzone": "Bas", "zoneOrder": 10, "itemOrder": 15, "name": "Coffret Spiraled", "qty": 1, "unit": "coffret", "category": "Signalisation", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M001", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Gauche", "zoneOrder": 11, "itemOrder": 1, "name": "OFD", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M002", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Gauche", "zoneOrder": 11, "itemOrder": 2, "name": "Fourche droite", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M003", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Gauche", "zoneOrder": 11, "itemOrder": 3, "name": "Fourche recourbée", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M004", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Gauche", "zoneOrder": 11, "itemOrder": 4, "name": "Balai de cantonnier", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M005", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Gauche", "zoneOrder": 11, "itemOrder": 5, "name": "Pelle", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M006", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Gauche", "zoneOrder": 11, "itemOrder": 6, "name": "Scie à bûches", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M007", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Gauche", "zoneOrder": 11, "itemOrder": 7, "name": "Gaffe", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M008", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Gauche", "zoneOrder": 11, "itemOrder": 8, "name": "Coupe-boulon", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M009", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Gauche", "zoneOrder": 11, "itemOrder": 9, "name": "Pioche", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M010", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Gauche", "zoneOrder": 11, "itemOrder": 10, "name": "Masse", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M011", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Gauche", "zoneOrder": 11, "itemOrder": 11, "name": "Hache", "qty": 1, "unit": "pièce", "category": "Outillage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M012", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Haut / milieu / bas", "zoneOrder": 11, "itemOrder": 12, "name": "Lot prompt secours", "qty": 1, "unit": "sac", "category": "Secours", "criticality": "Critique", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M013", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Haut / milieu / bas", "zoneOrder": 11, "itemOrder": 13, "name": "Tuyaux 45 x20 en écheveaux préconnectés avec LDMR", "qty": 4, "unit": "pièces", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M014", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Haut / milieu / bas", "zoneOrder": 11, "itemOrder": 14, "name": "Tuyaux 70 x20 en écheveaux préconnectés avec division mixte", "qty": 4, "unit": "pièces", "category": "Hydraulique", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M015", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Haut / milieu / bas", "zoneOrder": 11, "itemOrder": 15, "name": "Bouteilles d’ARI", "qty": 6, "unit": "pièces", "category": "ARI", "criticality": "Critique", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M016", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Haut / milieu / bas", "zoneOrder": 11, "itemOrder": 16, "name": "Enrouleur avec support métallique pour projecteur", "qty": 1, "unit": "pièce", "category": "Éclairage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z11-M017", "vehicle": "FPT GO", "zone": "Rideau avant droit", "subzone": "Haut / milieu / bas", "zoneOrder": 11, "itemOrder": 17, "name": "Trépied pour projecteur sur batterie", "qty": 1, "unit": "pièce", "category": "Éclairage", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M001", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Ventilation", "zoneOrder": 12, "itemOrder": 1, "name": "Bouteille O2 - 5 litres", "qty": 1, "unit": "pièce", "category": "Secours", "criticality": "Critique", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M002", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Ventilation", "zoneOrder": 12, "itemOrder": 2, "name": "Insufflateur adulte avec tubulure UU", "qty": 1, "unit": "pièce", "category": "Secours", "criticality": "Critique", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M003", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Ventilation", "zoneOrder": 12, "itemOrder": 3, "name": "Masques pour BAVU UU T5 / T3", "qty": 2, "unit": "pièces", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M004", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Ventilation", "zoneOrder": 12, "itemOrder": 4, "name": "Masque haute concentration adulte", "qty": 1, "unit": "pièce", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M005", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Kits pansements", "zoneOrder": 12, "itemOrder": 5, "name": "Unidoses de chlorhexidine", "qty": 3, "unit": "pièces", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M006", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Kits pansements", "zoneOrder": 12, "itemOrder": 6, "name": "Unidoses de chlorure de sodium 0,9%", "qty": 2, "unit": "pièces", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M007", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Kits pansements", "zoneOrder": 12, "itemOrder": 7, "name": "Compresses 7,5 x 7,5 cm", "qty": 5, "unit": "paquets", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M008", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Kits pansements", "zoneOrder": 12, "itemOrder": 8, "name": "Rouleau de sparadrap", "qty": 1, "unit": "pièce", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M009", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Kits pansements", "zoneOrder": 12, "itemOrder": 9, "name": "Bandes de crêpe 5 cm et 10 cm", "qty": 2, "unit": "pièces", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M010", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Kits pansements", "zoneOrder": 12, "itemOrder": 10, "name": "Réserve gants à usage unique", "qty": 1, "unit": "réserve", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M011", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Kits pansements", "zoneOrder": 12, "itemOrder": 11, "name": "Couverture isothermique", "qty": 1, "unit": "pièce", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M012", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Kits pansements", "zoneOrder": 12, "itemOrder": 12, "name": "Gel hydroalcoolique", "qty": 1, "unit": "flacon", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M013", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Kits pansements", "zoneOrder": 12, "itemOrder": 13, "name": "Pansement absorbant", "qty": 1, "unit": "pièce", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M014", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Kits pansements", "zoneOrder": 12, "itemOrder": 14, "name": "Watergel 10 x 10 cm", "qty": 2, "unit": "pièces", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M015", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Kits pansements", "zoneOrder": 12, "itemOrder": 15, "name": "Poche de froid", "qty": 1, "unit": "pièce", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}, {"id": "FPTGO-Z12-M016", "vehicle": "FPT GO", "zone": "Lot Prompt Secours", "subzone": "Divers", "zoneOrder": 12, "itemOrder": 16, "name": "Couteau de sécurité", "qty": 1, "unit": "pièce", "category": "Secours", "criticality": "Normale", "photo": "", "active": "Oui"}];
@@ -322,356 +322,12 @@ let editingInventoryIndex = null;
 
 function $(id){return document.getElementById(id)}
 function showScreen(id){
-  // Si un véhicule a été scanné via QR Code (?check=xxx), proposer un choix
-  // (vérification journalière ou relève sur intervention) au lieu de redemander un scan.
-  if(id === "scanner" && typeof scannedAsset !== "undefined" && scannedAsset){
-    id = "scanChoice";
-  }
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   $(id).classList.add("active");
   window.scrollTo(0,0);
   renderAll();
-  if(id === "scanChoice" && typeof renderScanChoiceV36 === "function") renderScanChoiceV36();
-  if(id === "interventionReport" && typeof renderInterventionReportV36 === "function") renderInterventionReportV36();
-  if(id === "tech" && typeof fcAskNotificationPermission === "function") fcAskNotificationPermission();
 }
-// Délégation d'événement : fonctionne aussi pour les boutons [data-go] créés
-// dynamiquement plus tard (ex: dans renderStep(), regénéré via innerHTML).
-document.addEventListener("click", (e) => {
-  const btn = e.target.closest("[data-go]");
-  if(btn) showScreen(btn.dataset.go);
-});
-
-/* ============================================================
-   V36 — Choix post-scan + rapport de relève sur intervention (hors-ligne)
-   ============================================================ */
-
-function renderScanChoiceV36(){
-  if(!scannedAsset) return;
-  const eyebrow = document.getElementById("scanChoiceEyebrow");
-  const title = document.getElementById("scanChoiceTitle");
-  if(eyebrow) eyebrow.textContent = `QR scanné : ${scannedAsset.name}`;
-  if(title) title.textContent = "Que veux-tu faire ?";
-
-  const verifBtn = document.getElementById("scanChoiceVerif");
-  const anomalyBtn = document.getElementById("scanChoiceAnomaly");
-  const interBtn = document.getElementById("scanChoiceIntervention");
-
-  if(verifBtn) verifBtn.onclick = () => {
-    if(typeof checkV27 !== "undefined"){
-      checkV27.done = {};
-      checkV27.issues = {};
-      checkV27.currentZone = null;
-      checkV27._viewManuallySet = false;
-    }
-    showScreen("check");
-  };
-
-  if(anomalyBtn) anomalyBtn.onclick = () => {
-    if(typeof openGuidedAnomalyDialogV27 === "function"){
-      openGuidedAnomalyDialogV27(scannedAsset, {zone: "—", section: "SIGNALEMENT DIRECT"}, null, false);
-    }
-  };
-
-  if(interBtn) interBtn.onclick = () => {
-    showScreen("interventionReport");
-  };
-
-  fcShowHandoverIfAnyV36();
-}
-
-function renderInterventionReportV36(){
-  if(!scannedAsset) return;
-  const title = document.getElementById("interventionVehicleTitle");
-  if(title) title.textContent = `${scannedAsset.name}${scannedAsset.plate ? " · " + scannedAsset.plate : ""}`;
-
-  const commentEl = document.getElementById("interventionComment");
-  const priorityEl = document.getElementById("interventionPriority");
-  if(commentEl) commentEl.value = "";
-  if(priorityEl) priorityEl.value = "Normale";
-
-  const offlineNotice = document.getElementById("interventionOfflineNotice");
-  if(offlineNotice) offlineNotice.classList.toggle("hidden", navigator.onLine);
-
-  fcRenderPendingHandoversBannerV36();
-
-  const saveBtn = document.getElementById("saveInterventionReport");
-  if(saveBtn) saveBtn.onclick = () => {
-    const comment = (commentEl?.value || "").trim();
-    if(!comment){
-      toast("Décris au moins le matériel sorti ou l’état constaté");
-      return;
-    }
-
-    const author = currentUser ? `${currentUser.grade} ${currentUser.prenom} ${currentUser.nom}` : "SP non identifié";
-    const handover = {
-      id: "ho-" + Date.now(),
-      vehicleId: scannedAsset.id,
-      vehicleName: scannedAsset.name,
-      comment: comment,
-      priority: priorityEl?.value || "Normale",
-      author: author,
-      time: new Date().toLocaleString("fr-FR"),
-      read: false
-    };
-
-    fcQueueOrSendHandoverV36(handover);
-
-    toast(navigator.onLine ? "Fiche de passation enregistrée" : "Fiche enregistrée localement — sera envoyée dès le retour du réseau");
-    showScreen("home");
-  };
-}
-
-// File d'attente locale pour les fiches de passation créées hors-ligne
-function fcGetPendingHandoversV36(){
-  try{ return JSON.parse(localStorage.getItem("fc_pending_handovers") || "[]"); }
-  catch(e){ return []; }
-}
-function fcSavePendingHandoversV36(list){
-  localStorage.setItem("fc_pending_handovers", JSON.stringify(list));
-}
-
-function fcQueueOrSendHandoverV36(handover){
-  if(navigator.onLine && typeof saveHandoverSupabase === "function"){
-    saveHandoverSupabase(handover);
-  } else {
-    const pending = fcGetPendingHandoversV36();
-    pending.push(handover);
-    fcSavePendingHandoversV36(pending);
-  }
-  fcRenderPendingHandoversBannerV36();
-}
-
-function fcRenderPendingHandoversBannerV36(){
-  const banner = document.getElementById("pendingReportsBanner");
-  const countEl = document.getElementById("pendingReportsCount");
-  if(!banner || !countEl) return;
-  const pending = fcGetPendingHandoversV36();
-  if(pending.length > 0){
-    banner.classList.remove("hidden");
-    countEl.textContent = pending.length;
-  } else {
-    banner.classList.add("hidden");
-  }
-}
-
-// Tente d'envoyer les fiches en attente dès que le réseau revient
-async function fcFlushPendingHandoversV36(){
-  const pending = fcGetPendingHandoversV36();
-  if(!pending.length || typeof saveHandoverSupabase !== "function") return;
-
-  const stillPending = [];
-  for(const handover of pending){
-    try{
-      await saveHandoverSupabase(handover);
-    }catch(e){
-      stillPending.push(handover);
-    }
-  }
-  fcSavePendingHandoversV36(stillPending);
-  fcRenderPendingHandoversBannerV36();
-  if(stillPending.length < pending.length){
-    toast(`${pending.length - stillPending.length} fiche(s) de passation envoyée(s)`);
-  }
-}
-
-// Affiche la fiche de passation non lue pour le véhicule scanné, le cas échéant
-async function fcShowHandoverIfAnyV36(){
-  if(!scannedAsset) return;
-
-  if(navigator.onLine && typeof syncHandovers === "function"){
-    try{ await syncHandovers(); }catch(e){ /* ignore, on utilise le cache local */ }
-  }
-
-  let handover = null;
-  if(typeof fcHandovers !== "undefined"){
-    handover = fcHandovers.find(h => h.vehicleId === scannedAsset.id && !h.read);
-  }
-
-  let dialog = document.getElementById("handoverDialogV36");
-  if(!dialog){
-    dialog = document.createElement("dialog");
-    dialog.id = "handoverDialogV36";
-    dialog.className = "dialog";
-    document.body.appendChild(dialog);
-  }
-
-  if(!handover){
-    if(dialog.open) dialog.close();
-    return;
-  }
-
-  dialog.innerHTML = `
-    <div class="modal">
-      <div class="modal-head">
-        <div>
-          <p class="eyebrow">Passation — ${fcEsc(handover.vehicleName)}</p>
-          <h2>Information de la relève précédente</h2>
-        </div>
-        <button class="round" id="closeHandoverV36">×</button>
-      </div>
-      <p class="muted">Signalé par ${fcEsc(handover.author)} · ${fcEsc(handover.time)}</p>
-      ${handover.priority !== "Normale" ? `<span class="pill red">⚠ ${fcEsc(handover.priority)}</span>` : ""}
-      <p style="white-space:pre-wrap; margin-top:12px;">${fcEsc(handover.comment)}</p>
-      <div class="modal-actions">
-        <button class="btn primary full" id="markHandoverReadV36">J’ai pris connaissance — Marquer comme lu</button>
-      </div>
-    </div>
-  `;
-
-  dialog.querySelector("#closeHandoverV36").onclick = () => dialog.close();
-  dialog.querySelector("#markHandoverReadV36").onclick = () => {
-    handover.read = true;
-    if(typeof markHandoverReadSupabase === "function") markHandoverReadSupabase(handover.id);
-    if(typeof fcHandovers !== "undefined"){
-      const idx = fcHandovers.findIndex(h => h.id === handover.id);
-      if(idx >= 0) fcHandovers.splice(idx, 1);
-    }
-    dialog.close();
-    toast("Fiche de passation marquée comme lue");
-  };
-
-  dialog.showModal();
-}
-
-window.addEventListener("online", () => {
-  toast("Connexion rétablie — envoi des fiches en attente...");
-  fcFlushPendingHandoversV36();
-});
-
-// Tentative de synchronisation au chargement (si déjà en ligne avec des fiches en attente)
-window.addEventListener("load", () => {
-  setTimeout(() => { if(navigator.onLine) fcFlushPendingHandoversV36(); }, 2000);
-});
-
-/* ============================================================
-   V35 — Badge de notification (onglet + favicon + notification système)
-   Signale : nouvelles remontées + remontées urgentes non traitées + péremptions proches
-   ============================================================ */
-const fcOriginalTitle = document.title;
-let fcLastNotifiedCount = 0;
-let fcNotifPermissionAsked = false;
-
-// Enregistrement du service worker — rend l'application installable (PWA)
-if("serviceWorker" in navigator){
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("sw.js").catch(e => console.warn("Service worker non enregistré:", e));
-  });
-}
-
-function fcComputeAlertCount(){
-  let count = 0;
-  try{
-    // Remontées nouvelles ou urgentes/bloquantes non clôturées
-    if(typeof reports !== "undefined"){
-      count += reports.filter(r => r.status === "Nouveau").length;
-      count += reports.filter(r => r.status !== "Nouveau" && r.status !== "Clôturé" &&
-        (r.priority === "Urgente" || r.priority === "Bloquant départ")).length;
-    }
-  }catch(e){ /* reports pas encore initialisé — ignore pour ce passage */ }
-  try{
-    // Produits pharmacie expirant dans 30 jours ou moins (ou déjà périmés)
-    if(typeof pharmData !== "undefined" && typeof pharmDaysLeft === "function"){
-      count += pharmData.filter(p => {
-        const d = pharmDaysLeft(p.expiry);
-        return d !== null && d <= 30;
-      }).length;
-    }
-  }catch(e){ /* pharmData pas encore initialisé — ignore pour ce passage */ }
-  try{
-    // Véhicules et matériels techniques en retard ou bientôt dus d'entretien
-    if(typeof vehicles !== "undefined" && typeof computeAssetState === "function"){
-      count += vehicles.filter(a => {
-        const s = computeAssetState(a).state;
-        return s === "late" || s === "soon";
-      }).length;
-    }
-    if(typeof equipment !== "undefined" && typeof computeAssetState === "function"){
-      count += equipment.filter(a => {
-        const s = computeAssetState(a).state;
-        return s === "late" || s === "soon";
-      }).length;
-    }
-  }catch(e){ /* assets pas encore initialisés — ignore pour ce passage */ }
-  return count;
-}
-
-function fcDrawFaviconBadge(count){
-  try{
-    const canvas = document.createElement("canvas");
-    canvas.width = 64; canvas.height = 64;
-    const ctx = canvas.getContext("2d");
-    if(!ctx) return;
-
-    // Base : carré rouge arrondi avec un casque/flamme simplifié (cohérent identité FireCheck)
-    ctx.fillStyle = "#d71920";
-    ctx.beginPath();
-    ctx.roundRect ? ctx.roundRect(4,4,56,56,14) : ctx.rect(4,4,56,56);
-    ctx.fill();
-    ctx.fillStyle = "#fff";
-    ctx.font = "bold 34px Arial";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("F", 32, 34);
-
-    if(count > 0){
-      // Pastille badge en haut à droite
-      ctx.beginPath();
-      ctx.arc(50, 14, 14, 0, Math.PI*2);
-      ctx.fillStyle = "#fff";
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(50, 14, 11, 0, Math.PI*2);
-      ctx.fillStyle = "#111827";
-      ctx.fill();
-      ctx.fillStyle = "#fff";
-      ctx.font = "bold 14px Arial";
-      ctx.fillText(count > 9 ? "9+" : String(count), 50, 15);
-    }
-
-    let link = document.querySelector("link[rel='icon']");
-    if(!link){
-      link = document.createElement("link");
-      link.rel = "icon";
-      document.head.appendChild(link);
-    }
-    link.href = canvas.toDataURL("image/png");
-  }catch(e){
-    console.warn("fcDrawFaviconBadge:", e);
-  }
-}
-
-function fcUpdateNotificationBadge(){
-  const count = fcComputeAlertCount();
-
-  // Titre de l'onglet
-  document.title = count > 0 ? `(${count > 99 ? "99+" : count}) ${fcOriginalTitle}` : fcOriginalTitle;
-
-  // Favicon avec pastille
-  fcDrawFaviconBadge(count);
-
-  // Notification système si le nombre d'alertes a augmenté
-  if(count > fcLastNotifiedCount && typeof Notification !== "undefined" && Notification.permission === "granted" && document.visibilityState !== "visible"){
-    try{
-      new Notification("FireCheck — Nouvelle alerte", {
-        body: `${count} élément${count > 1 ? "s" : ""} à traiter (remontées / péremptions).`,
-        icon: document.querySelector("link[rel='icon']")?.href
-      });
-    }catch(e){ /* notifications non supportées, ignore */ }
-  }
-  fcLastNotifiedCount = count;
-}
-
-function fcAskNotificationPermission(){
-  if(fcNotifPermissionAsked) return;
-  fcNotifPermissionAsked = true;
-  if(typeof Notification !== "undefined" && Notification.permission === "default"){
-    Notification.requestPermission().catch(() => {});
-  }
-}
-
-// Rafraîchit le badge périodiquement même sans interaction (ex: après un sync Supabase en arrière-plan)
-setInterval(() => { if(typeof fcUpdateNotificationBadge === "function") fcUpdateNotificationBadge(); }, 60000);
+document.querySelectorAll("[data-go]").forEach(btn => btn.addEventListener("click", () => showScreen(btn.dataset.go)));
 
 function toast(message){
   const t = $("toast");
@@ -807,7 +463,7 @@ $("deleteItemIssue").onclick = () => {
 function syncStepIssuesToReports(stepIndex){
   const issues = Object.values(stepIssues).filter(i => i.stepIndex === stepIndex && !i.sent);
   issues.forEach(issue => {
-    const report = {
+    reports.unshift({
       id: Date.now() + Math.floor(Math.random() * 999),
       asset: issue.asset,
       zone: issue.zone,
@@ -817,11 +473,9 @@ function syncStepIssuesToReports(stepIndex){
       comment: issue.comment,
       status: "Nouveau",
       priority: issue.priority,
-      author: currentUser ? `${currentUser.grade} ${currentUser.nom}` : "Inconnu",
-      time: "À l'instant"
-    };
-    reports.unshift(report);
-    if(typeof saveRemonteeSupabase === "function") saveRemonteeSupabase(report);
+      author: "Caporal Nicolas Morel",
+      time: "À l’instant"
+    });
     issue.sent = true;
   });
 }
@@ -859,7 +513,7 @@ $("saveAnomaly").onclick = () => {
 };
 
 $("sendQuickReport").onclick = () => {
-  const report = {
+  reports.unshift({
     id: Date.now(),
     asset: $("quickAsset").value,
     zone: "Signalement direct",
@@ -869,11 +523,9 @@ $("sendQuickReport").onclick = () => {
     comment: $("quickComment").value || "Aucun commentaire.",
     status: "Nouveau",
     priority: "Normale",
-    author: currentUser ? `${currentUser.grade} ${currentUser.nom}` : "Inconnu",
-    time: "À l'instant"
-  };
-  reports.unshift(report);
-  if(typeof saveRemonteeSupabase === "function") saveRemonteeSupabase(report);
+    author: "Caporal Nicolas Morel",
+    time: "À l’instant"
+  });
   $("quickComment").value = "";
   toast("Avarie envoyée au service technique");
   showScreen("home");
@@ -890,10 +542,9 @@ function statusClass(status){
 }
 
 function renderReports(){
-  const myName = currentUser ? `${currentUser.grade} ${currentUser.nom}` : null;
-  $("homeReportsCount").textContent = myName ? reports.filter(r => r.author === myName).length : reports.filter(r => r.status === "Nouveau").length;
+  $("homeReportsCount").textContent = reports.filter(r => r.author === "Caporal Nicolas Morel").length;
 
-  $("myReportsList").innerHTML = reports.filter(r => !myName || r.author === myName).map(r => `
+  $("myReportsList").innerHTML = reports.filter(r => r.author === "Caporal Nicolas Morel").map(r => `
     <article class="report-card">
       <div class="report-top">
         <div><strong>${r.asset}</strong><br><span class="muted">${r.zone} · ${r.origin}</span></div>
@@ -927,12 +578,12 @@ function renderReports(){
 
   document.querySelectorAll(".take-btn").forEach(btn => btn.onclick = () => {
     const r = reports.find(x => x.id === Number(btn.dataset.id));
-    if(r){ r.status = "Pris en compte"; if(typeof updateRemonteeStatusSupabase === "function") updateRemonteeStatusSupabase(r.id, "Pris en compte"); }
+    if(r) r.status = "Pris en compte";
     renderAll();
   });
   document.querySelectorAll(".close-btn").forEach(btn => btn.onclick = () => {
     const r = reports.find(x => x.id === Number(btn.dataset.id));
-    if(r){ r.status = "Clôturé"; if(typeof updateRemonteeStatusSupabase === "function") updateRemonteeStatusSupabase(r.id, "Clôturé"); }
+    if(r) r.status = "Clôturé";
     renderAll();
   });
 
@@ -944,7 +595,7 @@ function renderReports(){
 $("confirmFix").onclick = () => {
   const r = reports.find(x => x.id === activeFixReportId);
   if(r){
-    r.status = "Corrigé par SP"; if(typeof updateRemonteeStatusSupabase === "function") updateRemonteeStatusSupabase(r.id, "Corrigé par SP");
+    r.status = "Corrigé par SP";
     const c = $("fixComment").value;
     r.comment += c ? ` Correction SP : ${c}` : " Correction SP indiquée.";
   }
@@ -2229,636 +1880,6 @@ const libraryV8 = [
     "name": "TROUSSE DE SECOURS",
     "family": "SSUAP",
     "sub": "Secours à personne",
-    "qty": 1
-  },
-  ,{
-    "name": "GHV (Gilet Haute Visibilité)",
-    "family": "SSUAP",
-    "sub": "Équipement personnel",
-    "qty": 1
-  },
-  {
-    "name": "Portatif Antares",
-    "family": "SSUAP",
-    "sub": "Communication",
-    "qty": 1
-  },
-  {
-    "name": "Masques chirurgicaux",
-    "family": "SSUAP",
-    "sub": "Hygiène / protection",
-    "qty": 6
-  },
-  {
-    "name": "Masques FFP2",
-    "family": "SSUAP",
-    "sub": "Hygiène / protection",
-    "qty": 3
-  },
-  {
-    "name": "Livret technique du véhicule",
-    "family": "SSUAP",
-    "sub": "Documents",
-    "qty": 1
-  },
-  {
-    "name": "Éthylotest",
-    "family": "SSUAP",
-    "sub": "Équipement cabine",
-    "qty": 1
-  },
-  {
-    "name": "Boîte de gants taille M",
-    "family": "SSUAP",
-    "sub": "Hygiène / protection",
-    "qty": 1
-  },
-  {
-    "name": "Boîte de gants taille L",
-    "family": "SSUAP",
-    "sub": "Hygiène / protection",
-    "qty": 1
-  },
-  {
-    "name": "Boîte de gants taille XL",
-    "family": "SSUAP",
-    "sub": "Hygiène / protection",
-    "qty": 1
-  },
-  {
-    "name": "Boîte de gants taille S",
-    "family": "SSUAP",
-    "sub": "Hygiène / protection",
-    "qty": 1
-  },
-  {
-    "name": "Sacs DASRI 30 litres",
-    "family": "SSUAP",
-    "sub": "Hygiène / protection",
-    "qty": 2
-  },
-  {
-    "name": "Sacs DASRI 15 litres",
-    "family": "SSUAP",
-    "sub": "Hygiène / protection",
-    "qty": 3
-  },
-  {
-    "name": "Fiches réflexes opérationnelles",
-    "family": "SSUAP",
-    "sub": "Documents",
-    "qty": 3
-  },
-  {
-    "name": "Classeur cartographie",
-    "family": "SSUAP",
-    "sub": "Documents",
-    "qty": 1
-  },
-  {
-    "name": "Carnet fiche bilan secouriste",
-    "family": "SSUAP",
-    "sub": "Documents",
-    "qty": 1
-  },
-  {
-    "name": "Cône rétractable",
-    "family": "SSUAP",
-    "sub": "Balisage",
-    "qty": 4
-  },
-  {
-    "name": "Cales de roue",
-    "family": "SSUAP",
-    "sub": "Balisage",
-    "qty": 2
-  },
-  {
-    "name": "Bouée + corde flottante",
-    "family": "SSUAP",
-    "sub": "Sauvetage aquatique",
-    "qty": 1
-  },
-  {
-    "name": "Cagoule d'évacuation",
-    "family": "SSUAP",
-    "sub": "Hygiène / protection",
-    "qty": 1
-  },
-  {
-    "name": "Brise vitre",
-    "family": "SSUAP",
-    "sub": "Désincarcération",
-    "qty": 1
-  },
-  {
-    "name": "Casque F2 Orange",
-    "family": "SSUAP",
-    "sub": "Équipement personnel",
-    "qty": 3
-  },
-  {
-    "name": "Bouteilles d'eau",
-    "family": "SSUAP",
-    "sub": "Divers",
-    "qty": 4
-  },
-  {
-    "name": "Attelle à dépression",
-    "family": "SSUAP",
-    "sub": "Immobilisation",
-    "qty": 1
-  },
-  {
-    "name": "Attelle à dépression poignet / avant-bras",
-    "family": "SSUAP",
-    "sub": "Immobilisation",
-    "qty": 1
-  },
-  {
-    "name": "Attelle ALUFORM jambe adulte",
-    "family": "SSUAP",
-    "sub": "Immobilisation",
-    "qty": 1
-  },
-  {
-    "name": "Attelle ALUFORM coude",
-    "family": "SSUAP",
-    "sub": "Immobilisation",
-    "qty": 1
-  },
-  {
-    "name": "MID pédiatrique",
-    "family": "SSUAP",
-    "sub": "Immobilisation",
-    "qty": 1
-  },
-  {
-    "name": "MID",
-    "family": "SSUAP",
-    "sub": "Immobilisation",
-    "qty": 1
-  },
-  {
-    "name": "Collier cervical pédiatrique réglable",
-    "family": "SSUAP",
-    "sub": "Immobilisation",
-    "qty": 1
-  },
-  {
-    "name": "Collier cervical adulte réglable",
-    "family": "SSUAP",
-    "sub": "Immobilisation",
-    "qty": 2
-  },
-  {
-    "name": "ACT",
-    "family": "SSUAP",
-    "sub": "Immobilisation",
-    "qty": 1
-  },
-  {
-    "name": "Chaise portoir pliante",
-    "family": "SSUAP",
-    "sub": "Relevage / brancardage",
-    "qty": 1
-  },
-  {
-    "name": "Pompe à dépression",
-    "family": "SSUAP",
-    "sub": "Immobilisation",
-    "qty": 1
-  },
-  {
-    "name": "Brancard cuillère",
-    "family": "SSUAP",
-    "sub": "Relevage / brancardage",
-    "qty": 1
-  },
-  {
-    "name": "Brancard avec chariot, pied de perf et plan dur",
-    "family": "SSUAP",
-    "sub": "Relevage / brancardage",
-    "qty": 1
-  },
-  {
-    "name": "Bouteille O2 5L",
-    "family": "SSUAP",
-    "sub": "Oxygénothérapie / ventilation",
-    "qty": 1
-  },
-  {
-    "name": "Couteau de sécurité",
-    "family": "SSUAP",
-    "sub": "Divers",
-    "qty": 1
-  },
-  {
-    "name": "Ciseaux JESCO",
-    "family": "SSUAP",
-    "sub": "Pansements",
-    "qty": 1
-  },
-  {
-    "name": "Vomibag",
-    "family": "SSUAP",
-    "sub": "Hygiène / protection",
-    "qty": 1
-  },
-  {
-    "name": "Pansement israélien",
-    "family": "SSUAP",
-    "sub": "Pansements",
-    "qty": 2
-  },
-  {
-    "name": "Garrot hémostatique d'urgence plat",
-    "family": "SSUAP",
-    "sub": "Pansements",
-    "qty": 1
-  },
-  {
-    "name": "Garrot tourniquet",
-    "family": "SSUAP",
-    "sub": "Pansements",
-    "qty": 1
-  },
-  {
-    "name": "Compresses gaze hémostatique",
-    "family": "SSUAP",
-    "sub": "Pansements",
-    "qty": 2
-  },
-  {
-    "name": "Lecteur de glycémie + bandelettes + auto-piqueurs",
-    "family": "SSUAP",
-    "sub": "Bilan / monitoring",
-    "qty": 1
-  },
-  {
-    "name": "Thermomètre tympanique",
-    "family": "SSUAP",
-    "sub": "Bilan / monitoring",
-    "qty": 1
-  },
-  {
-    "name": "Poche de froid",
-    "family": "SSUAP",
-    "sub": "Pansements",
-    "qty": 1
-  },
-  {
-    "name": "Dosettes de savon liquide",
-    "family": "SSUAP",
-    "sub": "Hygiène / protection",
-    "qty": 2
-  },
-  {
-    "name": "Dosettes de chlorure de sodium",
-    "family": "SSUAP",
-    "sub": "Pansements",
-    "qty": 5
-  },
-  {
-    "name": "Rouleau de sparadrap",
-    "family": "SSUAP",
-    "sub": "Pansements",
-    "qty": 1
-  },
-  {
-    "name": "Bande 5 cm",
-    "family": "SSUAP",
-    "sub": "Pansements",
-    "qty": 1
-  },
-  {
-    "name": "Bande 10 cm",
-    "family": "SSUAP",
-    "sub": "Pansements",
-    "qty": 1
-  },
-  {
-    "name": "Lot de filets tubulaires (T2, T4, T6)",
-    "family": "SSUAP",
-    "sub": "Pansements",
-    "qty": 1
-  },
-  {
-    "name": "Pansements absorbants",
-    "family": "SSUAP",
-    "sub": "Pansements",
-    "qty": 2
-  },
-  {
-    "name": "Écharpes à UU",
-    "family": "SSUAP",
-    "sub": "Pansements",
-    "qty": 2
-  },
-  {
-    "name": "Insufflateur à UU adulte",
-    "family": "SSUAP",
-    "sub": "Oxygénothérapie / ventilation",
-    "qty": 1
-  },
-  {
-    "name": "Masque à UU taille 3",
-    "family": "SSUAP",
-    "sub": "Oxygénothérapie / ventilation",
-    "qty": 1
-  },
-  {
-    "name": "Masque à UU taille 5",
-    "family": "SSUAP",
-    "sub": "Oxygénothérapie / ventilation",
-    "qty": 1
-  },
-  {
-    "name": "Masque HC adulte",
-    "family": "SSUAP",
-    "sub": "Oxygénothérapie / ventilation",
-    "qty": 1
-  },
-  {
-    "name": "Lunette à oxygène",
-    "family": "SSUAP",
-    "sub": "Oxygénothérapie / ventilation",
-    "qty": 1
-  },
-  {
-    "name": "Filtre antimicrobien",
-    "family": "SSUAP",
-    "sub": "Oxygénothérapie / ventilation",
-    "qty": 1
-  },
-  {
-    "name": "Canule taille 0",
-    "family": "SSUAP",
-    "sub": "Oxygénothérapie / ventilation",
-    "qty": 1
-  },
-  {
-    "name": "Canule taille 1",
-    "family": "SSUAP",
-    "sub": "Oxygénothérapie / ventilation",
-    "qty": 1
-  },
-  {
-    "name": "Canule taille 2",
-    "family": "SSUAP",
-    "sub": "Oxygénothérapie / ventilation",
-    "qty": 1
-  },
-  {
-    "name": "Canule taille 3",
-    "family": "SSUAP",
-    "sub": "Oxygénothérapie / ventilation",
-    "qty": 1
-  },
-  {
-    "name": "Insufflateur pédiatrique + masque taille 1",
-    "family": "SSUAP",
-    "sub": "Oxygénothérapie / ventilation",
-    "qty": 1
-  },
-  {
-    "name": "Masque HC pédiatrique",
-    "family": "SSUAP",
-    "sub": "Oxygénothérapie / ventilation",
-    "qty": 1
-  },
-  {
-    "name": "Sonde d'aspiration F8",
-    "family": "SSUAP",
-    "sub": "Oxygénothérapie / ventilation",
-    "qty": 1
-  },
-  {
-    "name": "Aspirateur de mucosités",
-    "family": "SSUAP",
-    "sub": "Oxygénothérapie / ventilation",
-    "qty": 1
-  },
-  {
-    "name": "Canules d'aspiration CH26",
-    "family": "SSUAP",
-    "sub": "Oxygénothérapie / ventilation",
-    "qty": 2
-  },
-  {
-    "name": "Kit d'aspiration à UU",
-    "family": "SSUAP",
-    "sub": "Oxygénothérapie / ventilation",
-    "qty": 1
-  },
-  {
-    "name": "Aspirateur manuel",
-    "family": "SSUAP",
-    "sub": "Oxygénothérapie / ventilation",
-    "qty": 1
-  },
-  {
-    "name": "Schiller T7 (défibrillateur)",
-    "family": "SSUAP",
-    "sub": "Bilan / monitoring",
-    "qty": 1
-  },
-  {
-    "name": "Détecteur CO",
-    "family": "SSUAP",
-    "sub": "Bilan / monitoring",
-    "qty": 1
-  },
-  {
-    "name": "Brassard adulte normal",
-    "family": "SSUAP",
-    "sub": "Bilan / monitoring",
-    "qty": 1
-  },
-  {
-    "name": "Brassard adulte large",
-    "family": "SSUAP",
-    "sub": "Bilan / monitoring",
-    "qty": 1
-  },
-  {
-    "name": "Brassard pédiatrique",
-    "family": "SSUAP",
-    "sub": "Bilan / monitoring",
-    "qty": 1
-  },
-  {
-    "name": "Capteur adulte SPO2",
-    "family": "SSUAP",
-    "sub": "Bilan / monitoring",
-    "qty": 1
-  },
-  {
-    "name": "Capteur pédiatrique SPO2 UU",
-    "family": "SSUAP",
-    "sub": "Bilan / monitoring",
-    "qty": 1
-  },
-  {
-    "name": "Électrodes DSA",
-    "family": "SSUAP",
-    "sub": "Bilan / monitoring",
-    "qty": 1
-  },
-  {
-    "name": "Électrodes ECG",
-    "family": "SSUAP",
-    "sub": "Bilan / monitoring",
-    "qty": 1
-  },
-  {
-    "name": "Câble 4 brins scope",
-    "family": "SSUAP",
-    "sub": "Bilan / monitoring",
-    "qty": 1
-  },
-  {
-    "name": "Câble 10 brins ECG",
-    "family": "SSUAP",
-    "sub": "Bilan / monitoring",
-    "qty": 1
-  },
-  {
-    "name": "Saturomètre",
-    "family": "SSUAP",
-    "sub": "Bilan / monitoring",
-    "qty": 1
-  },
-  {
-    "name": "Tensiomètre + stéthoscope",
-    "family": "SSUAP",
-    "sub": "Bilan / monitoring",
-    "qty": 1
-  },
-  {
-    "name": "Drap CH",
-    "family": "SSUAP",
-    "sub": "Relevage / brancardage",
-    "qty": 2
-  },
-  {
-    "name": "Drap à UU",
-    "family": "SSUAP",
-    "sub": "Relevage / brancardage",
-    "qty": 1
-  },
-  {
-    "name": "Couverture bactériostatique SDIS",
-    "family": "SSUAP",
-    "sub": "Relevage / brancardage",
-    "qty": 1
-  },
-  {
-    "name": "Portoir souple de transfert",
-    "family": "SSUAP",
-    "sub": "Relevage / brancardage",
-    "qty": 1
-  },
-  {
-    "name": "Housse mortuaire",
-    "family": "SSUAP",
-    "sub": "Divers",
-    "qty": 1
-  },
-  {
-    "name": "Sangle de relevage",
-    "family": "SSUAP",
-    "sub": "Relevage / brancardage",
-    "qty": 1
-  },
-  {
-    "name": "Sangle araignée",
-    "family": "SSUAP",
-    "sub": "Relevage / brancardage",
-    "qty": 1
-  },
-  {
-    "name": "Kit mousse bloc tête",
-    "family": "SSUAP",
-    "sub": "Immobilisation",
-    "qty": 1
-  },
-  {
-    "name": "Kit protection risques biologiques",
-    "family": "SSUAP",
-    "sub": "Hygiène / protection",
-    "qty": 2
-  },
-  {
-    "name": "Visière de protection",
-    "family": "SSUAP",
-    "sub": "Hygiène / protection",
-    "qty": 3
-  },
-  {
-    "name": "Kit accouchement",
-    "family": "SSUAP",
-    "sub": "Kits spéciaux",
-    "qty": 1
-  },
-  {
-    "name": "Kit section de membre",
-    "family": "SSUAP",
-    "sub": "Kits spéciaux",
-    "qty": 1
-  },
-  {
-    "name": "Kit brûlure",
-    "family": "SSUAP",
-    "sub": "Kits spéciaux",
-    "qty": 1
-  },
-  {
-    "name": "Kit EPIPEN (DAI adulte + DAI pédia)",
-    "family": "SSUAP",
-    "sub": "Kits spéciaux",
-    "qty": 1
-  },
-  {
-    "name": "Kit perfusion + solutés",
-    "family": "SSUAP",
-    "sub": "Kits spéciaux",
-    "qty": 1
-  },
-  {
-    "name": "Kit AES (Dakin + cupule)",
-    "family": "SSUAP",
-    "sub": "Kits spéciaux",
-    "qty": 1
-  },
-  {
-    "name": "Kit Sinus",
-    "family": "SSUAP",
-    "sub": "Kits spéciaux",
-    "qty": 1
-  },
-  {
-    "name": "Kit Damage contrôle",
-    "family": "SSUAP",
-    "sub": "Kits spéciaux",
-    "qty": 1
-  },
-  {
-    "name": "Pulvérisateur solution désinfectante",
-    "family": "SSUAP",
-    "sub": "Hygiène / protection",
-    "qty": 1
-  },
-  {
-    "name": "Bombe bactéricide",
-    "family": "SSUAP",
-    "sub": "Hygiène / protection",
-    "qty": 1
-  },
-  {
-    "name": "Sangle araignée",
-    "family": "SSUAP",
-    "sub": "Relevage / brancardage",
     "qty": 1
   },
   {
@@ -5391,12 +4412,12 @@ const inventoryVehiclesV8 = [
 ];
 
 const vehicleViewsV8 = [
-  {id:"gauche", label:"Côté gauche"},
-  {id:"arriere", label:"Arrière"},
   {id:"droite", label:"Côté droit"},
+  {id:"arriere", label:"Arrière"},
+  {id:"gauche", label:"Côté gauche"},
+  {id:"toit", label:"Toit"},
   {id:"avant", label:"Devant"},
-  {id:"interieur", label:"Intérieur"},
-  {id:"toit", label:"Toit"}
+  {id:"interieur", label:"Intérieur"}
 ];
 
 let selectedInventoryCategoryV8 = "rolling";
@@ -5973,115 +4994,10 @@ const FC_LIBRARY = [
   ["Échelle à coulisse","INCENDIE","Échelles",1],["Échelle à crochet","INCENDIE","Échelles",1],["Ventilateur","INCENDIE","Ventilation",1],["Extincteur poudre","INCENDIE","Extinction",1],
   ["Extincteur CO2","INCENDIE","Extinction",1],["LSPCC","INCENDIE","Sauvetage",1],
   // SSUAP
-  ["Sac prompt secours","SSUAP","Sac",1],
-  // Oxygénothérapie / ventilation
-  ["Bouteille O2 5 L","SSUAP","Oxygénothérapie / ventilation",1],["Bouteilles O2 5L","SSUAP","Oxygénothérapie / ventilation",3],
-  ["Insufflateur à UU adulte","SSUAP","Oxygénothérapie / ventilation",1],["Insufflateur pédiatrique + masque taille 1","SSUAP","Oxygénothérapie / ventilation",1],
-  ["Masque haute concentration adulte","SSUAP","Oxygénothérapie / ventilation",1],["Masque HC adulte","SSUAP","Oxygénothérapie / ventilation",2],
-  ["Masque HC pédiatrique","SSUAP","Oxygénothérapie / ventilation",1],["Masque BAVU","SSUAP","Oxygénothérapie / ventilation",1],
-  ["Masque à UU taille 3","SSUAP","Oxygénothérapie / ventilation",1],["Masque à UU taille 5","SSUAP","Oxygénothérapie / ventilation",1],
-  ["Lunette à oxygène","SSUAP","Oxygénothérapie / ventilation",1],["Filtre antimicrobien","SSUAP","Oxygénothérapie / ventilation",1],
-  ["Canule taille 0","SSUAP","Oxygénothérapie / ventilation",1],["Canule taille 1","SSUAP","Oxygénothérapie / ventilation",1],
-  ["Canule taille 2","SSUAP","Oxygénothérapie / ventilation",1],["Canule taille 3","SSUAP","Oxygénothérapie / ventilation",1],
-  ["Aspirateur de mucosités","SSUAP","Oxygénothérapie / ventilation",1],["Canules d'aspiration CH26","SSUAP","Oxygénothérapie / ventilation",2],
-  ["Kit d'aspiration à UU","SSUAP","Oxygénothérapie / ventilation",1],["Aspirateur manuel","SSUAP","Oxygénothérapie / ventilation",1],
-  ["Sonde d'aspiration F8","SSUAP","Oxygénothérapie / ventilation",1],
-  // Bilan / monitoring
-  ["Schiller T7 (défibrillateur)","SSUAP","Bilan / monitoring",1],["Détecteur CO","SSUAP","Bilan / monitoring",1],
-  ["Lecteur de glycémie + bandelettes","SSUAP","Bilan / monitoring",1],["Thermomètre tympanique","SSUAP","Bilan / monitoring",1],
-  ["Tensiomètre + stéthoscope","SSUAP","Bilan / monitoring",1],["Saturomètre","SSUAP","Bilan / monitoring",1],
-  ["Brassard adulte normal","SSUAP","Bilan / monitoring",1],["Brassard adulte large","SSUAP","Bilan / monitoring",1],
-  ["Brassard pédiatrique","SSUAP","Bilan / monitoring",1],["Capteur adulte SPO2","SSUAP","Bilan / monitoring",1],
-  ["Capteur pédiatrique SPO2 UU","SSUAP","Bilan / monitoring",1],["Électrodes DSA","SSUAP","Bilan / monitoring",1],
-  ["Électrodes ECG","SSUAP","Bilan / monitoring",1],["Câble 4 brins scope","SSUAP","Bilan / monitoring",1],
-  ["Câble 10 brins ECG","SSUAP","Bilan / monitoring",1],
-  // Immobilisation
-  ["Collier cervical adulte réglable","SSUAP","Immobilisation",2],["Collier cervical pédiatrique réglable","SSUAP","Immobilisation",1],
-  ["Attelle à dépression","SSUAP","Immobilisation",1],["Attelle à dépression poignet / avant-bras","SSUAP","Immobilisation",1],
-  ["Attelle ALUFORM jambe adulte","SSUAP","Immobilisation",1],["Attelle ALUFORM coude","SSUAP","Immobilisation",1],
-  ["MID","SSUAP","Immobilisation",1],["MID pédiatrique","SSUAP","Immobilisation",1],
-  ["ACT","SSUAP","Immobilisation",1],["Kit mousse bloc tête","SSUAP","Immobilisation",1],
-  ["Pompe à dépression","SSUAP","Immobilisation",1],
-  // Relevage / brancardage
-  ["Brancard avec chariot, pied de perf et plan dur","SSUAP","Relevage / brancardage",1],
-  ["Brancard cuillère","SSUAP","Relevage / brancardage",1],["Chaise portoir pliante","SSUAP","Relevage / brancardage",1],
-  ["Portoir souple de transfert","SSUAP","Relevage / brancardage",1],["Sangle de relevage","SSUAP","Relevage / brancardage",1],
-  ["Sangle araignée","SSUAP","Relevage / brancardage",1],["Drap CH","SSUAP","Relevage / brancardage",2],
-  ["Drap à UU","SSUAP","Relevage / brancardage",1],["Couverture bactériostatique SDIS","SSUAP","Relevage / brancardage",1],
-  // Pansements
-  ["Couverture isothermique","SSUAP","Pansements",1],["Pansement israélien","SSUAP","Pansements",2],
-  ["Pansement compressif","SSUAP","Pansements",1],["Pansements absorbants","SSUAP","Pansements",2],
-  ["Garrot hémostatique d'urgence plat","SSUAP","Pansements",1],["Garrot tourniquet","SSUAP","Pansements",1],
-  ["Compresses gaze hémostatique","SSUAP","Pansements",2],["Compresses","SSUAP","Pansements",10],
-  ["Rouleau de sparadrap","SSUAP","Pansements",1],["Bande 5 cm","SSUAP","Pansements",2],
-  ["Bande 10 cm","SSUAP","Pansements",2],["Lot de filets tubulaires (T2, T4, T6)","SSUAP","Pansements",1],
-  ["Écharpes à UU","SSUAP","Pansements",2],["Poche de froid","SSUAP","Pansements",1],
-  ["Dosettes de savon liquide","SSUAP","Pansements",2],["Dosettes de chlorure de sodium","SSUAP","Pansements",5],
-  // Hygiène / protection
-  ["Gel hydroalcoolique","SSUAP","Hygiène / protection",1],["Masques chirurgicaux","SSUAP","Hygiène / protection",6],
-  ["Masques FFP2","SSUAP","Hygiène / protection",3],["Boîte de gants taille S","SSUAP","Hygiène / protection",1],
-  ["Boîte de gants taille M","SSUAP","Hygiène / protection",1],["Boîte de gants taille L","SSUAP","Hygiène / protection",1],
-  ["Boîte de gants taille XL","SSUAP","Hygiène / protection",1],["Sacs DASRI 15 litres","SSUAP","Hygiène / protection",3],
-  ["Sacs DASRI 30 litres","SSUAP","Hygiène / protection",2],["Vomibag","SSUAP","Hygiène / protection",2],
-  ["Cagoule d'évacuation","SSUAP","Hygiène / protection",1],["Kit protection risques biologiques","SSUAP","Hygiène / protection",2],
-  ["Visière de protection","SSUAP","Hygiène / protection",3],["Pulvérisateur solution désinfectante","SSUAP","Hygiène / protection",1],
-  ["Bombe bactéricide","SSUAP","Hygiène / protection",1],
-  // Kits spéciaux
-  ["Kit accouchement","SSUAP","Kits spéciaux",1],["Kit section de membre","SSUAP","Kits spéciaux",1],
-  ["Kit brûlure","SSUAP","Kits spéciaux",1],["Kit EPIPEN (DAI adulte + DAI pédia)","SSUAP","Kits spéciaux",1],
-  ["Kit perfusion + solutés","SSUAP","Kits spéciaux",1],["Kit AES (Dakin + cupule)","SSUAP","Kits spéciaux",1],
-  ["Kit Sinus","SSUAP","Kits spéciaux",1],["Kit Damage contrôle","SSUAP","Kits spéciaux",1],
-  // Équipement / balisage
-  ["Casque F2 Orange","SSUAP","Équipement personnel",3],["GHV (Gilet Haute Visibilité)","SSUAP","Équipement personnel",1],
-  ["Cône rétractable","SSUAP","Balisage",4],["Cales de roue","SSUAP","Balisage",2],
-  ["Bouée + corde flottante","SSUAP","Sauvetage aquatique",1],["Brise vitre","SSUAP","Désincarcération",1],
-  ["Housse mortuaire","SSUAP","Divers",1],["Bouteilles d'eau","SSUAP","Divers",4],
-  ["Portatif Antares","SSUAP","Communication",1],
-  ["Fiches réflexes opérationnelles","SSUAP","Documents",3],["Carnet fiche bilan secouriste","SSUAP","Documents",1],
-  // PROTECTION PERSONNELLE
-  ["Casque F1 pompier","PROTECTION","Casques",1],
-  ["Casque F2","PROTECTION","Casques",1],
-  ["Casque F2 Orange","PROTECTION","Casques",1],
-  ["Cagoule anti-feu","PROTECTION","Tenue feu",1],
-  ["Gants de feu","PROTECTION","Tenue feu",1],
-  ["Gants de déblai","PROTECTION","Tenue feu",1],
-  ["Gants chimiques","PROTECTION","Risque chimique",1],
-  ["Sur-pantalon feu","PROTECTION","Tenue feu",1],
-  ["Veste de feu","PROTECTION","Tenue feu",1],
-  ["Bottines de feu","PROTECTION","Tenue feu",1],
-  ["GHV (Gilet Haute Visibilité)","PROTECTION","Visibilité",1],
-  ["Gilet haute visibilité conducteur","PROTECTION","Visibilité",1],
-  ["Gilet haute visibilité C/A","PROTECTION","Visibilité",1],
-  ["Masque FFP2","PROTECTION","Protection respiratoire",1],
-  ["Masque chirurgical","PROTECTION","Protection respiratoire",6],
-  ["Lunettes de protection","PROTECTION","Protection visage",1],
-  ["Visière de protection","PROTECTION","Protection visage",1],
-  ["Boîte de gants taille S","PROTECTION","Gants médicaux",1],
-  ["Boîte de gants taille M","PROTECTION","Gants médicaux",1],
-  ["Boîte de gants taille L","PROTECTION","Gants médicaux",1],
-  ["Boîte de gants taille XL","PROTECTION","Gants médicaux",1],
-  ["Combinaison de protection","PROTECTION","Risque chimique",1],
-  ["Surbottes","PROTECTION","Risque chimique",1],
-  ["Kit protection risques biologiques","PROTECTION","Risque biologique",2],
-  ["Cagoule d'évacuation","PROTECTION","Évacuation",1],
-  ["Gel hydroalcoolique","PROTECTION","Hygiène",1],
-  ["Pulvérisateur solution désinfectante","PROTECTION","Hygiène",1],
-  ["Bombe bactéricide","PROTECTION","Hygiène",1],
-  // COMMUNICATION
-  ["Portatif Antares","COMMUNICATION","Radios",1],
-  ["Portatif TPH 900","COMMUNICATION","Radios",1],
-  ["Portable TETRAPOL","COMMUNICATION","Radios",1],
-  ["Kit radio (housse + harnais + micro)","COMMUNICATION","Accessoires radio",1],
-  ["Micro-casque radio","COMMUNICATION","Accessoires radio",1],
-  ["Chargeur de portatif","COMMUNICATION","Accessoires radio",1],
-  ["Baie de chargement radios","COMMUNICATION","Accessoires radio",1],
-  ["Badge télépéage","COMMUNICATION","Divers",1],
-  ["Support téléphone","COMMUNICATION","Divers",1],
-  ["Tablette tactile opérationnelle","COMMUNICATION","Divers",1],
-  ["Classeur cartographie","COMMUNICATION","Documents opérationnels",1],
-  ["Classeurs PI","COMMUNICATION","Documents opérationnels",1],
-  ["Fiches réflexes opérationnelles","COMMUNICATION","Documents opérationnels",3],
-  ["Carnet fiche bilan secouriste","COMMUNICATION","Documents opérationnels",1],
+  ["Sac prompt secours","SSUAP","Sac",1],["Bouteille O2 5 L","SSUAP","Oxygénothérapie",1],["Insufflateur adulte","SSUAP","Ventilation",1],
+  ["Masque haute concentration","SSUAP","Oxygénothérapie",1],["Masque BAVU","SSUAP","Ventilation",1],["Collier cervical","SSUAP","Immobilisation",1],
+  ["Couverture isothermique","SSUAP","Protection",1],["Pansement compressif","SSUAP","Pansements",1],["Compresses","SSUAP","Pansements",1],
+  ["Gel hydroalcoolique","SSUAP","Hygiène",1],["Poche de froid","SSUAP","Pansements",1],
   // SR
   ["Cisaille","SR","Désincarcération",1],["Écarteur","SR","Désincarcération",1],["Vérin","SR","Désincarcération",1],
   ["Cales de stabilisation","SR","Stabilisation",1],["Coupe-pédales","SR","Désincarcération",1],["Protection airbag","SR","Sécurité",1],
@@ -6094,71 +5010,21 @@ const FC_LIBRARY = [
   ["Pioche","DIVERS","Outillage",1],["Hache","DIVERS","Outillage",1],["Masse","DIVERS","Outillage",1]
 ].map(x => ({name:x[0], family:x[1], sub:x[2], qty:x[3]}));
 
-
 let fcVehicles = [
   {id:"fpt-53", category:"rolling", name:"FPT 53", plate:"GL-485-CL", type:"Fourgon pompe tonne"},
   {id:"fpt-go", category:"rolling", name:"FPT GO", plate:"GQ 311 JE", type:"Fourgon pompe tonne"},
   {id:"vsav-02", category:"rolling", name:"VSAV 02", plate:"AB-123-CD", type:"VSAV"},
   {id:"mpr-02", category:"equipment", name:"MPR 02", plate:"MAT-MPR-02", type:"Motopompe remorquable"}
-]; // Véhicules de base — complétés par Supabase
-
-const fcDefaultViews = [
-  {id:"gauche", label:"Côté gauche"},
-  {id:"arriere", label:"Arrière"},
-  {id:"droite", label:"Côté droit"},
-  {id:"avant", label:"Devant"},
-  {id:"interieur", label:"Intérieur"},
-  {id:"toit", label:"Toit"}
 ];
 
-// Vues personnalisées par véhicule, stockées en localStorage
-let fcVehicleViews = JSON.parse(localStorage.getItem("fc_vehicle_views") || "{}");
-
-// Sous-emplacements (sous-zones) par véhicule/zone : { vehicleId: { zoneId: ["Sous la banquette", ...] } }
-let fcSubZones = JSON.parse(localStorage.getItem("fc_subzones") || "{}");
-
-function fcSaveSubZones(){
-  localStorage.setItem("fc_subzones", JSON.stringify(fcSubZones));
-}
-
-function fcGetSubZones(vehicleId, zoneId){
-  fcSubZones[vehicleId] = fcSubZones[vehicleId] || {};
-  fcSubZones[vehicleId][zoneId] = fcSubZones[vehicleId][zoneId] || [];
-  return fcSubZones[vehicleId][zoneId];
-}
-
-// État replié/déplié de chaque emplacement (sous-zone), persisté localement
-let fcSubGroupCollapsed = JSON.parse(localStorage.getItem("fc_subgroup_collapsed") || "{}");
-
-function fcSubGroupCollapseKey(vehicleId, zoneId, subName){
-  return `${vehicleId}__${zoneId}__${subName}`;
-}
-
-function fcSaveSubGroupCollapsed(){
-  localStorage.setItem("fc_subgroup_collapsed", JSON.stringify(fcSubGroupCollapsed));
-}
-
-function fcSaveVehicleViews(){
-  localStorage.setItem("fc_vehicle_views", JSON.stringify(fcVehicleViews));
-}
-
-function fcGetViews(vehicleId){
-  // Si des vues personnalisées existent pour ce véhicule (ST a ajouté/renommé/supprimé des vues),
-  // on les utilise. Sinon, on retourne toujours les vues par défaut fraîches (dans le bon ordre).
-  const custom = fcVehicleViews[vehicleId];
-  if(custom && custom.length > 0){
-    // Vérifie si ce sont juste les vues par défaut copiées sans modification —
-    // dans ce cas on ignore le localStorage et on repart des defaults à jour.
-    const isDefaultCopy = custom.length === fcDefaultViews.length &&
-      custom.every((v, i) => v.id === fcDefaultViews[i].id);
-    if(isDefaultCopy) return fcDefaultViews.map(v => ({...v}));
-    return custom;
-  }
-  return fcDefaultViews.map(v => ({...v}));
-}
-
-// Compatibilité ascendante
-const fcViews = fcDefaultViews;
+const fcViews = [
+  {id:"droite", label:"Côté droit"},
+  {id:"arriere", label:"Arrière"},
+  {id:"gauche", label:"Côté gauche"},
+  {id:"toit", label:"Toit"},
+  {id:"avant", label:"Devant"},
+  {id:"interieur", label:"Intérieur"}
+];
 
 let fcState = {
   family:"INCENDIE",
@@ -6216,7 +5082,31 @@ let fcLayouts = {
   }
 };
 
-let fcInventory = []; // Chargé depuis Supabase
+let fcInventory = [
+  ["fpt-53","Cabine conducteur","Carte carburant","DIVERS",1],
+  ["fpt-53","Cabine conducteur","Clés gaz","DIVERS",1],
+  ["fpt-53","Cabine conducteur","Outil OFD","DIVERS",1],
+  ["fpt-53","Cabine conducteur","Boîte de craies","DIVERS",1],
+  ["fpt-53","Cabine conducteur","Rouleau de rubalise","DIVERS",1],
+  ["fpt-53","Cabine chef d’agrès","Portatif TPH 900","DIVERS",1],
+  ["fpt-53","Cabine chef d’agrès","Classeur cartographie","DIVERS",1],
+  ["fpt-53","Cabine chef d’agrès","Classeur PI","DIVERS",1],
+  ["fpt-53","Dévidoir arrière gauche","Tuyau Ø70 x40 m","INCENDIE",5],
+  ["fpt-53","Dévidoir arrière droit","Tuyau Ø70 x40 m","INCENDIE",5],
+  ["fpt-53","Pompe","Crépine","INCENDIE",1],
+  ["fpt-53","Pompe","Flotteur","INCENDIE",1],
+  ["fpt-53","Pompe","Collecteur d’alimentation","INCENDIE",1],
+  ["fpt-53","Rideau avant gauche","ARI complet avec masque","INCENDIE",2],
+  ["fpt-53","Rideau avant gauche","Bouteille ARI","INCENDIE",2],
+  ["fpt-53","Rideau arrière gauche","Division","INCENDIE",1],
+  ["fpt-53","Rideau arrière gauche","LDV 500","INCENDIE",1],
+  ["fpt-53","Rideau avant droit","Projecteur","DIVERS",2],
+  ["fpt-53","Rideau avant droit","Ventilateur","INCENDIE",1],
+  ["fpt-53","Rideau arrière droit","LSPCC","INCENDIE",1],
+  ["fpt-53","Rideau arrière droit","Cône de Lübeck","DIVERS",4],
+  ["fpt-53","Toit / échelles","Échelle à coulisse","INCENDIE",1],
+  ["fpt-53","Toit / échelles","Échelle à crochet","INCENDIE",1]
+].map((x,i)=>({id:"fc-"+i, vehicleId:x[0], zone:x[1], name:x[2], category:x[3], qty:x[4]}));
 
 function fcEnsureVehicle(vehicleId){
   if(!fcLayouts[vehicleId]){
@@ -6262,129 +5152,30 @@ function renderFcLibrary(){
   const q = (document.getElementById("fcSearch")?.value || "").toLowerCase();
   const items = FC_LIBRARY.filter(i => i.family === fcState.family).filter(i => i.name.toLowerCase().includes(q));
   const addButton = `<button class="btn primary fc-library-add" id="openLibraryItemDialog">+ Ajouter du matériel</button>`;
-
-  // Grouper par sous-catégorie
-  const groups = {};
-  items.forEach(i => {
-    const key = i.sub || "Autres";
-    if(!groups[key]) groups[key] = [];
-    groups[key].push(i);
-  });
-
-  const grouped = Object.entries(groups).sort(([a],[b]) => a.localeCompare(b, "fr"));
-
-  list.innerHTML = addButton + grouped.map(([subName, subItems]) => `
-    <div class="fc-lib-subcat-wrap" data-lib-target-sub="${fcEsc(subName)}">
-      <div class="fc-lib-subcat">${fcEsc(subName)}</div>
-      ${subItems.map(i => {
-        const libIdx = FC_LIBRARY.indexOf(i);
-        return `
-          <div class="fc-lib-item ${i.custom ? "fc-lib-custom" : ""}" draggable="true"
-               data-name="${fcEsc(i.name)}" data-family="${i.family}" data-sub="${fcEsc(i.sub)}"
-               data-qty="${i.qty}" data-lib-idx="${libIdx}">
-            <strong>${i.name}</strong>
-            <button class="fc-lib-edit-btn" data-lib-idx="${libIdx}" title="Modifier / déplacer" draggable="false">✏️</button>
-          </div>
-        `;
-      }).join("")}
+  list.innerHTML = addButton + items.map((i,idx)=>`
+    <div class="fc-lib-item ${i.custom ? "fc-lib-custom" : ""}" draggable="true" data-name="${fcEsc(i.name)}" data-family="${i.family}" data-sub="${fcEsc(i.sub)}" data-qty="${i.qty}">
+      <strong>${i.name}</strong>
+      <small>${i.family} · ${i.sub}</small>
     </div>
   `).join("");
-
   document.querySelectorAll(".fc-lib-item").forEach(el=>{
     el.ondragstart = e => {
-      e.dataTransfer.effectAllowed = "copyMove";
       e.dataTransfer.setData("application/json", JSON.stringify({
         name:el.dataset.name, family:el.dataset.family, sub:el.dataset.sub, qty:Number(el.dataset.qty || 1)
       }));
-      // Marque aussi le drag comme provenant de la bibliothèque interne
-      e.dataTransfer.setData("text/lib-idx", el.dataset.libIdx);
-    };
-  });
-
-  // Drag interne bibliothèque : déposer un item sur une autre sous-catégorie
-  document.querySelectorAll(".fc-lib-subcat-wrap").forEach(wrap => {
-    wrap.ondragover = e => {
-      // N'accepte que les drags depuis la bibliothèque (pas depuis les zones inventaire)
-      e.preventDefault();
-      wrap.classList.add("fc-lib-drop-over");
-    };
-    wrap.ondragleave = () => wrap.classList.remove("fc-lib-drop-over");
-    wrap.ondrop = e => {
-      wrap.classList.remove("fc-lib-drop-over");
-      const libIdxStr = e.dataTransfer.getData("text/lib-idx");
-      if(!libIdxStr) return; // drop depuis zone inventaire → ignoré ici
-      e.stopPropagation(); // empêche le drop d'être traité par les zones inventaire
-      const libIdx = parseInt(libIdxStr);
-      const item = FC_LIBRARY[libIdx];
-      if(!item) return;
-      const targetSub = wrap.dataset.libTargetSub;
-      if(item.sub === targetSub) return; // déjà dans cette sous-cat
-      item.sub = targetSub;
-      if(item.custom && typeof saveLibraryItemSupabase === "function") saveLibraryItemSupabase(item);
-      toast(`${item.name} déplacé vers « ${targetSub} »`);
-      renderFcLibrary();
-    };
-  });
-  document.querySelectorAll(".fc-lib-edit-btn").forEach(btn => {
-    btn.onclick = e => {
-      e.stopPropagation();
-      const idx = parseInt(btn.dataset.libIdx);
-      const item = FC_LIBRARY[idx];
-      if(!item) return;
-      openLibraryEditDialog(idx, item);
     };
   });
   const search = document.getElementById("fcSearch");
   if(search) search.oninput = renderFcLibrary;
 
-  // Drag & drop vers une autre catégorie (dépôt sur les onglets)
-  document.querySelectorAll(".fc-tab").forEach(tab => {
-    tab.ondragover = e => {
-      // Vérifie que c'est bien un item bibliothèque
-      if(e.dataTransfer.types.includes("application/json")){
-        e.preventDefault();
-        tab.classList.add("fc-tab-drop-target");
-      }
-    };
-    tab.ondragleave = () => tab.classList.remove("fc-tab-drop-target");
-    tab.ondrop = e => {
-      tab.classList.remove("fc-tab-drop-target");
-      e.preventDefault();
-      try{
-        const data = JSON.parse(e.dataTransfer.getData("application/json"));
-        const targetFamily = tab.dataset.fcFamily;
-        if(!data.name || !targetFamily) return;
-        if(data.family === targetFamily){ toast("Déjà dans cette catégorie"); return; }
-        // Trouver et déplacer dans FC_LIBRARY
-        const idx = FC_LIBRARY.findIndex(i => i.name === data.name && i.family === data.family && i.sub === data.sub);
-        if(idx >= 0){
-          FC_LIBRARY[idx] = {...FC_LIBRARY[idx], family: targetFamily};
-          fcState.family = targetFamily;
-          renderCheckSheets();
-          toast(`"${data.name}" déplacé vers ${targetFamily}`);
-        }
-      }catch(err){ console.error(err); }
-    };
-  });
-
   const addBtn = document.getElementById("openLibraryItemDialog");
   if(addBtn) addBtn.onclick = () => {
-    const dlg = document.getElementById("libraryItemDialog");
-    dlg.dataset.editIdx = "";
-    const title = dlg.querySelector("h2");
-    if(title) title.textContent = "Ajouter du matériel";
-    const saveBtn = document.getElementById("saveLibraryItem");
-    if(saveBtn) saveBtn.textContent = "Ajouter à la bibliothèque";
     document.getElementById("newLibraryItemFamily").value = fcState.family;
+    document.getElementById("newLibraryItemSub").value = "";
     document.getElementById("newLibraryItemName").value = "";
     document.getElementById("newLibraryItemQty").value = 1;
-    fcPopulateSubCatSelect(fcState.family);
-    dlg.showModal();
+    document.getElementById("libraryItemDialog").showModal();
   };
-
-  // Re-populate sub-categories when family changes
-  const familySel = document.getElementById("newLibraryItemFamily");
-  if(familySel) familySel.onchange = () => fcPopulateSubCatSelect(familySel.value);
 }
 
 function renderFcList(root){
@@ -6402,10 +5193,7 @@ function renderFcList(root){
           <p>${v.type}</p>
           <p><strong>${v.plate}</strong></p>
           <p>${count} matériels inventoriés</p>
-          <div class="fc-card-actions">
-            <button class="btn secondary fc-open" data-id="${v.id}">Ouvrir l’inventaire</button>
-            <button class="btn danger-outline fc-delete-inventory" data-id="${v.id}" title="Supprimer cet inventaire">🗑️</button>
-          </div>
+          <button class="btn secondary fc-open" data-id="${v.id}">Ouvrir l’inventaire</button>
         </article>`;
       }).join("")}
     </div>
@@ -6417,38 +5205,6 @@ function renderFcList(root){
       fcState.view = "gauche";
       fcEnsureVehicle(fcState.vehicleId);
       fcState.zone = (fcLayouts[fcState.vehicleId][fcState.view] || [])[0]?.id || "";
-      renderCheckSheets();
-    };
-  });
-
-  document.querySelectorAll(".fc-delete-inventory").forEach(btn=>{
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      const id = btn.dataset.id;
-      const v = fcVehicles.find(x => x.id === id);
-      if(!v) return;
-      const count = fcInventory.filter(i => i.vehicleId === id).length;
-      const msg = count > 0
-        ? `Supprimer "${v.name}" et ses ${count} matériels inventoriés ? Cette action est définitive.`
-        : `Supprimer l'inventaire "${v.name}" ? Cette action est définitive.`;
-      if(!confirm(msg)) return;
-
-      // Supprimer les items d'inventaire associés
-      const items = fcInventory.filter(i => i.vehicleId === id);
-      fcInventory = fcInventory.filter(i => i.vehicleId !== id);
-      items.forEach(i => { if(typeof deleteInventaireItemSupabase === "function") deleteInventaireItemSupabase(i.id); });
-
-      // Supprimer le véhicule lui-même
-      fcVehicles = fcVehicles.filter(x => x.id !== id);
-      if(typeof deleteVehicleSupabase === "function") deleteVehicleSupabase(id);
-
-      // Nettoyer layouts/photos/vues locales
-      delete fcLayouts[id];
-      delete fcPhotos[id];
-      delete fcVehicleViews[id];
-      fcSaveVehicleViews();
-
-      toast(`Inventaire "${v.name}" supprimé`);
       renderCheckSheets();
     };
   });
@@ -6483,14 +5239,8 @@ function renderFcDetail(root){
       </div>
     </div>
 
-    <div class="fc-view-tabs" id="fcViewTabs">
-      ${fcGetViews(vehicle.id).map(v=>`
-        <span class="fc-view-tab-wrap">
-          <button class="fc-view-tab ${v.id===fcState.view?"active":""}" data-view="${v.id}">${fcEsc(v.label)}</button>
-          <button class="fc-view-edit-btn" data-edit-view="${v.id}" title="Renommer / supprimer">✏️</button>
-        </span>
-      `).join("")}
-      <button class="fc-view-add-btn" id="fcAddView" title="Ajouter une vue">➕</button>
+    <div class="fc-view-tabs">
+      ${fcViews.map(v=>`<button class="fc-view-tab ${v.id===fcState.view?"active":""}" data-view="${v.id}">${v.label}</button>`).join("")}
     </div>
 
     <div class="fc-detail-grid">
@@ -6506,7 +5256,7 @@ function renderFcDetail(root){
           </div>
         </div>
         <div class="fc-photo-stage" id="fcPhotoStage" ${photo ? `style="background-image:url('${photo}')"` : ""}>
-          ${photo ? "" : `<div class="fc-placeholder"><div><span>📷</span><strong>${fcGetViews(vehicle.id).find(v=>v.id===fcState.view)?.label || ""}</strong><p>Importe une photo ou ajoute des zones.</p></div></div>`}
+          ${photo ? "" : `<div class="fc-placeholder"><div><span>📷</span><strong>${fcViews.find(v=>v.id===fcState.view)?.label}</strong><p>Importe une photo ou ajoute des zones.</p></div></div>`}
           ${zones.map(z=>`<div class="fc-zone ${z.id===fcState.zone?"active":""}" data-zone="${fcEsc(z.id)}" style="left:${z.x}%;top:${z.y}%;width:${z.w}%;height:${z.h}%">${z.label}<span class="resize"></span></div>`).join("")}
         </div>
         <div class="fc-actions">
@@ -6514,7 +5264,7 @@ function renderFcDetail(root){
           <input id="fcPhotoInput" type="file" accept="image/*">
           <button class="btn secondary" id="fcAddZone">+ Ajouter zone</button>
           <button class="btn ghost" id="fcDeleteZone">Supprimer zone</button>
-          <button class="btn primary" id="fcSaveLayoutBtn">Enregistrer le plan</button>
+          <button class="btn primary" onclick="toast('Plan enregistré dans le prototype')">Enregistrer le plan</button>
         </div>
       </div>
 
@@ -6522,62 +5272,13 @@ function renderFcDetail(root){
         <h3>Zone sélectionnée</h3>
         ${selectedZone ? `
           <input class="fc-zone-name" id="fcZoneName" value="${fcEsc(selectedZone.label)}">
-
-          <div class="fc-subzone-toolbar">
-            <input id="fcNewSubZone" placeholder="Nom du nouvel emplacement (ex: Sous la banquette)">
-            <button class="btn secondary" id="fcAddSubZone">+ Créer un emplacement</button>
-          </div>
-
           <div class="fc-zone-drop" id="fcDrop">
-            ${(() => {
-              const definedSubs = fcGetSubZones(vehicle.id, selectedZone.id);
-              const itemSubs = [...new Set(zoneItems.map(i => i.subLocation || "").filter(Boolean))];
-              const allSubs = [...new Set([...definedSubs, ...itemSubs])];
-
-              const renderGroup = (subName, items) => {
-                const collapseKey = fcSubGroupCollapseKey(vehicle.id, selectedZone.id, subName);
-                const isCollapsed = fcSubGroupCollapsed[collapseKey] === true;
-                return `
-                <div class="fc-sub-group ${isCollapsed ? "is-collapsed" : ""}" data-subzone-drop="${fcEsc(subName)}">
-                  <div class="fc-sub-group-head">
-                    <button class="fc-sub-toggle" data-sub-toggle="${fcEsc(subName)}" title="${isCollapsed ? "Déplier" : "Replier"}">${isCollapsed ? "▸" : "▾"}</button>
-                    <span>${subName ? fcEsc(subName) : "Emplacement général"}</span>
-                    <small class="fc-sub-count">${items.length} matériel${items.length===1?"":"s"}</small>
-                    ${subName ? `
-                      <button class="fc-sub-move-up" data-sub-move="${fcEsc(subName)}" data-sub-dir="up" title="Monter">↑</button>
-                      <button class="fc-sub-move-down" data-sub-move="${fcEsc(subName)}" data-sub-dir="down" title="Descendre">↓</button>
-                      <button class="fc-sub-rename" data-sub-rename="${fcEsc(subName)}" title="Renommer">✏️</button>
-                      <button class="fc-sub-delete" data-sub-delete="${fcEsc(subName)}" title="Supprimer">🗑️</button>
-                    ` : ""}
-                  </div>
-                  <div class="fc-sub-group-body">
-                    ${items.length ? items.map(i=>`
-                      <div class="fc-zone-item" draggable="true" data-move-item="${i.id}">
-                        <div><strong>${i.name}</strong><small>${i.category || "Sans catégorie"}</small></div>
-                        <div class="fc-item-controls" draggable="false">
-                          ${!subName && fcGetSubZones(vehicle.id, selectedZone.id).length ? `
-                            <select class="fc-move-select" data-move-item-to="${i.id}" draggable="false">
-                              <option value="">Déplacer vers…</option>
-                              ${fcGetSubZones(vehicle.id, selectedZone.id).map(s => `<option value="${fcEsc(s)}">${fcEsc(s)}</option>`).join("")}
-                            </select>
-                          ` : ""}
-                          <input type="number" min="1" value="${i.qty}" data-qty="${i.id}" draggable="false">
-                          <button class="delete-mini" data-delete="${i.id}" draggable="false">Suppr.</button>
-                        </div>
-                      </div>`).join("") : `<div class="fc-sub-empty">Glisse du matériel ici${subName ? "" : " depuis la bibliothèque"}.</div>`}
-                  </div>
-                  ${isCollapsed ? `<div class="fc-sub-collapsed-drop-hint">Dépose ici pour ajouter à « ${subName ? fcEsc(subName) : "Emplacement général"} »</div>` : ""}
-                </div>
-              `;};
-
-              const generalItems = zoneItems.filter(i => !(i.subLocation || ""));
-              let html = renderGroup("", generalItems);
-              allSubs.forEach(sub => {
-                const items = zoneItems.filter(i => (i.subLocation || "") === sub);
-                html += renderGroup(sub, items);
-              });
-              return html;
-            })()}
+            ${zoneItems.length ? zoneItems.map(i=>`
+              <div class="fc-zone-item">
+                <div><strong>${i.name}</strong><small>${i.category || "Sans catégorie"}</small></div>
+                <input type="number" min="1" value="${i.qty}" data-qty="${i.id}">
+                <button class="delete-mini" data-delete="${i.id}">Suppr.</button>
+              </div>`).join("") : `<div class="fc-empty">Glisse ici du matériel depuis la bibliothèque.</div>`}
           </div>
         ` : `<div class="fc-empty">Aucune zone sur cette vue. Clique sur “Ajouter zone”.</div>`}
       </aside>
@@ -6586,100 +5287,23 @@ function renderFcDetail(root){
 
   root.querySelector(".fc-back").onclick = () => { fcState.mode = "list"; renderCheckSheets(); };
 
-
-
   document.querySelectorAll(".fc-view-tab").forEach(btn=>{
     btn.onclick = () => {
       fcState.view = btn.dataset.view;
-      fcEnsureVehicle(vehicle.id);
       fcState.zone = (fcLayouts[vehicle.id][fcState.view] || [])[0]?.id || "";
       renderCheckSheets();
     };
   });
 
-  // Ajouter une nouvelle vue
-  const addViewBtn = document.getElementById("fcAddView");
-  if(addViewBtn) addViewBtn.onclick = () => {
-    const label = prompt("Nom de la nouvelle vue (ex: Dessous, Échelle, Coffre cabine...)");
-    if(!label || !label.trim()) return;
-    const id = label.trim().toLowerCase().replace(/[^a-z0-9]+/g,"-") + "-" + Date.now().toString(36);
-    const views = fcGetViews(vehicle.id);
-    views.push({id, label: label.trim()});
-    fcSaveVehicleViews();
-    fcEnsureVehicle(vehicle.id);
-    if(!fcLayouts[vehicle.id][id]) fcLayouts[vehicle.id][id] = [];
-    if(!fcPhotos[vehicle.id]) fcPhotos[vehicle.id] = {};
-    fcState.view = id;
-    fcState.zone = "";
-    if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
-    renderCheckSheets();
-    toast(`Vue "${label.trim()}" ajoutée`);
-  };
-
-  // Renommer / supprimer une vue
-  document.querySelectorAll("[data-edit-view]").forEach(btn => {
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      const viewId = btn.dataset.editView;
-      const views = fcGetViews(vehicle.id);
-      const view = views.find(v => v.id === viewId);
-      if(!view) return;
-
-      const action = prompt(
-        `Vue "${view.label}" :\n\nTape un nouveau nom pour la renommer,\nou tape SUPPRIMER pour la retirer.`,
-        view.label
-      );
-      if(action === null) return;
-
-      if(action.trim().toUpperCase() === "SUPPRIMER"){
-        if(views.length <= 1){
-          toast("Impossible de supprimer la dernière vue");
-          return;
-        }
-        if(!confirm(`Supprimer définitivement la vue "${view.label}" ?`)) return;
-        const idx = views.findIndex(v => v.id === viewId);
-        views.splice(idx, 1);
-        fcSaveVehicleViews();
-        if(fcState.view === viewId){
-          fcState.view = views[0].id;
-          fcState.zone = (fcLayouts[vehicle.id][fcState.view] || [])[0]?.id || "";
-        }
-        if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
-        renderCheckSheets();
-        toast("Vue supprimée");
-      } else if(action.trim() && action.trim() !== view.label){
-        view.label = action.trim();
-        fcSaveVehicleViews();
-        if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
-        renderCheckSheets();
-        toast("Vue renommée");
-      }
-    };
-  });
-
   document.querySelectorAll(".fc-zone").forEach(el=>fcZoneEvents(el, vehicle.id));
-
-  const saveLayoutBtn = document.getElementById("fcSaveLayoutBtn");
-  if(saveLayoutBtn) saveLayoutBtn.onclick = () => {
-    if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
-    toast("Plan enregistré");
-  };
 
   const photoInput = document.getElementById("fcPhotoInput");
   if(photoInput){
-    photoInput.onchange = async e => {
+    photoInput.onchange = e => {
       const file = e.target.files[0];
       if(!file) return;
-      try{
-        const value = await compressImageV32(file, 1400, 0.75);
-        fcPhotos[vehicle.id][fcState.view] = value;
-        if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
-        renderCheckSheets();
-        toast("Photo de vue enregistrée");
-      }catch(err){
-        console.error(err);
-        toast("Impossible d’enregistrer cette photo");
-      }
+      fcPhotos[vehicle.id][fcState.view] = URL.createObjectURL(file);
+      renderCheckSheets();
     };
   }
 
@@ -6687,19 +5311,14 @@ function renderFcDetail(root){
     const z = {id:"Nouvelle zone " + Date.now(), label:"Nouvelle zone", x:30, y:30, w:22, h:18};
     fcLayouts[vehicle.id][fcState.view].push(z);
     fcState.zone = z.id;
-    if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
     renderCheckSheets();
   };
 
   document.getElementById("fcDeleteZone").onclick = () => {
     if(!fcState.zone) return;
-    const deletedZoneId = fcState.zone;
     fcLayouts[vehicle.id][fcState.view] = fcLayouts[vehicle.id][fcState.view].filter(z => z.id !== fcState.zone);
-    const removedItems = fcInventory.filter(i => i.vehicleId === vehicle.id && i.zone === deletedZoneId);
-    fcInventory = fcInventory.filter(i => !(i.vehicleId === vehicle.id && i.zone === deletedZoneId));
-    removedItems.forEach(i => { if(typeof deleteInventaireItemSupabase === "function") deleteInventaireItemSupabase(i.id); });
+    fcInventory = fcInventory.filter(i => !(i.vehicleId === vehicle.id && i.zone === fcState.zone));
     fcState.zone = (fcLayouts[vehicle.id][fcState.view] || [])[0]?.id || "";
-    if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
     renderCheckSheets();
   };
 
@@ -6711,195 +5330,36 @@ function renderFcDetail(root){
       const old = z.id;
       z.id = zoneName.value;
       z.label = zoneName.value;
-      const affected = fcInventory.filter(i => i.vehicleId === vehicle.id && i.zone === old);
-      affected.forEach(i => {
-        i.zone = z.id;
-        if(typeof saveInventaireItemSupabase === "function") saveInventaireItemSupabase(i);
-      });
+      fcInventory.forEach(i => { if(i.vehicleId === vehicle.id && i.zone === old) i.zone = z.id; });
       fcState.zone = z.id;
-      if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
       renderCheckSheets();
     };
   }
 
-  // Glisser-déposer par groupe (Emplacement général + emplacements précis)
-  document.querySelectorAll("[data-subzone-drop]").forEach(group => {
-    const subName = group.dataset.subzoneDrop;
-    group.ondragover = e => { e.preventDefault(); group.classList.add("drag-over"); };
-    group.ondragleave = () => group.classList.remove("drag-over");
-    group.ondrop = e => {
+  const drop = document.getElementById("fcDrop");
+  if(drop){
+    drop.ondragover = e => { e.preventDefault(); drop.classList.add("drag-over"); };
+    drop.ondragleave = () => drop.classList.remove("drag-over");
+    drop.ondrop = e => {
       e.preventDefault();
-      group.classList.remove("drag-over");
-      let data;
-      try{ data = JSON.parse(e.dataTransfer.getData("application/json")); }catch(err){ return; }
-
-      if(data.moveItemId){
-        // Déplacer un matériel existant vers cet emplacement
-        const item = fcInventory.find(i => i.id === data.moveItemId);
-        if(item && (item.subLocation || "") !== subName){
-          item.subLocation = subName;
-          if(typeof saveInventaireItemSupabase === "function") saveInventaireItemSupabase(item);
-          renderCheckSheets();
-        }
-        return;
-      }
-
-      // Nouveau matériel depuis la bibliothèque
-      const subZones = fcGetSubZones(vehicle.id, selectedZone.id);
-      const placeItem = (targetSub) => {
-        const newItem = {id:"fcitem-" + Date.now(), vehicleId:vehicle.id, zone:fcState.zone, name:data.name, category:data.family, qty:data.qty || 1, subLocation:targetSub};
-        fcInventory.push(newItem);
-        if(typeof saveInventaireItemSupabase === "function") saveInventaireItemSupabase(newItem);
-        toast(`${data.name} ajouté${targetSub ? " à «\u00a0" + targetSub + "\u00a0»" : " à " + fcState.zone}`);
-        renderCheckSheets();
-      };
-
-      // Si on dépose sur l'emplacement général mais que des emplacements précis existent,
-      // demander où placer l'article
-      if(!subName && subZones.length > 0){
-        openSubZonePlacementDialogV37(data, subZones, placeItem);
-      } else {
-        placeItem(subName);
-      }
-    };
-  });
-
-  // Déplacer un matériel vers un emplacement précis via le menu déroulant
-  document.querySelectorAll("[data-move-item-to]").forEach(sel => {
-    sel.onchange = () => {
-      const targetSub = sel.value;
-      if(!targetSub) return;
-      const itemId = sel.dataset.moveItemTo;
-      const item = fcInventory.find(i => i.id === itemId);
-      if(item){
-        item.subLocation = targetSub;
-        if(typeof saveInventaireItemSupabase === "function") saveInventaireItemSupabase(item);
-      }
+      drop.classList.remove("drag-over");
+      const item = JSON.parse(e.dataTransfer.getData("application/json"));
+      fcInventory.push({id:"fcitem-" + Date.now(), vehicleId:vehicle.id, zone:fcState.zone, name:item.name, category:item.family, qty:item.qty || 1});
+      toast(`${item.name} ajouté à ${fcState.zone}`);
       renderCheckSheets();
-    };
-  });
-
-  // Monter / descendre un emplacement précis
-  document.querySelectorAll("[data-sub-move]").forEach(btn => {
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      const subName = btn.dataset.subMove;
-      const dir = btn.dataset.subDir;
-      const subZones = fcGetSubZones(vehicle.id, selectedZone.id);
-      const idx = subZones.indexOf(subName);
-      if(idx === -1) return;
-      if(dir === "up" && idx > 0){
-        subZones.splice(idx, 1);
-        subZones.splice(idx - 1, 0, subName);
-      } else if(dir === "down" && idx < subZones.length - 1){
-        subZones.splice(idx, 1);
-        subZones.splice(idx + 1, 0, subName);
-      }
-      fcSaveSubZones();
-      if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
-      renderCheckSheets();
-    };
-  });
-
-  // Glisser un matériel déjà placé pour le déplacer entre emplacements
-  document.querySelectorAll("[data-move-item]").forEach(el => {
-    el.ondragstart = e => {
-      e.dataTransfer.effectAllowed = "move";
-      e.dataTransfer.setData("application/json", JSON.stringify({moveItemId: el.dataset.moveItem}));
-    };
-  });
-
-  // Replier / déplier un emplacement (le glisser-déposer reste actif même replié)
-  document.querySelectorAll("[data-sub-toggle]").forEach(btn => {
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      const subName = btn.dataset.subToggle;
-      const key = fcSubGroupCollapseKey(vehicle.id, selectedZone.id, subName);
-      fcSubGroupCollapsed[key] = !fcSubGroupCollapsed[key];
-      fcSaveSubGroupCollapsed();
-      renderCheckSheets();
-    };
-  });
-
-  // Créer un nouvel emplacement précis (sous-zone) — vide, prêt à recevoir du matériel
-  const addSubZoneBtn = document.getElementById("fcAddSubZone");
-  const newSubZoneInput = document.getElementById("fcNewSubZone");
-  if(addSubZoneBtn){
-    addSubZoneBtn.onclick = () => {
-      const name = (newSubZoneInput?.value || "").trim();
-      if(!name){ toast("Indique un nom pour ce nouvel emplacement"); return; }
-      const subs = fcGetSubZones(vehicle.id, fcState.zone);
-      if(subs.includes(name)){ toast("Cet emplacement existe déjà"); return; }
-      subs.push(name);
-      fcSaveSubZones();
-      if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
-      if(newSubZoneInput) newSubZoneInput.value = "";
-      renderCheckSheets();
-      toast(`Emplacement "${name}" créé`);
     };
   }
-
-  // Renommer un emplacement précis (déplace tous les matériels associés)
-  document.querySelectorAll("[data-sub-rename]").forEach(btn => {
-    btn.onclick = () => {
-      const oldName = btn.dataset.subRename;
-      const newName = prompt(`Renommer l'emplacement "${oldName}" en :`, oldName);
-      if(newName === null || !newName.trim() || newName.trim() === oldName) return;
-      const trimmed = newName.trim();
-      const subs = fcGetSubZones(vehicle.id, fcState.zone);
-      const idx = subs.indexOf(oldName);
-      if(idx >= 0) subs[idx] = trimmed; else subs.push(trimmed);
-      fcInventory.forEach(i => {
-        if(i.vehicleId === vehicle.id && i.zone === fcState.zone && (i.subLocation || "") === oldName){
-          i.subLocation = trimmed;
-          if(typeof saveInventaireItemSupabase === "function") saveInventaireItemSupabase(i);
-        }
-      });
-      fcSaveSubZones();
-      if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
-      renderCheckSheets();
-    };
-  });
-
-  // Supprimer un emplacement précis (les matériels repassent en Emplacement général)
-  document.querySelectorAll("[data-sub-delete]").forEach(btn => {
-    btn.onclick = () => {
-      const name = btn.dataset.subDelete;
-      const count = fcInventory.filter(i => i.vehicleId === vehicle.id && i.zone === fcState.zone && (i.subLocation || "") === name).length;
-      const msg = count > 0
-        ? `Supprimer l'emplacement "${name}" ? ${count} matériel(s) repasseront dans "Emplacement général".`
-        : `Supprimer l'emplacement "${name}" ?`;
-      if(!confirm(msg)) return;
-      const subs = fcGetSubZones(vehicle.id, fcState.zone);
-      const idx = subs.indexOf(name);
-      if(idx >= 0) subs.splice(idx, 1);
-      fcInventory.forEach(i => {
-        if(i.vehicleId === vehicle.id && i.zone === fcState.zone && (i.subLocation || "") === name){
-          i.subLocation = "";
-          if(typeof saveInventaireItemSupabase === "function") saveInventaireItemSupabase(i);
-        }
-      });
-      fcSaveSubZones();
-      if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
-      renderCheckSheets();
-    };
-  });
 
   document.querySelectorAll("[data-delete]").forEach(btn=>{
     btn.onclick = () => {
-      const deletedId = btn.dataset.delete;
-      fcInventory = fcInventory.filter(i => i.id !== deletedId);
-      if(typeof deleteInventaireItemSupabase === "function") deleteInventaireItemSupabase(deletedId);
+      fcInventory = fcInventory.filter(i => i.id !== btn.dataset.delete);
       renderCheckSheets();
     };
   });
   document.querySelectorAll("[data-qty]").forEach(input=>{
     input.onchange = () => {
       const item = fcInventory.find(i => i.id === input.dataset.qty);
-      if(item){
-        item.qty = Number(input.value || 1);
-        if(typeof saveInventaireItemSupabase === "function") saveInventaireItemSupabase(item);
-      }
+      if(item) item.qty = Number(input.value || 1);
       renderCheckSheets();
     };
   });
@@ -6948,43 +5408,12 @@ function fcZoneEvents(el, vehicleId){
   function end(){
     document.onmousemove = null;
     document.onmouseup = null;
-    if(mode && typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicleId);
     mode = null;
   }
   el.onmousedown = e => begin(e, false);
   const resize = el.querySelector(".resize");
   if(resize) resize.onmousedown = e => begin(e, true);
 }
-
-function fcOpenLightbox(src, alt){
-  let lb = document.getElementById("fcLightbox");
-  if(!lb){
-    lb = document.createElement("div");
-    lb.id = "fcLightbox";
-    lb.className = "fc-lightbox";
-    lb.innerHTML = '<button class="fc-lightbox-close" id="fcLightboxClose">×</button><img id="fcLightboxImg">';
-    document.body.appendChild(lb);
-    lb.addEventListener("click", e => {
-      if(e.target === lb || e.target.id === "fcLightboxClose") lb.style.display = "none";
-    });
-  }
-  document.getElementById("fcLightboxImg").src = src;
-  document.getElementById("fcLightboxImg").alt = alt || "";
-  lb.style.display = "flex";
-}
-
-// Délégation globale pour ouvrir le lightbox au clic sur les aperçus photo
-document.addEventListener("click", e => {
-  const preview = e.target.closest(".media-preview-v30, .media-preview-v31, .zone-detail-photo.has-photo");
-  if(preview){
-    const img = preview.querySelector("img");
-    if(img && img.src) fcOpenLightbox(img.src, img.alt);
-    else if(preview.style.backgroundImage){
-      const url = preview.style.backgroundImage.replace(/url\(['"]?(.+?)['"]?\)/,'$1');
-      if(url) fcOpenLightbox(url, "");
-    }
-  }
-});
 
 function fcEsc(value){
   return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
@@ -7001,15 +5430,13 @@ function fcBindCreate(){
     save.onclick = () => {
       const name = document.getElementById("fcNewName").value || "Nouvel inventaire";
       const id = name.toLowerCase().replace(/[^a-z0-9]+/g,"-") + "-" + Date.now();
-      const newVehicle = {
+      fcVehicles.push({
         id,
         category:document.getElementById("fcNewCategory").value,
         name,
         type:document.getElementById("fcNewType").value || "À définir",
         plate:document.getElementById("fcNewPlate").value || "À définir"
-      };
-      fcVehicles.push(newVehicle);
-      if(typeof saveVehicleSupabase === "function") saveVehicleSupabase(newVehicle);
+      });
       fcState.category = document.getElementById("fcNewCategory").value;
       fcState.vehicleId = id;
       fcState.mode = "detail";
@@ -7024,106 +5451,14 @@ function fcBindCreate(){
 fcBindCreate();
 
 
-/* V33 - feuille d'impression unifiée : QR réel + photos + données complètes */
-
-function openSubZonePlacementDialogV37(data, subZones, callback){
-  let dialog = document.getElementById("subZonePlacementDialogV37");
-  if(!dialog){
-    dialog = document.createElement("dialog");
-    dialog.id = "subZonePlacementDialogV37";
-    dialog.className = "dialog";
-    document.body.appendChild(dialog);
-  }
-
-  dialog.innerHTML = `
-    <div class="modal">
-      <div class="modal-head">
-        <div>
-          <p class="eyebrow">Placement du matériel</p>
-          <h2>${fcEsc(data.name)}</h2>
-        </div>
-        <button class="round" id="closePlacementDialogV37">×</button>
-      </div>
-      <p class="muted">Dans quel emplacement veux-tu placer ce matériel ?</p>
-      <div class="placement-choices">
-        <button class="btn ghost full placement-choice" data-sub="">Emplacement général</button>
-        ${subZones.map(s => `<button class="btn secondary full placement-choice" data-sub="${fcEsc(s)}">${fcEsc(s)}</button>`).join("")}
-      </div>
-    </div>
-  `;
-
-  dialog.querySelector("#closePlacementDialogV37").onclick = () => dialog.close();
-  dialog.querySelectorAll(".placement-choice").forEach(btn => {
-    btn.onclick = () => {
-      callback(btn.dataset.sub);
-      dialog.close();
-    };
-  });
-
-  dialog.showModal();
-}
-
-function renderStepTwoCols(items){
-  const groups = {};
-  items.forEach(item => {
-    const key = item.subLocation || "";
-    (groups[key] = groups[key] || []).push(item);
-  });
-  // Respecte l'ordre défini par l'utilisateur dans fcSubZones (↑↓)
-  const vehicleId = Object.keys(groups).length ? null : null;
-  const allSubZones = (() => {
-    // Trouve le vehicleId et zoneId depuis fcSubZones pour respecter l'ordre
-    for(const vid in fcSubZones){
-      for(const zid in fcSubZones[vid]){
-        const zoneSubList = fcSubZones[vid][zid];
-        const hasMatch = Object.keys(groups).filter(k => k !== "").every(k => zoneSubList.includes(k));
-        if(hasMatch && zoneSubList.length > 0) return zoneSubList;
-      }
-    }
-    return [];
-  })();
-  const orderedKeys = (() => {
-    const keys = Object.keys(groups);
-    const general = keys.filter(k => k === "");
-    const named = keys.filter(k => k !== "");
-    // Tri selon l'ordre de fcSubZones si disponible, sinon alphabétique
-    if(allSubZones.length){
-      named.sort((a,b) => {
-        const ia = allSubZones.indexOf(a);
-        const ib = allSubZones.indexOf(b);
-        return (ia === -1 ? 9999 : ia) - (ib === -1 ? 9999 : ib);
-      });
-    } else {
-      named.sort((a,b) => a.localeCompare(b));
-    }
-    return [...general, ...named];
-  })();
-  const onlyGeneral = orderedKeys.length === 1 && orderedKeys[0] === "";
-
-  const allRows = [];
-  orderedKeys.forEach(key => {
-    if(!onlyGeneral){
-      allRows.push('<tr class="print-subloc-row"><td colspan="3">' + (key ? fcEsc(key) : "Emplacement général") + "</td></tr>");
-    }
-    groups[key].forEach(item => {
-      allRows.push("<tr><td>" + fcEsc(item.name) + '</td><td class="print-col-qty">' + fcEsc(String(item.qty)) + '</td><td class="print-col-check"></td></tr>');
-    });
-  });
-
-  const mid = Math.ceil(allRows.length / 2);
-  const leftRows = allRows.slice(0, mid);
-  const rightRows = allRows.slice(mid);
-
-  const makeTable = (rows) => rows.length
-    ? '<table class="print-table"><thead><tr><th>Désignation</th><th class="print-col-qty">Qté</th><th class="print-col-check">✓</th></tr></thead><tbody>' + rows.join("") + "</tbody></table>"
-    : "";
-
-  return '<div class="print-step-two-cols">' + makeTable(leftRows) + makeTable(rightRows) + "</div>";
-}
+/* V13 - impression inventaire + amélioration ajout bibliothèque sans drag obligatoire */
 
 function fcPrintInventory(){
   const vehicle = fcVehicles.find(v => v.id === fcState.vehicleId);
-  if(!vehicle){ toast("Aucun inventaire sélectionné"); return; }
+  if(!vehicle){
+    toast("Aucun véhicule sélectionné");
+    return;
+  }
 
   const allItems = fcInventory.filter(i => i.vehicleId === vehicle.id);
   let printArea = document.getElementById("printArea");
@@ -7135,173 +5470,162 @@ function fcPrintInventory(){
   }
 
   const updated = new Date().toLocaleDateString("fr-FR");
-  const cisName = localStorage.getItem("fc_cis_name") || "CIS Château-Gontier";
-  const structure = getInventoryStepStructureV30(vehicle);
-  const coverPhoto = getMediaV30(vehicle.id, "cover")
-    || fcPhotos?.[vehicle.id]?.avant
-    || fcPhotos?.[vehicle.id]?.gauche
-    || "";
+  const photo = fcPhotos?.[vehicle.id]?.avant || fcPhotos?.[vehicle.id]?.gauche || fcPhotos?.[vehicle.id]?.arriere || "";
+
+  const printStructure = [
+    {
+      title:"CABINE",
+      subtitle:"Contrôle intérieur et accès opérationnels",
+      steps:[
+        {name:"Cabine avant", aliases:["Cabine conducteur","Cabine chef d’agrès","Cabine chef d'agres","Cabine avant","Cabine avant gauche","Cabine avant droite"]},
+        {name:"Cabine arrière", aliases:["Cabine arrière","Cabine arriere","Cabine arrière gauche","Cabine arrière droite"]}
+      ]
+    },
+    {
+      title:"CÔTÉ DROIT",
+      subtitle:"Contrôle des rideaux et coffres côté droit",
+      steps:[
+        {name:"Rideau avant droit", aliases:["Rideau avant droit","Rideau av. D"]},
+        {name:"Rideau arrière droit", aliases:["Rideau arrière droit","Rideau ar. D"]},
+        {name:"Coffre arrière droit", aliases:["Coffre arrière droit","Coffre bas droit"]}
+      ]
+    },
+    {
+      title:"ARRIÈRE",
+      subtitle:"Pompe, tableau de commande et dévidoirs",
+      steps:[
+        {name:"Compartiment pompe", aliases:["Pompe","Tableau de commande pompe","Rideau arrière"]},
+        {name:"Dévidoir gauche", aliases:["Dévidoir arrière gauche"]},
+        {name:"Dévidoir droit", aliases:["Dévidoir arrière droit"]},
+        {name:"Échelles arrière", aliases:["Échelles arrière / toit"]}
+      ]
+    },
+    {
+      title:"CÔTÉ GAUCHE",
+      subtitle:"Contrôle des rideaux et coffres côté gauche",
+      steps:[
+        {name:"Rideau avant gauche", aliases:["Rideau avant gauche","Rideau av. G"]},
+        {name:"Rideau arrière gauche", aliases:["Rideau arrière gauche","Rideau ar. G"]},
+        {name:"Coffre arrière gauche", aliases:["Coffre arrière gauche","Coffre bas gauche"]}
+      ]
+    },
+    {
+      title:"TOIT",
+      subtitle:"Échelles et matériel de toit",
+      steps:[
+        {name:"Échelles et matériel de toit", aliases:["Toit","Toit / échelles","Échelles de toit","Équipements de toit"]}
+      ]
+    }
+  ];
 
   const usedIds = new Set();
   const getItemsForStep = (aliases) => {
-    const lower = aliases.map(a => String(a).toLowerCase());
+    const cleanAliases = aliases.map(a => a.toLowerCase());
     return allItems.filter(item => {
-      const ok = lower.some(a => String(item.zone || "").toLowerCase() === a);
-      if(ok) usedIds.add(item.id);
-      return ok;
+      const zone = String(item.zone || "").toLowerCase();
+      const match = cleanAliases.some(a => zone === a.toLowerCase());
+      if(match) usedIds.add(item.id);
+      return match;
     });
   };
+
+  // Ajoute les zones non classées à la fin si besoin, pour ne rien perdre
+  const unclassified = allItems.filter(i => !usedIds.has(i.id));
 
   let stepCounter = 1;
   const renderStep = (step) => {
     const items = getItemsForStep(step.aliases);
-    const photo = getMediaV30(vehicle.id, `step:${step.name}`)
-      || step.aliases.map(a => getMediaV30(vehicle.id, `step:${a}`)).find(Boolean)
-      || "";
+    const photoLabel = `Emplacement photo — ${step.name}`;
     return `
       <section class="print-step">
         <div class="print-step-head">
           <div class="print-step-number">ÉTAPE ${stepCounter++}</div>
-          <div class="print-step-name">${fcEsc(step.name)}</div>
-          <div class="print-step-count">${items.length} matériel${items.length === 1 ? "" : "s"}</div>
+          <div class="print-step-name">${step.name}</div>
         </div>
-
-        ${photo ? `
-          <div class="print-step-photo-top">
-            <img src="${photo}" alt="Photo ${fcEsc(step.name)}">
-            <span class="print-step-photo-label">${fcEsc(step.name)}</span>
+        <div class="print-photo-placeholder">${photoLabel}</div>
+        ${items.length ? `
+          <div class="print-items-list">
+            ${items.map(item => `
+              <div class="print-item-line">
+                <strong>${fcEsc(item.name)}</strong>
+                <span>×${item.qty}</span>
+              </div>
+            `).join("")}
           </div>
-        ` : ""}
-
-        <div class="print-step-table-wrap">
-          ${items.length ? renderStepTwoCols(items) : `<div class="print-empty-step"><em>Aucun matériel renseigné pour cette zone.</em></div>`}
-        </div>
+        ` : `<div class="print-empty-step">Aucun matériel renseigné pour le moment. Emplacement prévu pour compléter l’inventaire.</div>`}
       </section>
     `;
   };
 
-  const unclassified = allItems.filter(i => !usedIds.has(i.id));
-  const totalItems = allItems.length;
-
   printArea.innerHTML = `
     <div class="print-page">
-
-      <!-- COUVERTURE -->
       <section class="print-cover">
-        <div class="print-cover-head">
-          <div class="print-cover-cis">${fcEsc(cisName)}</div>
-          <div class="print-cover-title">
-            <h1>${fcEsc(vehicle.name)}</h1>
-            <p>${fcEsc(vehicle.type || "")}${vehicle.plate ? " · " + fcEsc(vehicle.plate) : ""}</p>
+        <div class="print-titlebar">
+          <div>
+            <h1>Inventaire ${vehicle.name}</h1>
+            <p>Classeur de vérification journalière — FireCheck</p>
           </div>
-          <div class="print-cover-update">Mis à jour le ${updated}</div>
+          <div class="print-update">Mise à jour : ${updated}</div>
         </div>
 
-        <div class="print-cover-main">
-          <div class="print-cover-photo ${coverPhoto ? "has-photo" : ""}">
-            ${coverPhoto ? `<img src="${coverPhoto}" alt="Photo ${fcEsc(vehicle.name)}">` : `<span>📷 Photo de couverture</span>`}
+        <div class="print-vehicle-block">
+          <div class="print-info-grid">
+            <div class="print-info-item"><span>Véhicule</span><strong>${vehicle.name}</strong></div>
+            <div class="print-info-item"><span>Immatriculation</span><strong>${vehicle.plate}</strong></div>
+            <div class="print-info-item"><span>Type</span><strong>${vehicle.type}</strong></div>
           </div>
-          <div class="print-cover-info">
-            <div class="print-info-grid">
-              <div class="print-info-item"><span>Inventaire</span><strong>${fcEsc(vehicle.name)}</strong></div>
-              <div class="print-info-item"><span>Référence / immatriculation</span><strong>${fcEsc(vehicle.plate || "—")}</strong></div>
-              <div class="print-info-item"><span>Type</span><strong>${fcEsc(vehicle.type || "—")}</strong></div>
-              <div class="print-info-item"><span>Total matériels</span><strong>${totalItems}</strong></div>
-            </div>
-            <div class="print-qr">
-              <div class="print-qr-write-field">
-                <span class="print-qr-write-label">N° de véhicule :</span>
-                <div class="print-qr-write-line"></div>
-              </div>
-              <div class="print-qr-bottom">
-                <div id="invCoverQrBox" class="print-qr-box"></div>
-                <div class="print-qr-text">
-                  <strong>QR Code FireCheck</strong>
-                  <span>Scanner pour ouvrir la vérification numérique</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <div class="print-cover-sommaire">
-          <div class="print-sommaire-title">Sommaire des étapes</div>
-          <div class="print-sommaire-grid">
-            ${structure.flatMap(section => section.steps.map(step => step.name)).map((name, i) => `
-              <div class="print-sommaire-item"><span>${i+1}</span>${fcEsc(name)}</div>
-            `).join("")}
-            ${unclassified.length ? `<div class="print-sommaire-item"><span>+</span>Autres éléments</div>` : ""}
+          <div class="print-qr">
+            <div class="qr-box"></div>
+            <strong>QR Code vérification</strong>
           </div>
+
+          <div class="print-vehicle-photo" ${photo ? `style="background-image:url('${photo}')"` : ""}></div>
         </div>
       </section>
 
-      <!-- ÉTAPES -->
-      ${structure.map(section => `
+      <div class="print-intro">
+        Vérification papier à réaliser dans l’ordre du tour véhicule :
+        <strong>Cabine → Côté droit → Arrière → Côté gauche → Toit</strong>.
+        En cas d’anomalie, scanner le QR Code ou effectuer une remontée dans l’application.
+      </div>
+
+      ${printStructure.map(section => `
         <div class="print-section-title">
-          ${fcEsc(section.title)}
-          ${section.subtitle ? `<small>${fcEsc(section.subtitle)}</small>` : ""}
+          ${section.title}
+          <small>${section.subtitle}</small>
         </div>
         ${section.steps.map(renderStep).join("")}
       `).join("")}
 
-      <!-- NON CLASSÉS -->
       ${unclassified.length ? `
         <div class="print-section-title">
           AUTRES ÉLÉMENTS
-          <small>Matériels non rattachés à une étape du parcours</small>
+          <small>Matériels non rattachés au parcours principal</small>
         </div>
         <section class="print-step">
           <div class="print-step-head">
             <div class="print-step-number">ANNEXE</div>
             <div class="print-step-name">À reclasser</div>
-            <div class="print-step-count">${unclassified.length} matériel${unclassified.length === 1 ? "" : "s"}</div>
           </div>
-          <div class="print-step-body">
-            <div class="print-step-items" style="flex:1;">
-              <table class="print-table">
-                <thead><tr><th>Désignation</th><th>Zone</th><th class="print-col-qty">Qté</th><th class="print-col-check">✓</th></tr></thead>
-                <tbody>
-                  ${unclassified.map(item => `
-                    <tr>
-                      <td>${fcEsc(item.name)}</td>
-                      <td><em>${fcEsc(item.zone)}</em></td>
-                      <td class="print-col-qty">${fcEsc(String(item.qty))}</td>
-                      <td class="print-col-check"></td>
-                    </tr>
-                  `).join("")}
-                </tbody>
-              </table>
-            </div>
+          <div class="print-items-list">
+            ${unclassified.map(item => `
+              <div class="print-item-line">
+                <strong>${fcEsc(item.name)} <em>(${fcEsc(item.zone)})</em></strong>
+                <span>×${item.qty}</span>
+              </div>
+            `).join("")}
           </div>
         </section>
       ` : ""}
 
-      <div class="print-footer-note">
-        Document de vérification — FireCheck · ${fcEsc(cisName)} · ${fcEsc(vehicle.name)} · ${updated}
+      <div class="print-note">
+        Document papier de secours / classeur inventaire. La version numérique FireCheck reste la référence pour les remontées d’anomalies.
       </div>
     </div>
   `;
 
-  // Rendu du QR code réel (après injection du HTML pour avoir une taille mesurable)
-  const renderPrintQr = () => {
-    const box = document.getElementById("invCoverQrBox");
-    if(box && typeof QRCode !== "undefined"){
-      box.innerHTML = "";
-      const url = fcVehicleQrUrl(vehicle);
-      new QRCode(box, {
-        text: url,
-        width: 96,
-        height: 96,
-        colorDark: "#111827",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.M
-      });
-    }
-  };
-  renderPrintQr();
-  setTimeout(renderPrintQr, 80);
-
-  setTimeout(() => window.print(), 250);
+  window.print();
 }
 
 // Surclasse le détail pour ajouter le bouton imprimer après rendu existant
@@ -7326,17 +5650,14 @@ renderFcDetail = function(root){
         toast("Ouvre un inventaire et sélectionne une zone");
         return;
       }
-      const dblItem = {
+      fcInventory.push({
         id:"fcitem-" + Date.now(),
         vehicleId:vehicle.id,
         zone:fcState.zone,
         name:el.dataset.name,
         category:el.dataset.family,
-        qty:Number(el.dataset.qty || 1),
-        subLocation:""
-      };
-      fcInventory.push(dblItem);
-      if(typeof saveInventaireItemSupabase === "function") saveInventaireItemSupabase(dblItem);
+        qty:Number(el.dataset.qty || 1)
+      });
       toast(`${el.dataset.name} ajouté à ${fcState.zone}`);
       renderCheckSheets();
     };
@@ -7350,8 +5671,1086 @@ let centerSettings = {
   logo: localStorage.getItem("fc_cis_logo") || ""
 };
 
-let personnelList = JSON.parse(localStorage.getItem("fc_personnel") || "null") || [];
-
+let personnelList = JSON.parse(localStorage.getItem("fc_personnel") || "null") || [
+  {
+    "matricule": "",
+    "grade": "A/C",
+    "nom": "LETURGEON",
+    "prenom": "FREDERIC",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "04/04/1974",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "",
+    "grade": "A/C",
+    "nom": "ROBERT",
+    "prenom": "OLIVIER",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "21/12/1975",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "2928",
+    "grade": "A/C",
+    "nom": "LE GALLIOT",
+    "prenom": "NICOLAS",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "29/12/1979",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4426",
+    "grade": "Adjudant",
+    "nom": "HUET",
+    "prenom": "GUILLAUME",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "17/09/1978",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3025",
+    "grade": "Adjudant",
+    "nom": "MOREL",
+    "prenom": "NICOLAS",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "10/07/1981",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "2922",
+    "grade": "S/C",
+    "nom": "KERNEVEZ",
+    "prenom": "XAVIER",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "11/09/1980",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3999",
+    "grade": "S/C",
+    "nom": "LECOMTE",
+    "prenom": "EMILIEN",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "17/03/1989",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4619",
+    "grade": "Sergent",
+    "nom": "DUVAL",
+    "prenom": "DAVID",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "27/03/1986",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6395",
+    "grade": "Caporal",
+    "nom": "GIRAUX",
+    "prenom": "NICOLAS",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "24/10/1995",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5007",
+    "grade": "Caporal",
+    "nom": "BOURDIN",
+    "prenom": "CLEMENT",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "24/03/1997",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4221",
+    "grade": "Sergent",
+    "nom": "FOURREAU",
+    "prenom": "BAPTISTE",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "25/09/1990",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3254",
+    "grade": "Sergent",
+    "nom": "BOUHOURS",
+    "prenom": "GREGORY",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "09/03/1985",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4821",
+    "grade": "S/C",
+    "nom": "BRICHET",
+    "prenom": "BENOIT",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "16/06/1989",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5310",
+    "grade": "C/C",
+    "nom": "HESLOIN",
+    "prenom": "NICOLAS",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "04/08/1983",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "2721",
+    "grade": "LTN",
+    "nom": "BELLANGER",
+    "prenom": "DAVID",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "01/03/1973",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "2862",
+    "grade": "A/C",
+    "nom": "PASQUIER",
+    "prenom": "CHRISTOPHE",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "20/02/1973",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4940",
+    "grade": "C/C",
+    "nom": "ESNAULT",
+    "prenom": "XAVIER",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "13/06/1996",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4822",
+    "grade": "Sergent",
+    "nom": "PRODHOMME",
+    "prenom": "ROMAIN",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "18/03/1995",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5345",
+    "grade": "C/C",
+    "nom": "LEPEC",
+    "prenom": "KEVIN",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "04/12/2000",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4307",
+    "grade": "S/C",
+    "nom": "AUBERT",
+    "prenom": "ADRIEN",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "19/07/1989",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5820",
+    "grade": "Sapeur",
+    "nom": "CADOS",
+    "prenom": "JUSTIN",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "26/01/2008",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6096",
+    "grade": "Sapeur",
+    "nom": "TROVALLET",
+    "prenom": "THOMAS",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "18/04/2004",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6184",
+    "grade": "Sapeur",
+    "nom": "BERTRON",
+    "prenom": "LILOU",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "10/07/2006",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6288",
+    "grade": "Sapeur",
+    "nom": "HOUSSIAUX",
+    "prenom": "NOA",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "09/07/2003",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6318",
+    "grade": "Sapeur",
+    "nom": "CHESNE",
+    "prenom": "LAURENT",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "22/02/1978",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5085",
+    "grade": "Sapeur",
+    "nom": "PELLOUIN",
+    "prenom": "BAPTISTE",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "17/07/1990",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6448",
+    "grade": "Sapeur",
+    "nom": "MARCHAND",
+    "prenom": "RYAN",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "01/12/2008",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6475",
+    "grade": "Sapeur",
+    "nom": "RICHARD",
+    "prenom": "HUGO",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "03/11/2005",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5508",
+    "grade": "C/C",
+    "nom": "COCAUD",
+    "prenom": "JULIANA",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "05/06/2001",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5615",
+    "grade": "Sapeur",
+    "nom": "SYETTE DE VILLETTE",
+    "prenom": "SAMUEL",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "22/01/1986",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5698",
+    "grade": "Caporal",
+    "nom": "FOUCAULT",
+    "prenom": "ALEXIS",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "29/10/1991",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5877",
+    "grade": "Caporal",
+    "nom": "BOURBON",
+    "prenom": "MATHIEU",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "24/04/2002",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5959",
+    "grade": "Sapeur",
+    "nom": "GODIOT",
+    "prenom": "LUCAS",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "17/06/2002",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3900",
+    "grade": "LTN",
+    "nom": "GOISBAULT",
+    "prenom": "FRANCK",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "13/12/1969",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6078",
+    "grade": "Sapeur",
+    "nom": "RANGEARD",
+    "prenom": "LENNIE",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "10/01/2005",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6079",
+    "grade": "Sapeur",
+    "nom": "BOISBOUVIER",
+    "prenom": "LORIANE",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "10/08/2001",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5910",
+    "grade": "Caporal",
+    "nom": "BOUVET",
+    "prenom": "LISA",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "22/07/2004",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4549",
+    "grade": "S/C",
+    "nom": "ALLEXANDRE",
+    "prenom": "THIERRY",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "12/10/1983",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3845",
+    "grade": "A/C",
+    "nom": "HAY",
+    "prenom": "LUDOVIC",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "11/06/1985",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3847",
+    "grade": "A/C",
+    "nom": "BERNARD",
+    "prenom": "GUILLAUME",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "07/08/1986",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5042",
+    "grade": "C/C",
+    "nom": "BOITEAU",
+    "prenom": "KEVIN",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "17/08/1990",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4451",
+    "grade": "S/C",
+    "nom": "DEJONGHE TALDIR",
+    "prenom": "CLAIRE",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "02/10/1985",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4980",
+    "grade": "C/C",
+    "nom": "CHALINE",
+    "prenom": "DENOVAN",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "12/04/1995",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4450",
+    "grade": "Sergent",
+    "nom": "DUTERTRE",
+    "prenom": "ARNAUD",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "30/05/1990",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4229",
+    "grade": "A/C",
+    "nom": "GOHIER",
+    "prenom": "SEBASTIEN",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "30/10/1971",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3280",
+    "grade": "LTN",
+    "nom": "BOUVET",
+    "prenom": "VINCENT",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "06/01/1986",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3255",
+    "grade": "A/C",
+    "nom": "GIRAULT",
+    "prenom": "ANTOINE",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "03/06/1984",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3985",
+    "grade": "A/C",
+    "nom": "MARTIN",
+    "prenom": "VINCENT",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "20/06/1988",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4370",
+    "grade": "C/C",
+    "nom": "MOTTAIS",
+    "prenom": "ROMAIN",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "19/06/1984",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5257",
+    "grade": "C/C",
+    "nom": "DEROUIN",
+    "prenom": "FAUSTINE",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "20/08/1994",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4355",
+    "grade": "S/C",
+    "nom": "PAPION",
+    "prenom": "CLEMENT",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "24/04/1992",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5134",
+    "grade": "C/C",
+    "nom": "MARCHAND",
+    "prenom": "ALEXANDRE",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "25/02/1999",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5614",
+    "grade": "Sapeur",
+    "nom": "BOSCHET",
+    "prenom": "CHARLOTTE",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "07/01/2003",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4968",
+    "grade": "S/C",
+    "nom": "NOUVEL",
+    "prenom": "MATHIS",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "02/11/1995",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6006",
+    "grade": "Sapeur",
+    "nom": "PASSELANDE",
+    "prenom": "THEO",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "03/01/2006",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6021",
+    "grade": "Sapeur",
+    "nom": "GIRAULT",
+    "prenom": "MATTEO",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "04/02/2006",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6037",
+    "grade": "Caporal",
+    "nom": "ANGOT",
+    "prenom": "ROSANE",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "21/03/2005",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6183",
+    "grade": "Sapeur",
+    "nom": "MONTAROU",
+    "prenom": "BENJAMIN",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "16/12/2006",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6312",
+    "grade": "Sapeur",
+    "nom": "WATTIER",
+    "prenom": "QUENTIN",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "20/07/2007",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6314",
+    "grade": "Sapeur",
+    "nom": "POUCHOUX",
+    "prenom": "REMY",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "16/11/1996",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6469",
+    "grade": "Sapeur",
+    "nom": "LAURENT",
+    "prenom": "ALEXIS",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "11/01/1986",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5706",
+    "grade": "Caporal",
+    "nom": "PRODHOMME",
+    "prenom": "LUCAS",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "31/12/200",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5873",
+    "grade": "Caporal",
+    "nom": "GARNIER",
+    "prenom": "ROMAIN",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "05/07/1991",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5859",
+    "grade": "Caporal",
+    "nom": "BRICAUD",
+    "prenom": "JEREMY",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "11/09/1990",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6182",
+    "grade": "Sapeur",
+    "nom": "FOURREZ",
+    "prenom": "OCEANE",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "17/03/2007",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6287",
+    "grade": "Sapeur",
+    "nom": "BOUTIN",
+    "prenom": "OLIVIER",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "19/06/1971",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6313",
+    "grade": "Sapeur",
+    "nom": "PHILIPPOT",
+    "prenom": "LOU-ANN",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "05/08/2002",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6320",
+    "grade": "Sapeur",
+    "nom": "CIOR",
+    "prenom": "CHRISTOPHER",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "10/09/1989",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6322",
+    "grade": "Sapeur",
+    "nom": "MIGNOT",
+    "prenom": "ETHAN",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "07/01/2008",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3848",
+    "grade": "A/C",
+    "nom": "MARCHAND",
+    "prenom": "JIMMY",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "07/04/1987",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "1231",
+    "grade": "A/C",
+    "nom": "BELLANGER",
+    "prenom": "PHILIPPE",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "03/08/1971",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "1244",
+    "grade": "A/C",
+    "nom": "COCAUD",
+    "prenom": "MICKAEL",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "28/03/1978",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3250",
+    "grade": "S/C",
+    "nom": "SIMON",
+    "prenom": "ADRIEN",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "25/06/1984",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3790",
+    "grade": "S/C",
+    "nom": "COSSON",
+    "prenom": "MANUEL",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "20/06/1988",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5406",
+    "grade": "Caporal",
+    "nom": "BONNIER",
+    "prenom": "THEO",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "19/06/1999",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5136",
+    "grade": "C/C",
+    "nom": "OBLIN",
+    "prenom": "MAXENCE",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "19/12/1999",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5732",
+    "grade": "Caporal",
+    "nom": "GILLE",
+    "prenom": "MAXIME",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "30/10/2002",
+    "statut": "ACTIF",
+    "notes": ""
+  }
+];
 
 let currentUser = JSON.parse(localStorage.getItem("fc_current_user") || "null");
 
@@ -7503,17 +6902,6 @@ function importPersonnelCsv(file){
       if(parsed.length){
         personnelList = parsed;
         localStorage.setItem("fc_personnel", JSON.stringify(personnelList));
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
         renderPersonnelTable();
         toast(`${parsed.length} personnels importés depuis Excel`);
       } else {
@@ -7643,262 +7031,6 @@ renderAll = function(){
 };
 
 
-
-/* ============================================================
-   TOUR GUIDÉ — Aide contextuelle par onglet ST
-   ============================================================ */
-
-const FC_TOURS = {
-  dashboard: [
-    {
-      target: ".stats-grid",
-      title: "Les compteurs",
-      text: "Ces 4 compteurs résument l'état des remontées terrain. Clique sur un compteur pour filtrer la liste en dessous."
-    },
-    {
-      target: "[data-tab='dashboard'].active, .tech-reports",
-      title: "Liste des remontées",
-      text: "Chaque carte représente une anomalie signalée par un SP pendant une vérification ou un scan QR. La bordure colorée indique l'état : rouge = Nouveau, orange = En cours, vert = Clôturé."
-    },
-    {
-      target: ".tech-report",
-      title: "Ouvrir une fiche",
-      text: "Clique sur une carte pour voir le détail complet : matériel concerné, commentaire du SP, historique des actions. Tu peux y prendre en charge ou clôturer le dossier."
-    },
-    {
-      target: ".take-btn-v18",
-      title: "Prendre en charge",
-      text: "Clique 'Prendre en charge' pour attribuer le dossier à un technicien et saisir une note. Le SP qui a signalé verra le dossier passer en 'En cours'."
-    },
-    {
-      target: ".close-btn-v18",
-      title: "Clôturer",
-      text: "Une fois le problème réglé, clique 'Clôturer'. Le dossier passe en vert et sort du compteur 'Échéances proches'."
-    }
-  ],
-  vehicles: [
-    {
-      target: "#vehicles .secondary",
-      title: "Ajouter un véhicule",
-      text: "Clique ici pour créer une fiche de suivi pour un véhicule. Tu renseignes le kilométrage actuel, le kilométrage au dernier entretien, et la périodicité (ex: tous les 15 000 km)."
-    },
-    {
-      target: ".asset-card",
-      title: "Fiche véhicule",
-      text: "Chaque carte affiche l'état du suivi : vert = à jour, orange = bientôt à faire, rouge = en retard. La barre de progression indique où tu en es dans l'intervalle."
-    },
-    {
-      target: ".asset-card .btn.secondary",
-      title: "Modifier",
-      text: "Clique 'Modifier' pour mettre à jour les valeurs (nouveau kilométrage, dernier entretien). Le SP mettra à jour le kilométrage mensuel automatiquement lors de la vérification terrain."
-    },
-    {
-      target: null,
-      title: "Relevé mensuel automatique",
-      text: "Lors de la vérification terrain, si un SP vérifie un véhicule qui n'a pas eu de relevé ce mois-ci, FireCheck lui demandera automatiquement de saisir le kilométrage ou les heures actuels."
-    }
-  ],
-  equipment: [
-    {
-      target: "#equipment .secondary",
-      title: "Ajouter un matériel",
-      text: "Crée une fiche de suivi pour n'importe quel matériel technique : motopompe, groupe électrogène, etc. Choisis un suivi par heures ou par date selon le matériel."
-    },
-    {
-      target: "#equipmentGrid .asset-card",
-      title: "Fiche matériel",
-      text: "Même principe que les véhicules : vert = à jour, orange = bientôt, rouge = en retard. L'alerte apparaît aussi dans le badge de notification de l'application."
-    },
-    {
-      target: "#equipmentGrid .asset-card .btn.secondary",
-      title: "Modifier",
-      text: "Mets à jour les heures ou la date après chaque entretien pour remettre le compteur à zéro."
-    }
-  ],
-  pharmacie: [
-    {
-      target: "#pharmAddBtn",
-      title: "Ajouter un produit",
-      text: "Clique ici pour ajouter un médicament ou consommable avec sa date de péremption."
-    },
-    {
-      target: ".pharm-card",
-      title: "Carte produit",
-      text: "Chaque produit affiche sa date de péremption. La couleur indique l'urgence : vert = OK, orange = moins de 30 jours, rouge = périmé."
-    },
-    {
-      target: null,
-      title: "Notification automatique",
-      text: "Les produits expirant dans moins de 30 jours sont comptés dans le badge de notification en haut de l'onglet. Surveille ce compteur régulièrement."
-    }
-  ],
-  checkSheets: [
-    {
-      target: ".fc-vehicle-card",
-      title: "Choisir un véhicule",
-      text: "Clique sur un véhicule pour accéder à sa fiche d'inventaire complète : matériel par zone, photos, emplacements précis."
-    },
-    {
-      target: ".fc-tab",
-      title: "Vues du véhicule",
-      text: "Navigue entre les côtés du véhicule (Gauche, Arrière, Droite, Devant...). Chaque vue correspond à un angle de photos et ses zones cliquables."
-    },
-    {
-      target: ".fc-sub-group",
-      title: "Emplacements précis",
-      text: "Dans chaque zone, tu peux créer des emplacements précis (ex: 'Sous la banquette', 'Coffre central'). Le matériel y est rangé par glisser-déposer depuis la bibliothèque."
-    },
-    {
-      target: "#fcLibraryList",
-      title: "Bibliothèque matériel",
-      text: "À gauche, la bibliothèque contient tout le matériel disponible, classé par famille. Glisse un article vers une zone pour l'ajouter à l'inventaire. Clique '+ Ajouter du matériel' pour enrichir la bibliothèque."
-    },
-    {
-      target: ".fc-print-btn, [onclick*='fcPrintInventory']",
-      title: "Imprimer la fiche",
-      text: "Génère la fiche papier de l'inventaire : page de couverture avec QR code, photos des zones, liste du matériel en 2 colonnes. À plastifier et fixer dans le véhicule."
-    }
-  ],
-  stAccess: [
-    {
-      target: null,
-      title: "Accès Service Technique",
-      text: "Cet onglet permet de définir quels agents ont accès à l'interface ST. Un agent sans accès ST ne voit que l'interface SP (vérification terrain)."
-    },
-    {
-      target: ".st-access-table, #stAccessList",
-      title: "Liste des accès",
-      text: "Chaque ligne correspond à un agent du CIS. Active ou désactive l'accès ST en un clic. L'agent devra se connecter avec son matricule pour accéder à ST."
-    }
-  ],
-  personnelCis: [
-    {
-      target: "#personnelSearchSt",
-      title: "Rechercher un agent",
-      text: "Tape un matricule, un nom ou un grade pour filtrer la liste du personnel."
-    },
-    {
-      target: ".personnel-table-st",
-      title: "Liste du personnel",
-      text: "Tous les agents du CIS enregistrés dans FireCheck. Ils peuvent s'identifier par matricule avant une vérification pour que leur nom apparaisse sur les remontées."
-    },
-    {
-      target: null,
-      title: "Importer du personnel",
-      text: "Tu peux importer la liste complète depuis un fichier Excel ou CSV. Utilise le bouton 'Importer' pour mettre à jour d'un coup toute la liste."
-    }
-  ]
-};
-
-let fcTourActive = false;
-let fcTourSteps = [];
-let fcTourIndex = 0;
-let fcTourOverlay = null;
-let fcTourBox = null;
-
-function fcStartTour(tabId){
-  const steps = FC_TOURS[tabId];
-  if(!steps || !steps.length){
-    toast("Aucune aide disponible pour cet onglet.");
-    return;
-  }
-  fcTourSteps = steps;
-  fcTourIndex = 0;
-  fcTourActive = true;
-  fcBuildTourUI();
-  fcShowTourStep();
-}
-
-function fcBuildTourUI(){
-  if(!fcTourOverlay){
-    fcTourOverlay = document.createElement("div");
-    fcTourOverlay.id = "fcTourOverlay";
-    fcTourOverlay.className = "fc-tour-overlay";
-    fcTourOverlay.onclick = e => { if(e.target === fcTourOverlay) fcEndTour(); };
-    document.body.appendChild(fcTourOverlay);
-  }
-  if(!fcTourBox){
-    fcTourBox = document.createElement("div");
-    fcTourBox.id = "fcTourBox";
-    fcTourBox.className = "fc-tour-box";
-    document.body.appendChild(fcTourBox);
-  }
-  fcTourOverlay.style.display = "flex";
-  fcTourBox.style.display = "block";
-}
-
-function fcShowTourStep(){
-  const step = fcTourSteps[fcTourIndex];
-  if(!step){ fcEndTour(); return; }
-
-  // Supprime le highlight précédent
-  document.querySelectorAll(".fc-tour-highlight").forEach(el => el.classList.remove("fc-tour-highlight"));
-
-  // Highlight l'élément cible
-  let targetEl = null;
-  if(step.target){
-    targetEl = document.querySelector(step.target);
-    if(targetEl) targetEl.classList.add("fc-tour-highlight");
-  }
-
-  // Contenu de la bulle
-  fcTourBox.innerHTML = `
-    <div class="fc-tour-step-indicator">${fcTourIndex + 1} / ${fcTourSteps.length}</div>
-    <div class="fc-tour-progress">
-      <div class="fc-tour-progress-fill" style="width:${((fcTourIndex + 1) / fcTourSteps.length) * 100}%"></div>
-    </div>
-    <h3 class="fc-tour-title">${step.title}</h3>
-    <p class="fc-tour-text">${step.text}</p>
-    <div class="fc-tour-actions">
-      <button class="fc-tour-skip" id="fcTourSkip">Passer le tour</button>
-      ${fcTourIndex > 0 ? `<button class="fc-tour-prev" id="fcTourPrev">← Précédent</button>` : ""}
-      <button class="fc-tour-next" id="fcTourNext">${fcTourIndex === fcTourSteps.length - 1 ? "Terminer ✓" : "Suivant →"}</button>
-    </div>
-  `;
-
-  // Positionner la bulle près de l'élément cible
-  if(targetEl){
-    const rect = targetEl.getBoundingClientRect();
-    const boxW = 340;
-    const boxH = 200;
-    let top = rect.bottom + 12 + window.scrollY;
-    let left = Math.max(12, Math.min(rect.left, window.innerWidth - boxW - 12));
-    if(top + boxH > window.innerHeight + window.scrollY - 20){
-      top = rect.top + window.scrollY - boxH - 12;
-    }
-    fcTourBox.style.position = "absolute";
-    fcTourBox.style.top = top + "px";
-    fcTourBox.style.left = left + "px";
-    targetEl.scrollIntoView({behavior:"smooth", block:"center"});
-  } else {
-    fcTourBox.style.position = "fixed";
-    fcTourBox.style.top = "50%";
-    fcTourBox.style.left = "50%";
-    fcTourBox.style.transform = "translate(-50%, -50%)";
-  }
-
-  document.getElementById("fcTourNext").onclick = () => { fcTourIndex++; fcShowTourStep(); };
-  document.getElementById("fcTourSkip").onclick = fcEndTour;
-  const prev = document.getElementById("fcTourPrev");
-  if(prev) prev.onclick = () => { fcTourIndex--; fcShowTourStep(); };
-}
-
-function fcEndTour(){
-  fcTourActive = false;
-  document.querySelectorAll(".fc-tour-highlight").forEach(el => el.classList.remove("fc-tour-highlight"));
-  if(fcTourOverlay) fcTourOverlay.style.display = "none";
-  if(fcTourBox){ fcTourBox.style.display = "none"; fcTourBox.style.transform = ""; }
-}
-
-// Bind le bouton ? au tab actif
-document.addEventListener("click", e => {
-  if(e.target.id === "stHelpBtn" || e.target.closest("#stHelpBtn")){
-    const activeTab = document.querySelector(".tech-nav.active");
-    const tabId = activeTab?.dataset?.tab || "dashboard";
-    fcStartTour(tabId);
-  }
-});
-
 /* V18 - remontées filtrables + prise en charge + ajout entretien */
 let techReportFilter = "all";
 let activeTakeChargeId = null;
@@ -7919,126 +7051,58 @@ function setTechFilter(filter){
   renderReports();
 }
 
-function isUrgentReportV34(r){
-  return r.status !== "Clôturé" && (r.priority === "Urgente" || r.priority === "Bloquant départ");
-}
-
-function statusCardClassV34(status){
-  if(status === "Clôturé" || status === "Corrigé par SP") return "tech-report-done";
-  if(status === "Pris en compte" || status === "En cours") return "tech-report-progress";
-  return "tech-report-new";
-}
-
 const renderReportsBeforeV18 = renderReports;
 renderReports = function(){
   enhanceReportsForV18();
   renderReportsBeforeV18();
 
-  // Compteurs cliquables (Nouveaux / En cours / Corrigés / Échéances proches)
-  const newCountEl = document.getElementById("newCount");
-  const progressCountEl = document.getElementById("progressCount");
-  const spFixedCountEl = document.getElementById("spFixedCount");
-  if(newCountEl) newCountEl.textContent = reports.filter(r => r.status === "Nouveau").length;
-  if(progressCountEl) progressCountEl.textContent = reports.filter(r => r.status === "Pris en compte").length;
-  if(spFixedCountEl) spFixedCountEl.textContent = reports.filter(r => r.status === "Corrigé par SP").length;
-
-  const urgentCount = reports.filter(isUrgentReportV34).length;
-  const urgentStat = document.querySelector(".stat.urgent strong");
-  if(urgentStat) urgentStat.textContent = urgentCount;
-
   const filterMap = {
-    newCount:"Nouveau",
-    progressCount:"Pris en compte",
-    spFixedCount:"Corrigé par SP"
+    statNew:"Nouveau",
+    statProgress:"Pris en compte",
+    statSp:"Corrigé par SP",
+    statLate:"due"
   };
+
   Object.entries(filterMap).forEach(([id, filter]) => {
-    const stat = document.getElementById(id)?.closest(".stat");
-    if(stat){
-      stat.style.cursor = "pointer";
-      stat.title = "Cliquer pour filtrer";
-      stat.onclick = () => setTechFilter(filter);
-      stat.classList.toggle("active-filter", techReportFilter === filter);
+    const el = document.getElementById(id);
+    if(el){
+      el.onclick = () => setTechFilter(filter === "due" ? "all" : filter);
+      el.classList.toggle("active-filter", techReportFilter === filter);
+      el.title = "Cliquer pour filtrer";
     }
   });
-  const urgentStatCard = document.querySelector(".stat.urgent");
-  if(urgentStatCard){
-    urgentStatCard.style.cursor = "pointer";
-    urgentStatCard.title = "Cliquer pour filtrer";
-    urgentStatCard.onclick = (e) => {
-      if(e.target.closest("#urgentInfoBtn")) return;
-      setTechFilter("urgent");
-    };
-    urgentStatCard.classList.toggle("active-filter", techReportFilter === "urgent");
-  }
-
-  const urgentInfoBtn = document.getElementById("urgentInfoBtn");
-  if(urgentInfoBtn){
-    urgentInfoBtn.onclick = (e) => {
-      e.stopPropagation();
-      openUrgentInfoDialogV34();
-    };
-  }
 
   const tech = document.getElementById("techReportsList");
   if(tech){
     const effectiveFilter = techReportFilter;
-    const filteredReports = reports.filter(r => {
-      if(effectiveFilter === "all") return true;
-      if(effectiveFilter === "urgent") return isUrgentReportV34(r);
-      return r.status === effectiveFilter;
-    });
-    tech.innerHTML = filteredReports.length ? filteredReports.map(r => `
-      <article class="tech-report ${statusCardClassV34(r.status)}" data-open-report="${r.id}">
+    const filteredReports = reports.filter(r => effectiveFilter === "all" || r.status === effectiveFilter);
+    tech.innerHTML = filteredReports.map(r => `
+      <article class="tech-report">
         <div>
-          <strong>${fcEsc(r.asset)}</strong><br>
-          <span class="muted">${fcEsc(r.zone)}</span>
-          ${r.history?.length ? `<small class="history">${fcEsc(r.history[r.history.length - 1])}</small>` : ""}
+          <strong>${r.asset}</strong><br>
+          <span class="muted">${r.zone}</span>
+          ${r.history?.length ? `<small class="history">${r.history[r.history.length - 1]}</small>` : ""}
         </div>
-        <div>
-          <strong>${fcEsc(r.type)}</strong><br>
-          <span class="muted">${r.item && r.item !== "—" ? fcEsc(r.item) : ""}</span>
-          ${r.comment ? `<small class="tech-report-comment">${fcEsc(r.comment)}</small>` : ""}
-        </div>
-        <div class="tech-report-people">
-          <div class="tech-report-people-row">
-            <span class="tech-report-people-label">Signalé par :</span>
-            <strong>${fcEsc(r.author || "Inconnu")}</strong>
-            <span class="muted">${fcEsc(r.time)}</span>
-          </div>
-          <div class="tech-report-people-row">
-            <span class="tech-report-people-label">Pris en compte par :</span>
-            ${r.takenBy ? `<strong>${fcEsc(r.takenBy)}</strong>${r.takenDate ? `<span class="muted">le ${fcEsc(r.takenDate)}</span>` : ""}` : `<span class="muted">— Non pris en charge —</span>`}
-          </div>
-        </div>
+        <div><strong>${r.type}</strong><br><span class="muted">${r.item}</span></div>
+        <div>${r.author}<br><span class="muted">${r.time}</span></div>
         <div class="tech-report-actions">
-          <span class="pill ${statusClass(r.status)}">${fcEsc(r.status)}</span>
-          ${isUrgentReportV34(r) ? `<span class="pill red">⚠ ${fcEsc(r.priority)}</span>` : ""}
+          <span class="pill ${statusClass(r.status)}">${r.status}</span>
           <button class="btn ghost take-btn-v18" data-id="${r.id}">Prendre en charge</button>
           <button class="btn primary close-btn-v18" data-id="${r.id}">Clôturer</button>
         </div>
       </article>
-    `).join("") : `<p class="muted" style="padding:18px;">Aucune remontée pour ce filtre.</p>`;
-
-    // Ouvrir la fiche en détail (sans la prendre en charge) — clic sur la carte,
-    // mais pas si on a cliqué sur un bouton d'action à l'intérieur.
-    document.querySelectorAll("[data-open-report]").forEach(card => {
-      card.onclick = (e) => {
-        if(e.target.closest(".tech-report-actions")) return;
-        openReportDetailV34(Number(card.dataset.openReport));
-      };
-    });
+    `).join("");
 
     document.querySelectorAll(".take-btn-v18").forEach(btn => {
-      btn.onclick = (e) => { e.stopPropagation(); openTakeChargeDialog(Number(btn.dataset.id)); };
+      btn.onclick = () => openTakeChargeDialog(Number(btn.dataset.id));
     });
     document.querySelectorAll(".close-btn-v18").forEach(btn => {
-      btn.onclick = (e) => {
-        e.stopPropagation();
+      btn.onclick = () => {
         const r = reports.find(x => x.id === Number(btn.dataset.id));
         if(r){
           r.status = "Clôturé";
           r.history = r.history || [];
-          if(typeof updateRemonteeStatusSupabase === "function") updateRemonteeStatusSupabase(r.id, "Clôturé", {history: r.history});
+          r.history.push("Dossier clôturé par le service technique.");
         }
         renderAll();
       };
@@ -8051,109 +7115,9 @@ renderReports = function(){
       techReportFilter = select.value;
       renderReports();
     };
-    select.value = ["Nouveau","Pris en compte","Corrigé par SP","Clôturé"].includes(techReportFilter) ? techReportFilter : "all";
+    select.value = techReportFilter;
   }
 };
-
-function openUrgentInfoDialogV34(){
-  let dialog = document.getElementById("urgentInfoDialogV34");
-  if(!dialog){
-    dialog = document.createElement("dialog");
-    dialog.id = "urgentInfoDialogV34";
-    dialog.className = "dialog";
-    document.body.appendChild(dialog);
-  }
-
-  dialog.innerHTML = `
-    <div class="modal">
-      <div class="modal-head">
-        <div>
-          <p class="eyebrow">Service technique</p>
-          <h2>Échéances proches — comment ça fonctionne</h2>
-        </div>
-        <button class="round" id="closeUrgentInfoV34">×</button>
-      </div>
-      <p>Ce compteur regroupe les remontées <strong>non clôturées</strong> dont la priorité est <strong>Urgente</strong> ou <strong>Bloquant départ</strong>.</p>
-      <ul style="padding-left:18px; margin:14px 0;">
-        <li>Une remontée en priorité <strong>Normale</strong> n'est jamais comptée, quelle que soit son ancienneté.</li>
-        <li>Une remontée <strong>Urgente</strong> ou <strong>Bloquant départ</strong> reste comptée tant qu'elle n'est pas <strong>Clôturée</strong>.</li>
-        <li>Dès qu'elle passe au statut <strong>Clôturé</strong>, elle sort automatiquement du compteur.</li>
-      </ul>
-      <p class="muted">Ce n'est pas une date limite calendaire : il n'y a pas de champ « date d'échéance » dans l'application aujourd'hui. C'est un indicateur de priorité non traitée.</p>
-      <p class="muted">Clique sur le chiffre pour afficher uniquement ces dossiers prioritaires.</p>
-      <div class="modal-actions">
-        <button class="btn primary" id="closeUrgentInfoV34Btn">Compris</button>
-      </div>
-    </div>
-  `;
-
-  dialog.querySelector("#closeUrgentInfoV34").onclick = () => dialog.close();
-  dialog.querySelector("#closeUrgentInfoV34Btn").onclick = () => dialog.close();
-  dialog.showModal();
-}
-
-function openReportDetailV34(id){
-  const r = reports.find(x => x.id === id);
-  if(!r) return;
-
-  let dialog = document.getElementById("reportDetailDialogV34");
-  if(!dialog){
-    dialog = document.createElement("dialog");
-    dialog.id = "reportDetailDialogV34";
-    dialog.className = "dialog";
-    document.body.appendChild(dialog);
-  }
-
-  dialog.innerHTML = `
-    <div class="modal">
-      <div class="modal-head">
-        <div>
-          <p class="eyebrow">Service technique</p>
-          <h2>Détail de la remontée</h2>
-        </div>
-        <button class="round" id="closeReportDetailV34">×</button>
-      </div>
-
-      <div class="print-info-grid" style="margin-bottom:14px;">
-        <div class="print-info-item"><span>Engin / matériel</span><strong>${fcEsc(r.asset)}</strong></div>
-        <div class="print-info-item"><span>Zone</span><strong>${fcEsc(r.zone || "—")}</strong></div>
-        <div class="print-info-item"><span>Type</span><strong>${fcEsc(r.type || "—")}</strong></div>
-        <div class="print-info-item"><span>Statut</span><strong>${fcEsc(r.status)}</strong></div>
-        <div class="print-info-item"><span>Priorité</span><strong>${fcEsc(r.priority || "Normale")}</strong></div>
-        <div class="print-info-item"><span>Origine</span><strong>${fcEsc(r.origin || "—")}</strong></div>
-      </div>
-      ${r.item && r.item !== "—" ? `<p><strong>Matériel concerné :</strong> ${fcEsc(r.item)}</p>` : ""}
-      <p><strong>Commentaire :</strong><br>${fcEsc(r.comment || "Aucun commentaire.")}</p>
-      <p class="muted">Signalé par : <strong>${fcEsc(r.author || "Inconnu")}</strong> · ${fcEsc(r.time || "")}</p>
-      <p class="muted">Pris en compte par : ${r.takenBy ? `<strong>${fcEsc(r.takenBy)}</strong>${r.takenDate ? " le " + fcEsc(r.takenDate) : ""}` : "— Non pris en charge —"}</p>
-      ${r.history?.length ? `
-        <h3 style="margin-top:18px;">Historique</h3>
-        <ul style="padding-left:18px;">
-          ${r.history.map(h => `<li class="muted">${fcEsc(h)}</li>`).join("")}
-        </ul>
-      ` : ""}
-
-      ${r.status !== "Clôturé" ? `
-        <div class="modal-actions">
-          <button class="btn ghost" id="reportDetailTakeChargeV34">Prendre en charge</button>
-          <button class="btn primary" id="reportDetailCloseRepV34">Clôturer</button>
-        </div>
-      ` : ""}
-    </div>
-  `;
-
-  dialog.querySelector("#closeReportDetailV34").onclick = () => dialog.close();
-  dialog.querySelector("#reportDetailTakeChargeV34")?.addEventListener("click", () => { dialog.close(); openTakeChargeDialog(r.id); });
-  dialog.querySelector("#reportDetailCloseRepV34")?.addEventListener("click", () => {
-    r.status = "Clôturé";
-    r.history = r.history || [];
-    if(typeof updateRemonteeStatusSupabase === "function") updateRemonteeStatusSupabase(r.id, "Clôturé", {history: r.history});
-    dialog.close();
-    renderAll();
-  });
-
-  dialog.showModal();
-}
 
 function openTakeChargeDialog(id){
   activeTakeChargeId = id;
@@ -8162,7 +7126,7 @@ function openTakeChargeDialog(id){
   document.getElementById("takeChargeSummary").textContent = `${report.asset} · ${report.type} · ${report.item}`;
   document.getElementById("takeChargeName").value = currentUser ? `${currentUser.grade} ${currentUser.prenom} ${currentUser.nom}` : "";
   document.getElementById("takeChargeDate").value = new Date().toISOString().slice(0,10);
-  document.getElementById("takeChargeComment").value = "";
+  document.getElementById("takeChargeComment").value = `Dossier repris en main${currentUser ? " par " + currentUser.prenom + " " + currentUser.nom : ""}.`;
   document.getElementById("takeChargeDialog").showModal();
 }
 
@@ -8173,55 +7137,18 @@ function bindTakeChargeDialog(){
   if(confirm) confirm.onclick = () => {
     const report = reports.find(r => r.id === activeTakeChargeId);
     if(!report) return;
-    const nameInput = document.getElementById("takeChargeName");
-    const name = (nameInput.value || "").trim();
-    if(!name){
-      nameInput.focus();
-      nameInput.style.borderColor = "var(--red)";
-      toast("Indique le nom du SP qui prend en charge le dossier");
-      return;
-    }
-    nameInput.style.borderColor = "";
+    const name = document.getElementById("takeChargeName").value || "Service technique";
     const date = document.getElementById("takeChargeDate").value || new Date().toISOString().slice(0,10);
     const comment = document.getElementById("takeChargeComment").value || "";
     report.status = "Pris en compte";
     report.takenBy = name;
     report.takenDate = date;
     report.history = report.history || [];
-    if(comment.trim()){
-      report.history.push(comment.trim());
-    }
-    if(typeof updateRemonteeStatusSupabase === "function") updateRemonteeStatusSupabase(report.id, "Pris en compte", {history: report.history, takenBy: name, takenDate: date});
+    report.history.push(`Pris en charge le ${date} par ${name}. ${comment}`);
     document.getElementById("takeChargeDialog").close();
     renderAll();
     toast("Dossier pris en charge");
   };
-}
-
-/* ============================================================
-   V37 — Relevé mensuel kilométrage/heures pendant la vérification SP
-   ============================================================ */
-
-function fcFindAssetForVehicle(vehicleName){
-  if(typeof vehicles !== "undefined"){
-    const v = vehicles.find(a => a.name === vehicleName);
-    if(v) return v;
-  }
-  if(typeof equipment !== "undefined"){
-    const e = equipment.find(a => a.name === vehicleName);
-    if(e) return e;
-  }
-  return null;
-}
-
-function fcCurrentMonthKey(){
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
-}
-
-function fcMonthlyReadingDone(asset){
-  if(!asset) return true; // pas de fiche d'entretien configurée par ST → ne bloque pas
-  return asset.lastReadingMonth === fcCurrentMonthKey();
 }
 
 function computeAssetState(asset){
@@ -8239,28 +7166,20 @@ function computeAssetState(asset){
   return {followType,current,last,interval,unit,nextValue,remaining,percent,state};
 }
 
-let editingAssetId = null;
-
-function openAssetDialog(mode, editId){
+function openAssetDialog(mode){
   assetDialogMode = mode;
-  editingAssetId = editId || null;
-  const list = mode === "vehicle" ? vehicles : equipment;
-  const existing = editId ? list.find(a => a.id === editId) : null;
-
   document.getElementById("assetDialogEyebrow").textContent = mode === "vehicle" ? "Entretien véhicule" : "Matériel technique";
-  document.getElementById("assetDialogTitle").textContent = existing
-    ? `Modifier ${existing.name}`
-    : (mode === "vehicle" ? "Ajouter un véhicule" : "Ajouter un matériel");
-  document.getElementById("assetName").value = existing?.name || "";
-  document.getElementById("assetType").value = existing?.type || (mode === "vehicle" ? "Véhicule" : "Matériel");
-  document.getElementById("assetRef").value = existing?.detail || "";
-  document.getElementById("assetFollowType").value = existing?.followType || (mode === "vehicle" ? "km" : "hours");
-  document.getElementById("assetCurrentValue").value = existing?.currentValue || "";
-  document.getElementById("assetUnit").value = existing?.unit || (mode === "vehicle" ? "km" : "h");
-  document.getElementById("assetLastServiceValue").value = existing?.lastServiceValue || "";
-  document.getElementById("assetIntervalValue").value = existing?.intervalValue || (mode === "vehicle" ? "15000" : "100");
-  document.getElementById("assetNextControlDate").value = existing?.nextControlDate || "";
-  document.getElementById("assetNotes").value = existing?.notes || "";
+  document.getElementById("assetDialogTitle").textContent = mode === "vehicle" ? "Ajouter un véhicule" : "Ajouter un matériel";
+  document.getElementById("assetName").value = "";
+  document.getElementById("assetType").value = mode === "vehicle" ? "Véhicule" : "Matériel";
+  document.getElementById("assetRef").value = "";
+  document.getElementById("assetFollowType").value = mode === "vehicle" ? "km" : "hours";
+  document.getElementById("assetCurrentValue").value = "";
+  document.getElementById("assetUnit").value = mode === "vehicle" ? "km" : "h";
+  document.getElementById("assetLastServiceValue").value = "";
+  document.getElementById("assetIntervalValue").value = mode === "vehicle" ? "15000" : "100";
+  document.getElementById("assetNextControlDate").value = "";
+  document.getElementById("assetNotes").value = "";
   document.getElementById("assetDialog").showModal();
 }
 
@@ -8282,21 +7201,6 @@ renderAssets = function(){
   document.querySelectorAll("#equipment .secondary").forEach(btn => {
     btn.onclick = () => openAssetDialog("equipment");
   });
-
-  document.querySelectorAll("[data-asset-edit]").forEach(btn => {
-    btn.onclick = () => openAssetDialog(btn.dataset.assetMode, btn.dataset.assetEdit);
-  });
-  document.querySelectorAll("[data-asset-delete]").forEach(btn => {
-    btn.onclick = () => {
-      const id = btn.dataset.assetDelete;
-      const mode = btn.dataset.assetMode;
-      if(mode === "vehicle") vehicles = vehicles.filter(a => a.id !== id);
-      else equipment = equipment.filter(a => a.id !== id);
-      if(typeof deleteAssetSupabase === "function") deleteAssetSupabase(id);
-      renderAll();
-      toast("Élément supprimé");
-    };
-  });
 };
 
 function assetCardV18(a, mode){
@@ -8316,8 +7220,8 @@ function assetCardV18(a, mode){
       <p class="due ${c.state}">${label}</p>
       <span class="asset-next">${c.followType === "hours" ? "Calcul en heures" : c.followType === "km" ? "Calcul en kilomètres" : "Suivi par date"}</span>
       <div class="asset-actions">
-        <button class="btn ghost" data-asset-delete="${a.id}" data-asset-mode="${mode}">Supprimer</button>
-        <button class="btn secondary" data-asset-edit="${a.id}" data-asset-mode="${mode}">Modifier</button>
+        <button class="btn ghost" onclick="toast('Historique entretien prévu')">Historique</button>
+        <button class="btn secondary" onclick="toast('Modification prévue')">Modifier</button>
       </div>
     </article>
   `;
@@ -8337,7 +7241,6 @@ function bindAssetDialog(){
     const followType = document.getElementById("assetFollowType").value;
     const unit = document.getElementById("assetUnit").value || (followType === "hours" ? "h" : "km");
     const asset = {
-      id: editingAssetId || ("asset-" + Date.now()),
       name: document.getElementById("assetName").value || "Nouvel élément",
       detail: document.getElementById("assetRef").value || document.getElementById("assetType").value,
       type: document.getElementById("assetType").value,
@@ -8350,27 +7253,11 @@ function bindAssetDialog(){
       ct: document.getElementById("assetNextControlDate").value || "—",
       notes: document.getElementById("assetNotes").value
     };
-
-    if(editingAssetId){
-      // Mise à jour d'un élément existant
-      if(assetDialogMode === "vehicle"){
-        const idx = vehicles.findIndex(a => a.id === editingAssetId);
-        if(idx >= 0) vehicles[idx] = asset;
-      } else {
-        const idx = equipment.findIndex(a => a.id === editingAssetId);
-        if(idx >= 0) equipment[idx] = asset;
-      }
-    } else {
-      // Création d'un nouvel élément
-      if(assetDialogMode === "vehicle") vehicles.push(asset);
-      else equipment.push(asset);
-    }
-
-    if(typeof saveAssetSupabase === "function") saveAssetSupabase(asset, assetDialogMode);
-
+    if(assetDialogMode === "vehicle") vehicles.push(asset);
+    else equipment.push(asset);
     document.getElementById("assetDialog").close();
     renderAll();
-    toast(editingAssetId ? "Élément mis à jour" : "Élément ajouté");
+    toast("Élément ajouté");
   };
 }
 
@@ -8391,8 +7278,7 @@ function bindLibraryItemDialog(){
   if(save) save.onclick = () => {
     const name = document.getElementById("newLibraryItemName").value.trim();
     const family = document.getElementById("newLibraryItemFamily").value;
-    const rawSub = document.getElementById("newLibraryItemSub").value;
-    const sub = (rawSub && rawSub !== "__new__") ? rawSub.trim() : "";
+    const sub = document.getElementById("newLibraryItemSub").value.trim() || "Sans sous-catégorie";
     const qty = Number(document.getElementById("newLibraryItemQty").value || 1);
 
     if(!name){
@@ -8400,105 +7286,12 @@ function bindLibraryItemDialog(){
       return;
     }
 
-    const dlg = document.getElementById("libraryItemDialog");
-    const editIdx = dlg.dataset.editIdx !== "" ? parseInt(dlg.dataset.editIdx) : NaN;
-    if(!isNaN(editIdx) && editIdx >= 0 && FC_LIBRARY[editIdx]){
-      const existing = FC_LIBRARY[editIdx];
-      FC_LIBRARY[editIdx] = {...existing, name, family, sub, qty};
-      fcState.family = family;
-      if(typeof saveLibraryItemSupabase === "function") saveLibraryItemSupabase(FC_LIBRARY[editIdx]);
-      dlg.dataset.editIdx = "";
-      dlg.close();
-      renderCheckSheets();
-      toast(`${name} déplacé vers ${family} · ${sub}`);
-    } else {
-      const newItem = {id:"lib-" + Date.now(), name, family, sub, qty, custom:true};
-      FC_LIBRARY.push(newItem);
-      fcState.family = family;
-      if(typeof saveLibraryItemSupabase === "function") saveLibraryItemSupabase(newItem);
-      dlg.dataset.editIdx = "";
-      dlg.close();
-      renderCheckSheets();
-      toast(`${name} ajouté à la bibliothèque`);
-    }
+    FC_LIBRARY.push({name, family, sub, qty, custom:true});
+    fcState.family = family;
+    document.getElementById("libraryItemDialog").close();
+    renderCheckSheets();
+    toast(`${name} ajouté à la bibliothèque`);
   };
-}
-
-function fcPopulateSubCatSelect(family){
-  const sel = document.getElementById("newLibraryItemSub");
-  if(!sel) return;
-
-  // Collecte les sous-catégories existantes pour cette famille
-  const subs = [...new Set(
-    FC_LIBRARY
-      .filter(i => i.family === family && i.sub)
-      .map(i => i.sub)
-  )].sort((a,b) => a.localeCompare(b));
-
-  const currentVal = sel.value;
-  sel.innerHTML = '<option value="">-- Aucune sous-catégorie --</option>';
-  subs.forEach(s => {
-    const opt = document.createElement("option");
-    opt.value = s;
-    opt.textContent = s;
-    sel.appendChild(opt);
-  });
-  const newOpt = document.createElement("option");
-  newOpt.value = "__new__";
-  newOpt.textContent = "✚ Créer une nouvelle sous-catégorie...";
-  sel.appendChild(newOpt);
-
-  // Restore previous value if still valid
-  if(currentVal && subs.includes(currentVal)) sel.value = currentVal;
-
-  // Handle "Créer une nouvelle"
-  sel.onchange = () => {
-    if(sel.value === "__new__"){
-      const name = prompt("Nom de la nouvelle sous-catégorie :");
-      if(name && name.trim()){
-        const trimmed = name.trim();
-        // Add to select
-        const opt = document.createElement("option");
-        opt.value = trimmed;
-        opt.textContent = trimmed;
-        sel.insertBefore(opt, newOpt);
-        sel.value = trimmed;
-      } else {
-        sel.value = "";
-      }
-    }
-  };
-}
-
-function openLibraryEditDialog(idx, item){
-  const dlg = document.getElementById("libraryItemDialog");
-  if(!dlg) return;
-
-  // Switch title
-  const title = dlg.querySelector("h2");
-  if(title) title.textContent = idx >= 0 ? "Modifier / déplacer" : "Ajouter du matériel";
-  const saveBtn = document.getElementById("saveLibraryItem");
-  if(saveBtn) saveBtn.textContent = idx >= 0 ? "Enregistrer les modifications" : "Ajouter à la bibliothèque";
-
-  document.getElementById("newLibraryItemName").value = item.name;
-  document.getElementById("newLibraryItemFamily").value = item.family;
-  document.getElementById("newLibraryItemQty").value = item.qty || 1;
-  fcPopulateSubCatSelect(item.family);
-  // Set the current sub after populating
-  const subSel = document.getElementById("newLibraryItemSub");
-  if(subSel && item.sub){
-    // Add if not present
-    if(![...subSel.options].find(o => o.value === item.sub)){
-      const opt = document.createElement("option");
-      opt.value = item.sub;
-      opt.textContent = item.sub;
-      subSel.insertBefore(opt, subSel.lastElementChild);
-    }
-    subSel.value = item.sub;
-  }
-
-  dlg.dataset.editIdx = idx >= 0 ? idx : "";
-  dlg.showModal();
 }
 
 const renderAllBeforeV19 = renderAll;
@@ -8516,25 +7309,38 @@ function fcVehicleQrUrl(vehicle){
   return `${base}?check=${encodeURIComponent(vehicle.id)}`;
 }
 
+function simpleQrMatrix(text){
+  // QR visuel prototype : matrice déterministe inspirée QR.
+  // En production, remplacer par une vraie librairie QR Code.
+  let seed = 0;
+  for(let i=0;i<text.length;i++) seed = (seed * 31 + text.charCodeAt(i)) >>> 0;
+  const size = 21;
+  const cells = Array.from({length:size},()=>Array(size).fill(false));
+  function finder(x,y){
+    for(let yy=0;yy<7;yy++){
+      for(let xx=0;xx<7;xx++){
+        const border = xx===0||yy===0||xx===6||yy===6;
+        const center = xx>=2&&xx<=4&&yy>=2&&yy<=4;
+        cells[y+yy][x+xx] = border || center;
+      }
+    }
+  }
+  finder(0,0); finder(14,0); finder(0,14);
+  for(let y=0;y<size;y++){
+    for(let x=0;x<size;x++){
+      const inFinder = (x<7&&y<7)||(x>=14&&y<7)||(x<7&&y>=14);
+      if(inFinder) continue;
+      seed = (seed * 1664525 + 1013904223) >>> 0;
+      cells[y][x] = (seed % 100) < 42;
+    }
+  }
+  return cells;
+}
+
 function renderQrInto(el, text){
   if(!el) return;
-  el.innerHTML = "";
-  if(typeof QRCode !== "undefined"){
-    // Vraie librairie QRCode.js — QR scannable
-    const qrSize = el.offsetWidth > 50 ? el.offsetWidth : 180;
-    new QRCode(el, {
-      text: text,
-      width: qrSize,
-      height: qrSize,
-      colorDark: "#111827",
-      colorLight: "#ffffff",
-      correctLevel: QRCode.CorrectLevel.M
-    });
-  } else {
-    // Fallback texte si librairie non chargée
-    el.style.cssText = "display:flex;align-items:center;justify-content:center;font-size:10px;word-break:break-all;padding:8px;background:#f1f5f9;";
-    el.textContent = text;
-  }
+  const matrix = simpleQrMatrix(text);
+  el.innerHTML = matrix.flatMap((row,y)=>row.map((on,x)=>on ? `<i style="grid-column:${x+1};grid-row:${y+1}"></i>` : "")).join("");
 }
 
 function openQrDialog(vehicleId){
@@ -8546,8 +7352,8 @@ function openQrDialog(vehicleId){
   document.getElementById("qrVehicleName").textContent = vehicle.name;
   document.getElementById("qrVehicleMeta").textContent = `${vehicle.type} · ${vehicle.plate}`;
   document.getElementById("qrUrlText").textContent = url;
+  renderQrInto(document.getElementById("realQrBox"), url);
   document.getElementById("qrPrintDialog").showModal();
-  setTimeout(() => renderQrInto(document.getElementById("realQrBox"), url), 50);
 }
 
 function printQrOnly(){
@@ -8613,7 +7419,11 @@ renderFcDetail = function(root){
   }
 };
 
-
+const fcPrintInventoryBeforeV20 = fcPrintInventory;
+fcPrintInventory = function(){
+  // La fiche imprimée contient déjà un QR visuel générique ; on garde le bouton QR séparé pour impression dédiée.
+  fcPrintInventoryBeforeV20();
+};
 
 function bindQrDialog(){
   const close = document.getElementById("closeQrPrintDialog");
@@ -8703,10 +7513,10 @@ bindSettings = function(){
 
 /* V23 - Accueil contextualisé QR + accès ST */
 let scannedAsset = null;
-let fcHandovers = []; // Fiches de passation entre relèves, chargées depuis Supabase
 let stMobileCode = localStorage.getItem("fc_st_mobile_code") || "2026";
 let stAccessList = JSON.parse(localStorage.getItem("fc_st_access_list") || "null") || [
-  /* utilisateurs chargés depuis Supabase */
+  {matricule:"SP-45821", grade:"Caporal", nom:"Morel", prenom:"Nicolas"},
+  {matricule:"SP-10254", grade:"Sergent", nom:"Martin", prenom:"Alexandre"}
 ];
 
 function detectScannedAsset(){
@@ -8844,23 +7654,6 @@ function bindStAccessAdmin(){
   };
 }
 
-// Si l'URL contient ?check=xxx au chargement de la page (vrai scan QR avec
-// l'appareil photo du téléphone), rediriger automatiquement vers l'écran de
-// choix post-scan au lieu de rester sur l'accueil.
-let fcAutoRedirectDoneV36 = false;
-function fcAutoRedirectFromQrV36(){
-  if(fcAutoRedirectDoneV36) return;
-  const params = new URLSearchParams(location.search);
-  if(params.get("check")){
-    fcAutoRedirectDoneV36 = true;
-    applyScannedContext();
-    showScreen("scanChoice");
-  }
-}
-window.addEventListener("load", fcAutoRedirectFromQrV36);
-// Au cas où le script se charge après l'événement "load" (cache/ordre de chargement)
-if(document.readyState === "complete") fcAutoRedirectFromQrV36();
-
 const renderAllBeforeV23 = renderAll;
 renderAll = function(){
   renderAllBeforeV23();
@@ -8870,7 +7663,1086 @@ renderAll = function(){
   bindStAccessAdmin();
 };
 
-// PERSONNEL_DEFAULT_V25 supprimé — liste chargée depuis Supabase
+const PERSONNEL_DEFAULT_V25 = [
+  {
+    "matricule": "",
+    "grade": "A/C",
+    "nom": "LETURGEON",
+    "prenom": "FREDERIC",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "04/04/1974",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "",
+    "grade": "A/C",
+    "nom": "ROBERT",
+    "prenom": "OLIVIER",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "21/12/1975",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "2928",
+    "grade": "A/C",
+    "nom": "LE GALLIOT",
+    "prenom": "NICOLAS",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "29/12/1979",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4426",
+    "grade": "Adjudant",
+    "nom": "HUET",
+    "prenom": "GUILLAUME",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "17/09/1978",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3025",
+    "grade": "Adjudant",
+    "nom": "MOREL",
+    "prenom": "NICOLAS",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "10/07/1981",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "2922",
+    "grade": "S/C",
+    "nom": "KERNEVEZ",
+    "prenom": "XAVIER",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "11/09/1980",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3999",
+    "grade": "S/C",
+    "nom": "LECOMTE",
+    "prenom": "EMILIEN",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "17/03/1989",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4619",
+    "grade": "Sergent",
+    "nom": "DUVAL",
+    "prenom": "DAVID",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "27/03/1986",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6395",
+    "grade": "Caporal",
+    "nom": "GIRAUX",
+    "prenom": "NICOLAS",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "24/10/1995",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5007",
+    "grade": "Caporal",
+    "nom": "BOURDIN",
+    "prenom": "CLEMENT",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "24/03/1997",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4221",
+    "grade": "Sergent",
+    "nom": "FOURREAU",
+    "prenom": "BAPTISTE",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "25/09/1990",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3254",
+    "grade": "Sergent",
+    "nom": "BOUHOURS",
+    "prenom": "GREGORY",
+    "service": "",
+    "type": "SPP",
+    "equipe": "",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "09/03/1985",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4821",
+    "grade": "S/C",
+    "nom": "BRICHET",
+    "prenom": "BENOIT",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "16/06/1989",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5310",
+    "grade": "C/C",
+    "nom": "HESLOIN",
+    "prenom": "NICOLAS",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "04/08/1983",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "2721",
+    "grade": "LTN",
+    "nom": "BELLANGER",
+    "prenom": "DAVID",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "01/03/1973",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "2862",
+    "grade": "A/C",
+    "nom": "PASQUIER",
+    "prenom": "CHRISTOPHE",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "20/02/1973",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4940",
+    "grade": "C/C",
+    "nom": "ESNAULT",
+    "prenom": "XAVIER",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "13/06/1996",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4822",
+    "grade": "Sergent",
+    "nom": "PRODHOMME",
+    "prenom": "ROMAIN",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "18/03/1995",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5345",
+    "grade": "C/C",
+    "nom": "LEPEC",
+    "prenom": "KEVIN",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "04/12/2000",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4307",
+    "grade": "S/C",
+    "nom": "AUBERT",
+    "prenom": "ADRIEN",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "19/07/1989",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5820",
+    "grade": "Sapeur",
+    "nom": "CADOS",
+    "prenom": "JUSTIN",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "26/01/2008",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6096",
+    "grade": "Sapeur",
+    "nom": "TROVALLET",
+    "prenom": "THOMAS",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "18/04/2004",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6184",
+    "grade": "Sapeur",
+    "nom": "BERTRON",
+    "prenom": "LILOU",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "10/07/2006",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6288",
+    "grade": "Sapeur",
+    "nom": "HOUSSIAUX",
+    "prenom": "NOA",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "09/07/2003",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6318",
+    "grade": "Sapeur",
+    "nom": "CHESNE",
+    "prenom": "LAURENT",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "22/02/1978",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5085",
+    "grade": "Sapeur",
+    "nom": "PELLOUIN",
+    "prenom": "BAPTISTE",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "17/07/1990",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6448",
+    "grade": "Sapeur",
+    "nom": "MARCHAND",
+    "prenom": "RYAN",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "01/12/2008",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6475",
+    "grade": "Sapeur",
+    "nom": "RICHARD",
+    "prenom": "HUGO",
+    "service": "4",
+    "type": "SPV",
+    "equipe": "4",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "03/11/2005",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5508",
+    "grade": "C/C",
+    "nom": "COCAUD",
+    "prenom": "JULIANA",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "05/06/2001",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5615",
+    "grade": "Sapeur",
+    "nom": "SYETTE DE VILLETTE",
+    "prenom": "SAMUEL",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "22/01/1986",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5698",
+    "grade": "Caporal",
+    "nom": "FOUCAULT",
+    "prenom": "ALEXIS",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "29/10/1991",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5877",
+    "grade": "Caporal",
+    "nom": "BOURBON",
+    "prenom": "MATHIEU",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "24/04/2002",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5959",
+    "grade": "Sapeur",
+    "nom": "GODIOT",
+    "prenom": "LUCAS",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "17/06/2002",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3900",
+    "grade": "LTN",
+    "nom": "GOISBAULT",
+    "prenom": "FRANCK",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "13/12/1969",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6078",
+    "grade": "Sapeur",
+    "nom": "RANGEARD",
+    "prenom": "LENNIE",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "10/01/2005",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6079",
+    "grade": "Sapeur",
+    "nom": "BOISBOUVIER",
+    "prenom": "LORIANE",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "10/08/2001",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5910",
+    "grade": "Caporal",
+    "nom": "BOUVET",
+    "prenom": "LISA",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "22/07/2004",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4549",
+    "grade": "S/C",
+    "nom": "ALLEXANDRE",
+    "prenom": "THIERRY",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "12/10/1983",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3845",
+    "grade": "A/C",
+    "nom": "HAY",
+    "prenom": "LUDOVIC",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "11/06/1985",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3847",
+    "grade": "A/C",
+    "nom": "BERNARD",
+    "prenom": "GUILLAUME",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "07/08/1986",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5042",
+    "grade": "C/C",
+    "nom": "BOITEAU",
+    "prenom": "KEVIN",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "17/08/1990",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4451",
+    "grade": "S/C",
+    "nom": "DEJONGHE TALDIR",
+    "prenom": "CLAIRE",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "02/10/1985",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4980",
+    "grade": "C/C",
+    "nom": "CHALINE",
+    "prenom": "DENOVAN",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "12/04/1995",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4450",
+    "grade": "Sergent",
+    "nom": "DUTERTRE",
+    "prenom": "ARNAUD",
+    "service": "3",
+    "type": "SPV",
+    "equipe": "3",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "30/05/1990",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4229",
+    "grade": "A/C",
+    "nom": "GOHIER",
+    "prenom": "SEBASTIEN",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "30/10/1971",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3280",
+    "grade": "LTN",
+    "nom": "BOUVET",
+    "prenom": "VINCENT",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "06/01/1986",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3255",
+    "grade": "A/C",
+    "nom": "GIRAULT",
+    "prenom": "ANTOINE",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "03/06/1984",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3985",
+    "grade": "A/C",
+    "nom": "MARTIN",
+    "prenom": "VINCENT",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "20/06/1988",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4370",
+    "grade": "C/C",
+    "nom": "MOTTAIS",
+    "prenom": "ROMAIN",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "19/06/1984",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5257",
+    "grade": "C/C",
+    "nom": "DEROUIN",
+    "prenom": "FAUSTINE",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "20/08/1994",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4355",
+    "grade": "S/C",
+    "nom": "PAPION",
+    "prenom": "CLEMENT",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "24/04/1992",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5134",
+    "grade": "C/C",
+    "nom": "MARCHAND",
+    "prenom": "ALEXANDRE",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "25/02/1999",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5614",
+    "grade": "Sapeur",
+    "nom": "BOSCHET",
+    "prenom": "CHARLOTTE",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "07/01/2003",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "4968",
+    "grade": "S/C",
+    "nom": "NOUVEL",
+    "prenom": "MATHIS",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "02/11/1995",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6006",
+    "grade": "Sapeur",
+    "nom": "PASSELANDE",
+    "prenom": "THEO",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "03/01/2006",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6021",
+    "grade": "Sapeur",
+    "nom": "GIRAULT",
+    "prenom": "MATTEO",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "04/02/2006",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6037",
+    "grade": "Caporal",
+    "nom": "ANGOT",
+    "prenom": "ROSANE",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "21/03/2005",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6183",
+    "grade": "Sapeur",
+    "nom": "MONTAROU",
+    "prenom": "BENJAMIN",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "16/12/2006",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6312",
+    "grade": "Sapeur",
+    "nom": "WATTIER",
+    "prenom": "QUENTIN",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "20/07/2007",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6314",
+    "grade": "Sapeur",
+    "nom": "POUCHOUX",
+    "prenom": "REMY",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "16/11/1996",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6469",
+    "grade": "Sapeur",
+    "nom": "LAURENT",
+    "prenom": "ALEXIS",
+    "service": "2",
+    "type": "SPV",
+    "equipe": "2",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "11/01/1986",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5706",
+    "grade": "Caporal",
+    "nom": "PRODHOMME",
+    "prenom": "LUCAS",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "31/12/200",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5873",
+    "grade": "Caporal",
+    "nom": "GARNIER",
+    "prenom": "ROMAIN",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "05/07/1991",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5859",
+    "grade": "Caporal",
+    "nom": "BRICAUD",
+    "prenom": "JEREMY",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "11/09/1990",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6182",
+    "grade": "Sapeur",
+    "nom": "FOURREZ",
+    "prenom": "OCEANE",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "17/03/2007",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6287",
+    "grade": "Sapeur",
+    "nom": "BOUTIN",
+    "prenom": "OLIVIER",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "19/06/1971",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6313",
+    "grade": "Sapeur",
+    "nom": "PHILIPPOT",
+    "prenom": "LOU-ANN",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "05/08/2002",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6320",
+    "grade": "Sapeur",
+    "nom": "CIOR",
+    "prenom": "CHRISTOPHER",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "10/09/1989",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "6322",
+    "grade": "Sapeur",
+    "nom": "MIGNOT",
+    "prenom": "ETHAN",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "07/01/2008",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3848",
+    "grade": "A/C",
+    "nom": "MARCHAND",
+    "prenom": "JIMMY",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "07/04/1987",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "1231",
+    "grade": "A/C",
+    "nom": "BELLANGER",
+    "prenom": "PHILIPPE",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "03/08/1971",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "1244",
+    "grade": "A/C",
+    "nom": "COCAUD",
+    "prenom": "MICKAEL",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "28/03/1978",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3250",
+    "grade": "S/C",
+    "nom": "SIMON",
+    "prenom": "ADRIEN",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "25/06/1984",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "3790",
+    "grade": "S/C",
+    "nom": "COSSON",
+    "prenom": "MANUEL",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "20/06/1988",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5406",
+    "grade": "Caporal",
+    "nom": "BONNIER",
+    "prenom": "THEO",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "19/06/1999",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5136",
+    "grade": "C/C",
+    "nom": "OBLIN",
+    "prenom": "MAXENCE",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "19/12/1999",
+    "statut": "ACTIF",
+    "notes": ""
+  },
+  {
+    "matricule": "5732",
+    "grade": "Caporal",
+    "nom": "GILLE",
+    "prenom": "MAXIME",
+    "service": "1",
+    "type": "SPV",
+    "equipe": "1",
+    "aptitude": "",
+    "specialites": "",
+    "dateNaissance": "30/10/2002",
+    "statut": "ACTIF",
+    "notes": ""
+  }
+];
 
 /* V25 - correction identification matricule */
 function normalizeMatricule(value){
@@ -8905,7 +8777,18 @@ function loginWithMatricule(){
 
 // Si l'utilisateur a une ancienne liste de test en mémoire locale, on propose quand même les 77 personnels du modèle.
 // On ne supprime pas sa liste, mais on ajoute les matricules manquants depuis la base préchargée si elle existe dans le code.
-// mergePersonnelDefaults supprimé — données depuis Supabase
+function mergePersonnelDefaults(){
+  try{
+    const defaultPersonnel = PERSONNEL_DEFAULT_V25 || [];
+    defaultPersonnel.forEach(p => {
+      const exists = personnelList.some(x => normalizeMatricule(x.matricule) === normalizeMatricule(p.matricule));
+      if(!exists) personnelList.push(p);
+    });
+    localStorage.setItem("fc_personnel", JSON.stringify(personnelList));
+  }catch(e){}
+}
+
+mergePersonnelDefaults();
 
 /* V26 - Onglet Personnel CIS dans Service Technique */
 function renderPersonnelCisTab(){
@@ -9022,14 +8905,13 @@ renderAll = function(){
   renderAllBeforeV26();
   renderPersonnelCisTab();
   bindPersonnelCisTab();
-  if(typeof fcUpdateNotificationBadge === "function") fcUpdateNotificationBadge();
 };
 
 
 /* V27 - vérification terrain avec carousel + contrôle guidé */
 let checkV27 = {
-  view:"gauche",
-  currentZone:"Cabine avant gauche",
+  view:"avant",
+  currentZone:"Cabine avant",
   done:{},
   issues:{}
 };
@@ -9043,17 +8925,18 @@ function getCheckVehicleV27(){
 function checkViewsV27(vehicleId){
   const layouts = (typeof fcLayouts !== "undefined" ? fcLayouts : {});
   const photos = (typeof fcPhotos !== "undefined" ? fcPhotos : {});
-  // Utilise les vues définies par ST (personnalisées par véhicule), pour rester
-  // synchronisé avec ce qui a été configuré dans la fiche d'inventaire.
-  const views = (typeof fcGetViews === "function") ? fcGetViews(vehicleId) : [];
-  return views
-    .map(v => ({
-      ...v,
-      zones: layouts[vehicleId]?.[v.id] || [],
-      photo: photos[vehicleId]?.[v.id] || ""
-    }))
-    // Ne propose que les vues qui ont au moins une zone ou une photo définie
-    .filter(v => v.zones.length > 0 || v.photo);
+  const baseViews = [
+    {id:"avant", label:"AVANT"},
+    {id:"droite", label:"CÔTÉ D"},
+    {id:"arriere", label:"ARRIÈRE"},
+    {id:"gauche", label:"CÔTÉ G"},
+    {id:"toit", label:"TOIT"}
+  ];
+  return baseViews.map(v => ({
+    ...v,
+    zones: layouts[vehicleId]?.[v.id] || [],
+    photo: photos[vehicleId]?.[v.id] || ""
+  }));
 }
 
 function guidedOrderV27(vehicleId){
@@ -9081,12 +8964,6 @@ function zoneMatchesV27(itemZone, aliases){
 function getZoneItemsV27(vehicleId, step){
   if(typeof fcInventory === "undefined") return [];
   return fcInventory.filter(i => i.vehicleId === vehicleId && zoneMatchesV27(i.zone, step.aliases));
-}
-
-function fcGuidedStepPhotoV27(vehicle, zoneId){
-  if(!vehicle || typeof getMediaV30 !== "function") return "";
-  const stepName = (typeof fcStepNameForZone === "function") ? fcStepNameForZone(vehicle, zoneId) : zoneId;
-  return getMediaV30(vehicle.id, `step:${stepName}`) || "";
 }
 
 function getCurrentStepV27(vehicleId){
@@ -9120,50 +8997,10 @@ function markZoneDoneV27(issue=false){
     const foundView = views.find(v => v.zones.some(z => next.aliases.some(a => String(a).toLowerCase() === String(z.id).toLowerCase())));
     if(foundView) checkV27.view = foundView.id;
     toast("Étape validée, passage à la suivante");
-    renderStep();
-    // Scroll en haut de l'écran de vérification dès le changement d'étape
-    const checkEl = document.getElementById("check");
-    if(checkEl) checkEl.scrollTo ? checkEl.scrollTo(0,0) : window.scrollTo(0,0);
-    window.scrollTo(0,0);
   } else {
-    // Toutes les zones sont faites : vérifie si le relevé mensuel km/heures a été fait
-    const asset = fcFindAssetForVehicle(vehicle.name);
-    if(asset && !fcMonthlyReadingDone(asset)){
-      openMonthlyReadingDialogV37(vehicle, asset);
-    } else {
-      renderStep(); // affiche l'écran de fin (percent=100)
-    }
+    toast("Vérification terminée");
   }
-}
-
-function openMonthlyReadingDialogV37(vehicle, asset){
-  const dialog = document.getElementById("monthlyReadingDialogV37");
-  if(!dialog) return;
-
-  const isHours = asset.followType === "hours";
-  document.getElementById("monthlyReadingTitleV37").textContent = `${vehicle.name} — ${isHours ? "Heures" : "Kilométrage"}`;
-  document.getElementById("monthlyReadingLabelV37").textContent = `Valeur actuelle (${asset.unit || (isHours ? "h" : "km")})`;
-  document.getElementById("monthlyReadingValue").value = asset.currentValue || "";
-
-  const saveBtn = document.getElementById("saveMonthlyReadingV37");
-  saveBtn.onclick = () => {
-    const val = Number(document.getElementById("monthlyReadingValue").value || 0);
-    if(!val || val <= 0){
-      toast(`Indique ${isHours ? "le nombre d'heures" : "le kilométrage"} actuel pour terminer`);
-      return;
-    }
-    asset.currentValue = val;
-    asset.lastReadingMonth = fcCurrentMonthKey();
-    if(typeof saveAssetSupabase === "function"){
-      const mode = (typeof vehicles !== "undefined" && vehicles.includes(asset)) ? "vehicle" : "equipment";
-      saveAssetSupabase(asset, mode);
-    }
-    dialog.close();
-    toast("Relevé enregistré — vérification terminée");
-    renderStep();
-  };
-
-  dialog.showModal();
+  renderStep();
 }
 
 function renderStep(){
@@ -9171,61 +9008,13 @@ function renderStep(){
   if(!checkScreen) return;
 
   const vehicle = getCheckVehicleV27();
-  let views = checkViewsV27(vehicle.id);
-  // Le contrôle visuel suit toujours cet ordre : Côté gauche, Arrière, Côté droit, Devant,
-  // puis les autres vues éventuelles (toit, intérieur, vues personnalisées...).
-  // Ordre fixe pour la vérification SP : Côté gauche → Arrière → Côté droit → Devant
-  // Ce tri s'applique même aux vues personnalisées (sauvegardées dans Supabase avec l'ancien ordre)
-  const fcCheckViewOrderV37 = ["gauche", "arriere", "droite", "avant"];
-  views = views.slice().sort((a, b) => {
-    const ia = fcCheckViewOrderV37.indexOf(a.id);
-    const ib = fcCheckViewOrderV37.indexOf(b.id);
-    const ra = ia === -1 ? fcCheckViewOrderV37.length : ia;
-    const rb = ib === -1 ? fcCheckViewOrderV37.length : ib;
-    return ra - rb;
-  });
-  // Force la vue active à "gauche" si c'est le tout premier rendu (aucune zone encore cochée)
-  const isFirstRender = doneCount === 0 && !checkV27._viewManuallySet;
-  if(isFirstRender && views.length > 0) checkV27.view = views[0].id;
+  const views = checkViewsV27(vehicle.id);
   const order = guidedOrderV27(vehicle.id);
   const step = getCurrentStepV27(vehicle.id);
   const doneCount = order.filter(s => checkV27.done[s.zone]).length;
   const percent = Math.round((doneCount / order.length) * 100);
-  const activeView = views.find(v => v.id === checkV27.view) || views[0] || {id:"", label:"", zones:[], photo:""};
+  const activeView = views.find(v => v.id === checkV27.view) || views[0];
   const items = getZoneItemsV27(vehicle.id, step);
-
-  const fcAssetForBanner = fcFindAssetForVehicle(vehicle.name);
-  const fcShowMonthlyBanner = fcAssetForBanner && !fcMonthlyReadingDone(fcAssetForBanner);
-
-  // Écran de fin si toutes les zones sont validées
-  if(percent === 100){
-    const issueCount = Object.keys(checkV27.issues).length;
-    checkScreen.innerHTML = `
-      <div class="mobile-shell">
-        <header class="mobile-top">
-          <button class="round" data-go="home">←</button>
-          <div>
-            <p class="eyebrow">Vérification</p>
-            <h1>${fcEsc(vehicle.name)}</h1>
-          </div>
-        </header>
-        <div class="check-complete-card">
-          <div class="check-complete-icon">✅</div>
-          <h2>Vérification terminée</h2>
-          <p>Merci d'avoir effectué le contrôle journalier de <strong>${fcEsc(vehicle.name)}</strong>.</p>
-          ${issueCount > 0
-            ? `<p class="check-complete-issues">⚠️ ${issueCount} anomalie${issueCount > 1 ? "s" : ""} signalée${issueCount > 1 ? "s" : ""} — le service technique a été notifié.</p>`
-            : `<p class="check-complete-ok">Tous les éléments sont conformes.</p>`}
-          <div class="check-complete-bar">
-            <div class="check-complete-bar-fill"></div>
-          </div>
-          <p class="muted" style="font-size:13px;">${order.length} zones vérifiées</p>
-          <button class="btn primary full" data-go="home" style="margin-top:18px;">Retour à l'accueil</button>
-        </div>
-      </div>
-    `;
-    return;
-  }
 
   checkScreen.innerHTML = `
     <div class="mobile-shell">
@@ -9237,12 +9026,6 @@ function renderStep(){
           <span class="muted">${vehicle.type || ""} ${vehicle.plate ? "· " + vehicle.plate : ""}</span>
         </div>
       </header>
-
-      ${fcShowMonthlyBanner ? `
-        <div class="monthly-reading-banner">
-          📏 Relevé ${fcAssetForBanner.followType === "hours" ? "horaire" : "kilométrique"} du mois pas encore fait pour ce véhicule — il sera demandé à la fin de la vérification.
-        </div>
-      ` : ""}
 
       <section class="check-hero-v27">
         <div class="check-hero-top">
@@ -9257,29 +9040,23 @@ function renderStep(){
         </div>
 
         <div class="check-carousel-tabs">
-          ${views.length ? views.map(v => {
+          ${views.map(v => {
             const viewZones = v.zones || [];
             const viewDone = viewZones.length && viewZones.every(z => checkV27.done[z.id] || order.some(s => s.aliases.includes(z.id) && checkV27.done[s.zone]));
             const hasIssue = viewZones.some(z => checkV27.issues[z.id] || order.some(s => s.aliases.includes(z.id) && checkV27.issues[s.zone]));
             const icon = hasIssue ? "🔴" : viewDone ? "🟢" : "⚪";
-            return `<button class="check-view-tab ${v.id === activeView.id ? "active" : ""}" data-check-view="${v.id}">${icon} ${fcEsc(v.label)}</button>`;
-          }).join("") : ""}
+            return `<button class="check-view-tab ${v.id === activeView.id ? "active" : ""}" data-check-view="${v.id}">${icon} ${v.label}</button>`;
+          }).join("")}
         </div>
 
-        ${views.length ? `
-          <div class="check-photo-stage" style="${activeView.photo ? `background-image:url('${activeView.photo}')` : ""}">
-            ${(activeView.zones || []).map(z => {
-              const mappedStep = order.find(s => s.aliases.some(a => String(a).toLowerCase() === String(z.id).toLowerCase()));
-              const key = mappedStep?.zone || z.id;
-              const cls = checkV27.issues[key] ? "issue" : checkV27.done[key] ? "done" : key === step.zone ? "active" : "";
-              return `<button class="check-zone-hotspot ${cls}" data-check-zone="${z.id}" data-check-view="${activeView.id}" style="left:${z.x}%;top:${z.y}%;width:${z.w}%;height:${z.h}%">${fcEsc(z.label || z.id)}</button>`;
-            }).join("")}
-          </div>
-        ` : `
-          <div class="check-photo-stage check-photo-empty">
-            <p>Aucun plan/zone configuré pour ${fcEsc(vehicle.name)}. Configure les zones depuis ST → Fiches de vérification.</p>
-          </div>
-        `}
+        <div class="check-photo-stage" style="${activeView.photo ? `background-image:url('${activeView.photo}')` : ""}">
+          ${activeView.zones.map(z => {
+            const mappedStep = order.find(s => s.aliases.some(a => String(a).toLowerCase() === String(z.id).toLowerCase()));
+            const key = mappedStep?.zone || z.id;
+            const cls = checkV27.issues[key] ? "issue" : checkV27.done[key] ? "done" : key === step.zone ? "active" : "";
+            return `<button class="check-zone-hotspot ${cls}" data-check-zone="${z.id}" data-check-view="${activeView.id}" style="left:${z.x}%;top:${z.y}%;width:${z.w}%;height:${z.h}%">${z.label || z.id}</button>`;
+          }).join("")}
+        </div>
       </section>
 
       <section class="guided-card-v27">
@@ -9292,8 +9069,8 @@ function renderStep(){
           <span class="step-pill-v27">Étape ${order.indexOf(step) + 1}</span>
         </div>
 
-        <div class="guided-zone-photo-placeholder ${fcGuidedStepPhotoV27(vehicle, step.zone) ? "has-zone-photo" : ""}" style="${fcGuidedStepPhotoV27(vehicle, step.zone) ? `background-image:url('${fcGuidedStepPhotoV27(vehicle, step.zone)}')` : ""}">
-          <span>${fcGuidedStepPhotoV27(vehicle, step.zone) ? "" : `📷 Aucune photo détaillée pour ${fcEsc(step.zone)}`}</span>
+        <div class="guided-zone-photo-placeholder">
+          📷 Emplacement photo détaillée — ${step.zone}
         </div>
 
         <div class="guided-items-v27">
@@ -9301,7 +9078,6 @@ function renderStep(){
             <div class="guided-item-v27" data-guided-item="${item.id}">
               <strong>${item.name}</strong>
               <span>×${item.qty}</span>
-              <small class="guided-item-hint">Toucher pour signaler un problème</small>
             </div>
           `).join("") : `<div class="fc-empty">Aucun matériel renseigné pour cette zone pour le moment.</div>`}
         </div>
@@ -9321,7 +9097,6 @@ function renderStep(){
   document.querySelectorAll("[data-check-view]").forEach(btn => {
     btn.onclick = () => {
       checkV27.view = btn.dataset.checkView;
-      checkV27._viewManuallySet = true;
       renderStep();
     };
   });
@@ -9330,107 +9105,12 @@ function renderStep(){
   });
   document.getElementById("guidedDoneV27").onclick = () => markZoneDoneV27(false);
   document.getElementById("guidedIssueV27").onclick = () => {
-    openGuidedAnomalyDialogV27(vehicle, step, null);
+    toast("Anomalie enregistrée sur la zone");
+    markZoneDoneV27(true);
   };
-  document.querySelectorAll("[data-guided-item]").forEach(el => {
-    el.onclick = () => {
-      const itemId = el.dataset.guidedItem;
-      const item = items.find(i => i.id === itemId);
-      if(item) openGuidedAnomalyDialogV27(vehicle, step, item);
-    };
-  });
-  bindGuidedAnomalyDialogV27();
+
+  bindNavigation();
 }
-
-let activeGuidedAnomalyV27 = null;
-
-function openGuidedAnomalyDialogV27(vehicle, step, item, fromGuidedCheck=true){
-  activeGuidedAnomalyV27 = {vehicle, step, item, fromGuidedCheck};
-  const dialog = document.getElementById("guidedAnomalyDialogV27");
-  if(!dialog){
-    console.error("guidedAnomalyDialogV27 introuvable dans le HTML — vérifie que index.html est à jour.");
-    toast("Erreur : fenêtre d'anomalie introuvable. Vérifie que la page est bien à jour (Ctrl+Maj+R).");
-    return;
-  }
-
-  const title = document.getElementById("guidedAnomalyTitleV27");
-  const subtitle = document.getElementById("guidedAnomalySubtitleV27");
-  if(item){
-    title.textContent = `Anomalie — ${item.name}`;
-    subtitle.textContent = `${step.zone} · quantité attendue : ${item.qty}`;
-  } else if(step.zone === "—"){
-    title.textContent = `Anomalie — ${vehicle.name}`;
-    subtitle.textContent = "Signalement direct, sans zone précise.";
-  } else {
-    title.textContent = `Anomalie — ${step.zone}`;
-    subtitle.textContent = "Signalement général sur l’ensemble de la zone.";
-  }
-
-  document.getElementById("guidedAnomalyType").value = "Manquant";
-  document.getElementById("guidedAnomalyPriority").value = "Normale";
-  document.getElementById("guidedAnomalyComment").value = "";
-
-  dialog.showModal();
-}
-
-function bindGuidedAnomalyDialogV27(){
-  const dialog = document.getElementById("guidedAnomalyDialogV27");
-  if(!dialog || dialog.dataset.boundV27) return;
-  dialog.dataset.boundV27 = "1";
-
-  document.getElementById("closeGuidedAnomalyV27").onclick = () => dialog.close();
-  document.getElementById("cancelGuidedAnomalyV27").onclick = () => dialog.close();
-
-  document.getElementById("saveGuidedAnomalyV27").onclick = () => {
-    if(!activeGuidedAnomalyV27) return;
-    const {vehicle, step, item} = activeGuidedAnomalyV27;
-    const type = document.getElementById("guidedAnomalyType").value;
-    const priority = document.getElementById("guidedAnomalyPriority").value;
-    const comment = document.getElementById("guidedAnomalyComment").value.trim();
-
-    const author = currentUser ? `${currentUser.grade} ${currentUser.prenom} ${currentUser.nom}` : "SP non identifié";
-    const report = {
-      id: Date.now(),
-      asset: vehicle.name,
-      zone: step.zone,
-      origin: activeGuidedAnomalyV27.fromGuidedCheck ? "Vérification terrain" : "Signalement direct",
-      type: type,
-      item: item ? item.name : "—",
-      comment: comment || `${type} signalé sur ${step.zone}.`,
-      status: "Nouveau",
-      priority: priority,
-      author: author,
-      time: "À l’instant",
-      history: []
-    };
-
-    if(typeof reports !== "undefined") reports.unshift(report);
-    if(typeof saveRemonteeSupabase === "function") saveRemonteeSupabase(report);
-
-    dialog.close();
-    toast("Anomalie envoyée au service technique");
-
-    // Si ce signalement vient du contrôle guidé en cours (zone réelle de l'étape),
-    // on avance comme avant. Si c'est un signalement direct après scan (hors contrôle),
-    // on ne touche pas à la progression du contrôle guidé.
-    if(activeGuidedAnomalyV27.fromGuidedCheck){
-      checkV27.issues[step.zone] = true;
-      checkV27.done[step.zone] = true;
-
-      const next = guidedOrderV27(vehicle.id).find(s => !checkV27.done[s.zone]);
-      if(next){
-        checkV27.currentZone = next.zone;
-        const views = checkViewsV27(vehicle.id);
-        const foundView = views.find(v => v.zones.some(z => next.aliases.some(a => String(a).toLowerCase() === String(z.id).toLowerCase())));
-        if(foundView) checkV27.view = foundView.id;
-      }
-      renderStep();
-    } else {
-      showScreen("home");
-    }
-  };
-}
-bindGuidedAnomalyDialogV27();
 
 
 /* V28 - photo générale par vue + photo détaillée par zone */
@@ -9455,63 +9135,39 @@ renderFcDetail = function(root){
   if(!vehicle || !fcState.zone) return;
 
   const panel = root.querySelector(".fc-zone-panel");
-  if(!panel || panel.querySelector("#zoneDetailPhotoCard")) return;
+  if(!panel || panel.querySelector("#zoneDetailPhotoInput")) return;
 
-  // La photo de cette zone vient des "Médias de l'inventaire" (slot step:<étape regroupée>)
-  const stepName = fcStepNameForZone(vehicle, fcState.zone);
-  const slot = `step:${stepName}`;
-  const photo = getMediaV30(vehicle.id, slot);
-
+  const photo = getZonePhoto(vehicle.id, fcState.zone);
   const card = document.createElement("div");
-  card.id = "zoneDetailPhotoCard";
   card.className = "zone-detail-photo-card";
   card.innerHTML = `
     <h3>Photo détaillée de la zone</h3>
     <div class="zone-detail-photo ${photo ? "has-photo" : ""}" id="zoneDetailPhotoPreview" ${photo ? `style="background-image:url('${photo}')"` : ""}>
-      ${photo ? "" : "📷 Aucune photo pour cette zone"}
+      ${photo ? "" : "📷 Photo du compartiment ouvert"}
     </div>
     <div class="zone-detail-photo-actions">
-      <label class="zone-photo-label" for="zoneDetailPhotoInput">${photo ? "Remplacer" : "Ajouter"} la photo de cette zone</label>
+      <label class="zone-photo-label" for="zoneDetailPhotoInput">Ajouter / remplacer la photo de cette zone</label>
       <input id="zoneDetailPhotoInput" type="file" accept="image/*">
     </div>
-    <p class="muted" style="font-size:12px;margin-top:6px;">Cette photo est partagée avec « Médias de l’inventaire » (${fcEsc(stepName)}) et utilisée pour l’impression.</p>
   `;
 
   const zoneInput = panel.querySelector(".fc-zone-name");
   if(zoneInput) zoneInput.insertAdjacentElement("afterend", card);
   else panel.prepend(card);
 
-    card.querySelector("#zoneDetailPhotoInput").onchange = async e => {
+  card.querySelector("#zoneDetailPhotoInput").onchange = e => {
     const file = e.target.files[0];
     if(!file) return;
-    const preview = card.querySelector("#zoneDetailPhotoPreview");
-    const lbl = card.querySelector(".zone-photo-label");
-    if(preview) preview.textContent = "Compression en cours...";
-    try{
-      const value = await compressImageV32(file, 1000, 0.7);
-      if(preview){
-        preview.classList.add("has-photo");
-        preview.style.backgroundImage = `url('${value}')`;
-        preview.textContent = "";
-      }
-      if(lbl) lbl.textContent = "Remplacer la photo de cette zone";
-      if(typeof setMediaSupabase === "function"){
-        await setMediaSupabase(vehicle.id, slot, value);
-      } else {
-        safeSetMediaV32(vehicle.id, slot, value);
-      }
-      const existingCard = document.getElementById("zoneDetailPhotoCard");
-      if(existingCard) existingCard.remove();
-      const root = document.getElementById("fcView");
-      if(root && typeof renderFcDetail === "function") renderFcDetail(root);
-      toast("Photo détaillée enregistrée");
-    }catch(err){
-      console.error(err);
-      if(preview) preview.textContent = "Erreur — réessaie";
-      toast("Impossible d'enregistrer cette photo");
-    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setZonePhoto(vehicle.id, fcState.zone, reader.result);
+      toast("Photo détaillée ajoutée à la zone");
+      renderCheckSheets();
+    };
+    reader.readAsDataURL(file);
   };
 };
+
 const renderStepBeforeV28 = renderStep;
 renderStep = function(){
   renderStepBeforeV28();
@@ -9553,37 +9209,17 @@ renderFcDetail = function(root){
 
   const photo = getCoverPhoto(vehicle.id);
   const card = document.createElement("div");
-  card.className = "inventory-cover-card collapsible-panel";
+  card.className = "inventory-cover-card";
   card.innerHTML = `
-    <div class="collapsible-header" data-panel="coverPanel">
-      <h3>📷 Photo de couverture</h3>
-      <span class="collapsible-arrow">▾</span>
+    <h3>Photo de couverture inventaire papier</h3>
+    <p class="muted">Cette photo apparaît sur la première page, à côté du QR Code. Elle ne remplace pas les photos du carrousel.</p>
+    <div class="inventory-cover-preview ${photo ? "has-photo" : ""}" id="inventoryCoverPreview" ${photo ? `style="background-image:url('${photo}')"` : ""}>
+      ${photo ? "" : "📷 Photo dédiée à la fiche papier"}
     </div>
-    <div class="collapsible-body" id="coverPanel" style="display:none;">
-      <p class="muted">Cette photo apparaît sur la première page, à côté du QR Code.</p>
-      <div class="inventory-cover-preview ${photo ? "has-photo" : ""}" id="inventoryCoverPreview" ${photo ? `style="background-image:url('${photo}')"` : ""}>
-        ${photo ? "" : "📷 Photo dédiée à la fiche papier"}
-      </div>
-      <label class="inventory-cover-label" for="inventoryCoverPhotoInput">Ajouter / remplacer la photo de couverture</label>
-      <input id="inventoryCoverPhotoInput" type="file" accept="image/*">
-    </div>
+    <label class="inventory-cover-label" for="inventoryCoverPhotoInput">Ajouter / remplacer la photo de couverture</label>
+    <input id="inventoryCoverPhotoInput" type="file" accept="image/*">
   `;
   detailHead.insertAdjacentElement("afterend", card);
-
-  // Collapsible toggle for cover panel
-  const coverHdr = card.querySelector(".collapsible-header");
-  if(coverHdr){
-    coverHdr.style.cursor = "pointer";
-    coverHdr.onclick = () => {
-      const body = document.getElementById(coverHdr.dataset.panel);
-      const arrow = coverHdr.querySelector(".collapsible-arrow");
-      if(body){
-        const open = body.style.display !== "none";
-        body.style.display = open ? "none" : "";
-        if(arrow) arrow.textContent = open ? "▾" : "▴";
-      }
-    };
-  }
 
   card.querySelector("#inventoryCoverPhotoInput").onchange = e => {
     const file = e.target.files[0];
@@ -9599,20 +9235,199 @@ renderFcDetail = function(root){
 };
 
 // Remplace l'impression pour utiliser photo couverture + photos par étapes
+function fcPrintInventory(){
+  const vehicle = fcVehicles.find(v => v.id === fcState.vehicleId);
+  if(!vehicle){
+    toast("Aucun véhicule sélectionné");
+    return;
+  }
 
+  const allItems = fcInventory.filter(i => i.vehicleId === vehicle.id);
+  let printArea = document.getElementById("printArea");
+  if(!printArea){
+    printArea = document.createElement("div");
+    printArea.id = "printArea";
+    printArea.className = "print-only";
+    document.body.appendChild(printArea);
+  }
+
+  const updated = new Date().toLocaleDateString("fr-FR");
+  const coverPhoto = getCoverPhoto(vehicle.id) || fcPhotos?.[vehicle.id]?.avant || fcPhotos?.[vehicle.id]?.gauche || fcPhotos?.[vehicle.id]?.arriere || "";
+
+  const printStructure = [
+    {
+      title:"CABINE",
+      subtitle:"Contrôle intérieur et accès opérationnels",
+      steps:[
+        {name:"Cabine avant", aliases:["Cabine conducteur","Cabine chef d’agrès","Cabine chef d'agres","Cabine avant","Cabine avant gauche","Cabine avant droite"]},
+        {name:"Cabine arrière", aliases:["Cabine arrière","Cabine arriere","Cabine arrière gauche","Cabine arrière droite"]}
+      ]
+    },
+    {
+      title:"CÔTÉ DROIT",
+      subtitle:"Contrôle des rideaux et coffres côté droit",
+      steps:[
+        {name:"Rideau avant droit", aliases:["Rideau avant droit","Rideau av. D"]},
+        {name:"Rideau arrière droit", aliases:["Rideau arrière droit","Rideau ar. D"]},
+        {name:"Coffre arrière droit", aliases:["Coffre arrière droit","Coffre bas droit"]}
+      ]
+    },
+    {
+      title:"ARRIÈRE",
+      subtitle:"Pompe, tableau de commande et dévidoirs",
+      steps:[
+        {name:"Compartiment pompe", aliases:["Pompe","Tableau de commande pompe","Rideau arrière"]},
+        {name:"Dévidoir gauche", aliases:["Dévidoir arrière gauche"]},
+        {name:"Dévidoir droit", aliases:["Dévidoir arrière droit"]},
+        {name:"Échelles arrière", aliases:["Échelles arrière / toit"]}
+      ]
+    },
+    {
+      title:"CÔTÉ GAUCHE",
+      subtitle:"Contrôle des rideaux et coffres côté gauche",
+      steps:[
+        {name:"Rideau avant gauche", aliases:["Rideau avant gauche","Rideau av. G"]},
+        {name:"Rideau arrière gauche", aliases:["Rideau arrière gauche","Rideau ar. G"]},
+        {name:"Coffre arrière gauche", aliases:["Coffre arrière gauche","Coffre bas gauche"]}
+      ]
+    },
+    {
+      title:"TOIT",
+      subtitle:"Échelles et matériel de toit",
+      steps:[
+        {name:"Échelles et matériel de toit", aliases:["Toit","Toit / échelles","Échelles de toit","Équipements de toit"]}
+      ]
+    }
+  ];
+
+  const usedIds = new Set();
+  const getItemsForStep = (aliases) => {
+    const cleanAliases = aliases.map(a => String(a).toLowerCase());
+    return allItems.filter(item => {
+      const zone = String(item.zone || "").toLowerCase();
+      const match = cleanAliases.some(a => zone === a);
+      if(match) usedIds.add(item.id);
+      return match;
+    });
+  };
+
+  const stepPhoto = (vehicleId, step) => {
+    for(const alias of step.aliases){
+      const p = getZonePhoto(vehicleId, alias);
+      if(p) return p;
+    }
+    return "";
+  };
+
+  const unclassified = allItems.filter(i => !usedIds.has(i.id));
+  let stepCounter = 1;
+
+  const renderStep = (step) => {
+    const items = getItemsForStep(step.aliases);
+    const photo = stepPhoto(vehicle.id, step);
+    return `
+      <section class="print-step">
+        <div class="print-step-head">
+          <div class="print-step-number">ÉTAPE ${stepCounter++}</div>
+          <div class="print-step-name">${step.name}</div>
+        </div>
+        <div class="print-step-photo ${photo ? "has-photo" : ""}" ${photo ? `style="background-image:url('${photo}')"` : ""}>
+          ${photo ? `<span>Photo ${step.name}</span>` : `Emplacement photo — ${step.name}`}
+        </div>
+        ${items.length ? `
+          <div class="print-items-list">
+            ${items.map(item => `
+              <div class="print-item-line">
+                <strong>${fcEsc(item.name)}</strong>
+                <span>×${item.qty}</span>
+              </div>
+            `).join("")}
+          </div>
+        ` : `<div class="print-empty-step">Aucun matériel renseigné pour le moment. Emplacement prévu pour compléter l’inventaire.</div>`}
+      </section>
+    `;
+  };
+
+  printArea.innerHTML = `
+    <div class="print-page">
+      <section class="print-cover">
+        <div class="print-titlebar">
+          <div>
+            <h1>Inventaire ${vehicle.name}</h1>
+            <p>Classeur de vérification journalière — FireCheck</p>
+          </div>
+          <div class="print-update">Mise à jour : ${updated}</div>
+        </div>
+
+        <div class="print-vehicle-block">
+          <div class="print-info-grid">
+            <div class="print-info-item"><span>Véhicule</span><strong>${vehicle.name}</strong></div>
+            <div class="print-info-item"><span>Immatriculation</span><strong>${vehicle.plate}</strong></div>
+            <div class="print-info-item"><span>Type</span><strong>${vehicle.type}</strong></div>
+          </div>
+
+          <div class="print-qr">
+            <div class="qr-box"></div>
+            <strong>QR Code vérification</strong>
+          </div>
+
+          <div class="print-vehicle-photo cover-selected" ${coverPhoto ? `style="background-image:url('${coverPhoto}')"` : ""}></div>
+        </div>
+      </section>
+
+      <div class="print-intro">
+        Vérification papier à réaliser dans l’ordre du tour véhicule :
+        <strong>Cabine → Côté droit → Arrière → Côté gauche → Toit</strong>.
+        En cas d’anomalie, scanner le QR Code ou effectuer une remontée dans l’application.
+      </div>
+
+      ${printStructure.map(section => `
+        <div class="print-section-title">
+          ${section.title}
+          <small>${section.subtitle}</small>
+        </div>
+        ${section.steps.map(renderStep).join("")}
+      `).join("")}
+
+      ${unclassified.length ? `
+        <div class="print-section-title">
+          AUTRES ÉLÉMENTS
+          <small>Matériels non rattachés au parcours principal</small>
+        </div>
+        <section class="print-step">
+          <div class="print-step-head">
+            <div class="print-step-number">ANNEXE</div>
+            <div class="print-step-name">À reclasser</div>
+          </div>
+          <div class="print-items-list">
+            ${unclassified.map(item => `
+              <div class="print-item-line">
+                <strong>${fcEsc(item.name)} <em>(${fcEsc(item.zone)})</em></strong>
+                <span>×${item.qty}</span>
+              </div>
+            `).join("")}
+          </div>
+        </section>
+      ` : ""}
+
+      <div class="print-note">
+        Document papier de secours / classeur inventaire. La version numérique FireCheck reste la référence pour les remontées d’anomalies.
+      </div>
+    </div>
+  `;
+
+  window.print();
+}
 
 
 /* V30 - média universel par inventaire + impression illustrée robuste */
-/* Stockage photo par clé individuelle pour éviter QuotaExceededError */
+let fcMediaStore = JSON.parse(localStorage.getItem("fc_media_store_v30") || "{}");
+
 function mediaKeyV30(vehicleId, slot){
-  return "fcm__" + vehicleId + "__" + slot;
+  return `${vehicleId}__${slot}`;
 }
 function getMediaV30(vehicleId, slot){
-  // Priorité 1 : URL Supabase (partagée entre appareils)
-  if(typeof fcMediaUrls !== "undefined"){
-    const url = fcMediaUrls[`${vehicleId}__${slot}`];
-    if(url) return url;
-  }
+  // Compatibilité avec anciennes photos V28/V29
   if(slot === "cover" && typeof getCoverPhoto === "function"){
     const oldCover = getCoverPhoto(vehicleId);
     if(oldCover) return oldCover;
@@ -9622,20 +9437,11 @@ function getMediaV30(vehicleId, slot){
     const oldStep = getZonePhoto(vehicleId, stepName);
     if(oldStep) return oldStep;
   }
-  try{ return localStorage.getItem(mediaKeyV30(vehicleId, slot)) || ""; }
-  catch(e){ return ""; }
+  return fcMediaStore[mediaKeyV30(vehicleId, slot)] || "";
 }
 function setMediaV30(vehicleId, slot, dataUrl){
-  try{
-    localStorage.setItem(mediaKeyV30(vehicleId, slot), dataUrl);
-  }catch(e){
-    // Quota dépassé : essayer de libérer les anciennes entrées du store groupé
-    try{ localStorage.removeItem("fc_media_store_v30"); }catch(e2){}
-    // Réessayer avec qualité réduite si possible
-    try{ localStorage.setItem(mediaKeyV30(vehicleId, slot), dataUrl); }catch(e3){
-      throw new Error("Stockage local plein");
-    }
-  }
+  fcMediaStore[mediaKeyV30(vehicleId, slot)] = dataUrl;
+  localStorage.setItem("fc_media_store_v30", JSON.stringify(fcMediaStore));
 }
 
 function getInventoryStepStructureV30(vehicle){
@@ -9649,10 +9455,10 @@ function getInventoryStepStructureV30(vehicle){
         {name:"Cabine avant", aliases:["Cabine conducteur","Cabine chef d’agrès","Cabine chef d'agres","Cabine avant","Cabine avant gauche","Cabine avant droite"]},
         {name:"Cabine arrière", aliases:["Cabine arrière","Cabine arriere","Cabine arrière gauche","Cabine arrière droite"]}
       ]},
-      {title:"CÔTÉ GAUCHE", subtitle:"Contrôle des rideaux et coffres côté gauche", steps:[
-        {name:"Rideau avant gauche", aliases:["Rideau avant gauche","Rideau av. G"]},
-        {name:"Rideau arrière gauche", aliases:["Rideau arrière gauche","Rideau ar. G"]},
-        {name:"Coffre arrière gauche", aliases:["Coffre arrière gauche","Coffre bas gauche"]}
+      {title:"CÔTÉ DROIT", subtitle:"Contrôle des rideaux et coffres côté droit", steps:[
+        {name:"Rideau avant droit", aliases:["Rideau avant droit","Rideau av. D"]},
+        {name:"Rideau arrière droit", aliases:["Rideau arrière droit","Rideau ar. D"]},
+        {name:"Coffre arrière droit", aliases:["Coffre arrière droit","Coffre bas droit"]}
       ]},
       {title:"ARRIÈRE", subtitle:"Pompe, tableau de commande et dévidoirs", steps:[
         {name:"Compartiment pompe", aliases:["Pompe","Tableau de commande pompe","Rideau arrière"]},
@@ -9660,10 +9466,10 @@ function getInventoryStepStructureV30(vehicle){
         {name:"Dévidoir droit", aliases:["Dévidoir arrière droit"]},
         {name:"Échelles arrière", aliases:["Échelles arrière / toit"]}
       ]},
-      {title:"CÔTÉ DROIT", subtitle:"Contrôle des rideaux et coffres côté droit", steps:[
-        {name:"Rideau avant droit", aliases:["Rideau avant droit","Rideau av. D"]},
-        {name:"Rideau arrière droit", aliases:["Rideau arrière droit","Rideau ar. D"]},
-        {name:"Coffre arrière droit", aliases:["Coffre arrière droit","Coffre bas droit"]}
+      {title:"CÔTÉ GAUCHE", subtitle:"Contrôle des rideaux et coffres côté gauche", steps:[
+        {name:"Rideau avant gauche", aliases:["Rideau avant gauche","Rideau av. G"]},
+        {name:"Rideau arrière gauche", aliases:["Rideau arrière gauche","Rideau ar. G"]},
+        {name:"Coffre arrière gauche", aliases:["Coffre arrière gauche","Coffre bas gauche"]}
       ]},
       {title:"TOIT", subtitle:"Échelles et matériel de toit", steps:[
         {name:"Échelles et matériel de toit", aliases:["Toit","Toit / échelles","Échelles de toit","Équipements de toit"]}
@@ -9683,18 +9489,6 @@ function getInventoryStepStructureV30(vehicle){
     subtitle:"Contrôle adapté au matériel ou à l’engin",
     steps
   }];
-}
-
-function fcStepNameForZone(vehicle, zoneId){
-  const structure = getInventoryStepStructureV30(vehicle);
-  for(const section of structure){
-    for(const step of section.steps){
-      if(step.aliases.some(a => String(a).toLowerCase() === String(zoneId).toLowerCase())){
-        return step.name;
-      }
-    }
-  }
-  return zoneId;
 }
 
 // Manager média dans la fiche inventaire
@@ -9755,6 +9549,136 @@ renderFcDetail = function(root){
 };
 
 // Impression illustrée robuste avec <img> pour éviter que le navigateur masque les arrière-plans
+function fcPrintInventory(){
+  const vehicle = fcVehicles.find(v => v.id === fcState.vehicleId);
+  if(!vehicle){ toast("Aucun inventaire sélectionné"); return; }
+
+  const allItems = fcInventory.filter(i => i.vehicleId === vehicle.id);
+  let printArea = document.getElementById("printArea");
+  if(!printArea){
+    printArea = document.createElement("div");
+    printArea.id = "printArea";
+    printArea.className = "print-only";
+    document.body.appendChild(printArea);
+  }
+
+  const updated = new Date().toLocaleDateString("fr-FR");
+  const structure = getInventoryStepStructureV30(vehicle);
+  const coverPhoto = getMediaV30(vehicle.id, "cover") || fcPhotos?.[vehicle.id]?.avant || fcPhotos?.[vehicle.id]?.gauche || "";
+
+  const usedIds = new Set();
+  const getItems = aliases => {
+    const lower = aliases.map(a => String(a).toLowerCase());
+    return allItems.filter(item => {
+      const ok = lower.some(a => String(item.zone || "").toLowerCase() === a);
+      if(ok) usedIds.add(item.id);
+      return ok;
+    });
+  };
+
+  let stepCounter = 1;
+  const renderStep = step => {
+    const items = getItems(step.aliases);
+    const photo = getMediaV30(vehicle.id, `step:${step.name}`) || step.aliases.map(a => getMediaV30(vehicle.id, `step:${a}`)).find(Boolean) || "";
+    return `
+      <section class="print-step">
+        <div class="print-step-head">
+          <div class="print-step-number">ÉTAPE ${stepCounter++}</div>
+          <div class="print-step-name">${fcEsc(step.name)}</div>
+        </div>
+        ${photo ? `
+          <div class="print-step-photo has-photo"><img src="${photo}" alt="Photo ${fcEsc(step.name)}"></div>
+        ` : `
+          <div class="print-step-photo placeholder">Emplacement photo — ${fcEsc(step.name)}</div>
+        `}
+        ${items.length ? `
+          <div class="print-items-list">
+            ${items.map(item => `
+              <div class="print-item-line">
+                <strong>${fcEsc(item.name)}</strong>
+                <span>×${item.qty}</span>
+              </div>
+            `).join("")}
+          </div>
+        ` : `<div class="print-empty-step">Aucun matériel renseigné pour le moment. Emplacement prévu pour compléter l’inventaire.</div>`}
+      </section>
+    `;
+  };
+
+  const unclassified = allItems.filter(i => !usedIds.has(i.id));
+
+  printArea.innerHTML = `
+    <div class="print-page">
+      <section class="print-cover">
+        <div class="print-titlebar">
+          <div>
+            <h1>Inventaire ${fcEsc(vehicle.name)}</h1>
+            <p>Classeur de vérification journalière — FireCheck</p>
+          </div>
+          <div class="print-update">Mise à jour : ${updated}</div>
+        </div>
+
+        <div class="print-vehicle-block">
+          <div class="print-info-grid">
+            <div class="print-info-item"><span>Inventaire</span><strong>${fcEsc(vehicle.name)}</strong></div>
+            <div class="print-info-item"><span>Référence / immat.</span><strong>${fcEsc(vehicle.plate || "—")}</strong></div>
+            <div class="print-info-item"><span>Type</span><strong>${fcEsc(vehicle.type || "—")}</strong></div>
+          </div>
+
+          <div class="print-qr">
+            <div class="qr-box"></div>
+            <strong>QR Code vérification</strong>
+          </div>
+
+          <div class="print-vehicle-photo">
+            ${coverPhoto ? `<img class="print-photo-img" src="${coverPhoto}" alt="Photo couverture">` : "Photo inventaire"}
+          </div>
+        </div>
+      </section>
+
+      <div class="print-intro">
+        Vérification papier illustrée à réaliser selon l’ordre proposé. En cas d’anomalie, scanner le QR Code ou effectuer une remontée dans l’application.
+      </div>
+
+      ${structure.map(section => `
+        <div class="print-section-title">
+          ${fcEsc(section.title)}
+          <small>${fcEsc(section.subtitle || "")}</small>
+        </div>
+        ${section.steps.map(renderStep).join("")}
+      `).join("")}
+
+      ${unclassified.length ? `
+        <div class="print-section-title">
+          AUTRES ÉLÉMENTS
+          <small>Matériels non rattachés au parcours principal</small>
+        </div>
+        <section class="print-step">
+          <div class="print-step-head">
+            <div class="print-step-number">ANNEXE</div>
+            <div class="print-step-name">À reclasser</div>
+          </div>
+          <div class="print-items-list">
+            ${unclassified.map(item => `
+              <div class="print-item-line">
+                <strong>${fcEsc(item.name)} <em>(${fcEsc(item.zone)})</em></strong>
+                <span>×${item.qty}</span>
+              </div>
+            `).join("")}
+          </div>
+        </section>
+      ` : ""}
+
+      <div class="print-note">
+        Document papier de secours / classeur inventaire. La version numérique FireCheck reste la référence pour les remontées d’anomalies.
+      </div>
+    </div>
+  `;
+
+  window.print();
+}
+
+
 /* V31 - gestion médias fiable + impression compacte */
 function mediaSlotsForVehicleV31(vehicle){
   const structure = getInventoryStepStructureV30(vehicle);
@@ -9765,7 +9689,70 @@ function mediaSlotsForVehicleV31(vehicle){
   return slots;
 }
 
-/* première définition renderMediaManagerV31 supprimée */
+function renderMediaManagerV31(root, vehicle){
+  const old = root.querySelector("#mediaManagerV30");
+  if(old) old.remove();
+
+  const existing = root.querySelector("#mediaManagerV31");
+  if(existing) existing.remove();
+
+  const detailHead = root.querySelector(".fc-detail-head");
+  if(!detailHead) return;
+
+  const slots = mediaSlotsForVehicleV31(vehicle);
+
+  const card = document.createElement("div");
+  card.id = "mediaManagerV31";
+  card.className = "media-manager-card";
+  card.innerHTML = `
+    <h3>Médias de l’inventaire</h3>
+    <p class="muted">Ajoute ici la photo de couverture et les photos illustrées des étapes. Ces photos sont utilisées dans l’impression papier et dans le contrôle guidé.</p>
+    <div class="media-grid-v31">
+      ${slots.map((s, idx) => {
+        const img = getMediaV30(vehicle.id, s.slot);
+        return `
+          <div class="media-slot-v31">
+            <strong>${fcEsc(s.label)}</strong>
+            <div class="media-preview-v31" id="mediaPreviewV31_${idx}">
+              ${img ? `<img src="${img}" alt="">` : "📷 Ajouter photo"}
+            </div>
+            <label class="media-label-v31">
+              Ajouter / remplacer
+              <input type="file" accept="image/*" data-media-slot-v31="${s.slot}" data-preview-id="mediaPreviewV31_${idx}">
+            </label>
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `;
+
+  detailHead.insertAdjacentElement("afterend", card);
+
+  card.querySelectorAll("[data-media-slot-v31]").forEach(input => {
+    input.addEventListener("change", e => {
+      const file = e.target.files && e.target.files[0];
+      if(!file) return;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const slot = input.dataset.mediaSlotV31;
+        const value = reader.result;
+        setMediaV30(vehicle.id, slot, value);
+
+        if(slot === "cover" && typeof setCoverPhoto === "function") setCoverPhoto(vehicle.id, value);
+        if(slot.startsWith("step:") && typeof setZonePhoto === "function"){
+          setZonePhoto(vehicle.id, slot.replace("step:",""), value);
+        }
+
+        const preview = document.getElementById(input.dataset.previewId);
+        if(preview) preview.innerHTML = `<img src="${value}" alt="">`;
+
+        toast("Photo enregistrée");
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+}
 
 const renderFcDetailBeforeV31 = renderFcDetail;
 renderFcDetail = function(root){
@@ -9776,7 +9763,7 @@ renderFcDetail = function(root){
 
 
 /* V32 - compression des médias avant stockage local */
-function compressImageV32(file, maxWidth=900, quality=0.65){
+function compressImageV32(file, maxWidth=1200, quality=0.78){
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onerror = () => reject("Lecture du fichier impossible");
@@ -9827,11 +9814,7 @@ function renderMediaManagerV31(root, vehicle){
   card.id = "mediaManagerV31";
   card.className = "media-manager-card";
   card.innerHTML = `
-    <div class="collapsible-header" data-panel="mediaPanel">
-      <h3>🖼️ Médias de l’inventaire</h3>
-      <span class="collapsible-arrow">▾</span>
-    </div>
-    <div class="collapsible-body" id="mediaPanel" style="display:none;">
+    <h3>Médias de l’inventaire</h3>
     <p class="muted">Les photos sont automatiquement réduites pour être conservées dans le prototype.</p>
     <div class="media-grid-v31">
       ${slots.map((s, idx) => {
@@ -9842,32 +9825,21 @@ function renderMediaManagerV31(root, vehicle){
             <div class="media-preview-v31" id="mediaPreviewV31_${idx}">
               ${img ? `<img src="${img}" alt="">` : "📷 Ajouter photo"}
             </div>
-            <label class="media-label-v31" style="cursor:pointer;display:block;">
-              Ajouter / remplacer
-              <input type="file" accept="image/*" data-media-slot-v31="${s.slot}" data-preview-id="mediaPreviewV31_${idx}" style="display:none;">
-            </label>
+            <button class="media-label-v31" type="button" data-open-media="${idx}">Ajouter / remplacer</button>
+            <input id="mediaInputV31_${idx}" type="file" accept="image/*" data-media-slot-v31="${s.slot}" data-preview-id="mediaPreviewV31_${idx}" style="display:none">
             <div class="media-error-v32 hidden" id="mediaErrorV31_${idx}"></div>
           </div>
         `;
       }).join("")}
     </div>
-    </div>
-    </div>
   `;
 
   detailHead.insertAdjacentElement("afterend", card);
 
-  // Collapsible toggle
-  card.querySelectorAll(".collapsible-header").forEach(hdr => {
-    hdr.style.cursor = "pointer";
-    hdr.onclick = () => {
-      const body = document.getElementById(hdr.dataset.panel);
-      const arrow = hdr.querySelector(".collapsible-arrow");
-      if(body){
-        const open = body.style.display !== "none";
-        body.style.display = open ? "none" : "";
-        if(arrow) arrow.textContent = open ? "▾" : "▴";
-      }
+  card.querySelectorAll("[data-open-media]").forEach(btn => {
+    btn.onclick = () => {
+      const input = card.querySelector(`#mediaInputV31_${btn.dataset.openMedia}`);
+      if(input) input.click();
     };
   });
 
@@ -9877,24 +9849,19 @@ function renderMediaManagerV31(root, vehicle){
       if(!file) return;
 
       const preview = document.getElementById(input.dataset.previewId);
-      const errEl = input.closest(".media-slot-v31") && input.closest(".media-slot-v31").querySelector(".media-error-v32");
-      const err = errEl || null;
+      const idx = input.id.replace("mediaInputV31_","");
+      const err = document.getElementById(`mediaErrorV31_${idx}`);
       if(err){ err.classList.add("hidden"); err.textContent = ""; }
       if(preview) preview.textContent = "Compression de l’image...";
 
       try{
-        const value = await compressImageV32(file, 1000, 0.7);
-        if(preview) preview.innerHTML = `<img src="${value}" alt="">`;
+        const value = await compressImageV32(file);
+        const ok = safeSetMediaV32(vehicle.id, input.dataset.mediaSlotV31, value);
+        if(!ok) throw new Error("Stockage impossible");
 
-        // Upload vers Supabase Storage (évite le quota localStorage)
-        if(typeof setMediaSupabase === "function"){
-          await setMediaSupabase(vehicle.id, input.dataset.mediaSlotV31, value);
-        } else {
-          safeSetMediaV32(vehicle.id, input.dataset.mediaSlotV31, value);
-        }
+        if(preview) preview.innerHTML = `<img src="${value}" alt="">`;
         toast("Photo enregistrée");
       }catch(error){
-        console.error(error);
         if(preview) preview.textContent = "📷 Ajouter photo";
         if(err){
           err.textContent = "Photo non enregistrée. Essaie une image plus légère.";
@@ -9914,218 +9881,279 @@ if(setZonePhotoBeforeV32){
 
 renderAll();
 
-
 /* ============================================================
-   MODULE PHARMACIE — Gestion dates de péremption
+   FICHE VÉHICULE V33
+   - Remplace la section "Médias de l'inventaire"
+   - Photo de couverture → Supabase Storage (bucket firecheck-photos)
+   - Champs fiche → Supabase table fc_vehicle_info
+   - Couverture impression enrichie
    ============================================================ */
 
-let pharmData = JSON.parse(localStorage.getItem("fc_pharmacie_v1") || "[]");
+// ── Données en mémoire ──────────────────────────────────────────
+let fcVehicleInfo = {}; // { [vehicleId]: {capacite, personnels, specialite, description, cover_url} }
 
-function pharmSave(){
-  localStorage.setItem("fc_pharmacie_v1", JSON.stringify(pharmData));
+// ── Supabase : chargement ───────────────────────────────────────
+async function loadVehicleInfo() {
+  try {
+    const res = await supabase.from("fc_vehicle_info").select("*");
+    if (res.error) { console.warn("fc_vehicle_info:", res.error); return; }
+    if (res.data) {
+      fcVehicleInfo = {};
+      res.data.forEach(row => { fcVehicleInfo[row.vehicle_id] = row; });
+    }
+  } catch(e) { console.warn("loadVehicleInfo err", e); }
 }
 
-function pharmDaysLeft(dateStr){
-  if(!dateStr) return null;
-  const exp = new Date(dateStr);
-  const now = new Date();
-  now.setHours(0,0,0,0);
-  return Math.floor((exp - now) / 86400000);
+// ── Supabase : sauvegarde champs ────────────────────────────────
+async function saveVehicleInfo(vehicleId, fields) {
+  if (!fcVehicleInfo[vehicleId]) fcVehicleInfo[vehicleId] = { vehicle_id: vehicleId };
+  Object.assign(fcVehicleInfo[vehicleId], fields);
+
+  const existing = fcVehicleInfo[vehicleId];
+  try {
+    if (existing.id) {
+      await supabase.from("fc_vehicle_info").update(fields).eq("id", existing.id);
+    } else {
+      const res = await supabase.from("fc_vehicle_info").insert({ vehicle_id: vehicleId, ...fields });
+      if (res.data && res.data[0]) existing.id = res.data[0].id;
+    }
+  } catch(e) { console.warn("saveVehicleInfo err", e); }
 }
 
-function pharmStatus(days){
-  if(days === null) return "unknown";
-  if(days < 0) return "expired";
-  if(days <= 30) return "soon";
-  return "ok";
-}
+// ── Supabase Storage : upload photo couverture ──────────────────
+async function uploadCoverPhoto(vehicleId, file) {
+  // Compresser d'abord si possible
+  let dataUrl;
+  try {
+    if (typeof compressImageV32 === "function") {
+      dataUrl = await compressImageV32(file, 1400, 0.82);
+    } else {
+      dataUrl = await new Promise((res, rej) => {
+        const r = new FileReader();
+        r.onload = () => res(r.result);
+        r.onerror = rej;
+        r.readAsDataURL(file);
+      });
+    }
+  } catch(e) { throw new Error("Lecture image impossible"); }
 
-function pharmStatusLabel(days){
-  if(days === null) return "—";
-  if(days < 0) return "PÉRIMÉ";
-  if(days === 0) return "Expire aujourd'hui !";
-  if(days <= 30) return `Dans ${days} jour${days>1?"s":""}`;
-  return `Dans ${days} jours`;
-}
+  // Upload vers Supabase Storage
+  const path = `covers/${vehicleId}_${Date.now()}.jpg`;
+  try {
+    const blob = await (await fetch(dataUrl)).blob();
+    const { data, error } = await supabase.storage
+      .from("firecheck-photos")
+      .upload(path, blob, { contentType: "image/jpeg", upsert: true });
+    if (error) throw error;
 
-function pharmRender(){
-  const panel = document.getElementById("pharmList");
-  const filterBar = document.getElementById("pharmEnginFilter");
-  const alertBanner = document.getElementById("pharmAlertBanner");
-  if(!panel) return;
+    // Récupérer l'URL publique
+    const { data: urlData } = supabase.storage.from("firecheck-photos").getPublicUrl(path);
+    const publicUrl = urlData?.publicUrl || "";
 
-  // Engins uniques
-  const engins = [...new Set(pharmData.map(p => p.engin).filter(Boolean))].sort();
-  const activeFilter = filterBar.dataset.filter || "all";
-
-  // Filtre bar
-  filterBar.innerHTML = `
-    <button class="pharm-filter-btn ${activeFilter==="all"?"active":""}" data-f="all">Tous</button>
-    ${engins.map(e => `<button class="pharm-filter-btn ${activeFilter===e?"active":""}" data-f="${fcEsc(e)}">${fcEsc(e)}</button>`).join("")}
-  `;
-  filterBar.querySelectorAll("[data-f]").forEach(btn => {
-    btn.onclick = () => { filterBar.dataset.filter = btn.dataset.f; pharmRender(); };
-  });
-
-  // Données filtrées et triées par date
-  let items = pharmData.slice();
-  if(activeFilter !== "all") items = items.filter(p => p.engin === activeFilter);
-  items.sort((a,b) => {
-    const da = pharmDaysLeft(a.expiry);
-    const db = pharmDaysLeft(b.expiry);
-    if(da === null) return 1;
-    if(db === null) return -1;
-    return da - db;
-  });
-
-  // Bannière alertes
-  const alerts = pharmData.filter(p => {
-    const d = pharmDaysLeft(p.expiry);
-    return d !== null && d <= 30;
-  });
-  if(alerts.length > 0){
-    alertBanner.classList.remove("hidden");
-    const expired = alerts.filter(p => pharmDaysLeft(p.expiry) < 0);
-    const soon = alerts.filter(p => pharmDaysLeft(p.expiry) >= 0);
-    alertBanner.innerHTML = `
-      <span class="pharm-alert-icon">⚠️</span>
-      <span>
-        ${expired.length > 0 ? `<strong>${expired.length} produit${expired.length>1?"s":""} périmé${expired.length>1?"s":""}</strong>` : ""}
-        ${expired.length > 0 && soon.length > 0 ? " · " : ""}
-        ${soon.length > 0 ? `<strong>${soon.length} produit${soon.length>1?"s":""}</strong> expire${soon.length>1?"nt":""} dans moins d'un mois` : ""}
-      </span>
-    `;
-  } else {
-    alertBanner.classList.add("hidden");
+    // Sauvegarder l'URL dans fc_vehicle_info
+    await saveVehicleInfo(vehicleId, { cover_url: publicUrl });
+    return { dataUrl, publicUrl };
+  } catch(e) {
+    // Fallback : stocker en base64 localement si Supabase Storage échoue
+    console.warn("Storage upload échoué, fallback localStorage:", e);
+    await saveVehicleInfo(vehicleId, { cover_url: dataUrl });
+    return { dataUrl, publicUrl: dataUrl };
   }
+}
 
-  if(items.length === 0){
-    panel.innerHTML = `<div class="pharm-empty">Aucun produit enregistré. Cliquez sur <strong>+ Ajouter un produit</strong> pour commencer.</div>`;
-    return;
-  }
+// ── Rendu de la fiche véhicule ──────────────────────────────────
+function renderFicheVehicule(root, vehicle) {
+  // Supprimer l'ancien gestionnaire de médias
+  ["#mediaManagerV30", "#mediaManagerV31", ".fiche-vehicule-card"].forEach(sel => {
+    root.querySelectorAll(sel).forEach(el => el.remove());
+  });
 
-  panel.innerHTML = `
-    <div class="pharm-grid">
-      ${items.map((p, i) => {
-        const days = pharmDaysLeft(p.expiry);
-        const status = pharmStatus(days);
-        const realIdx = pharmData.indexOf(p);
-        const expFormatted = p.expiry ? new Date(p.expiry).toLocaleDateString("fr-FR", {month:"long", year:"numeric"}) : "—";
-        return `
-          <div class="pharm-card pharm-${status}">
-            <div class="pharm-card-photo" ${p.photo ? `style="background-image:url('${p.photo}')"` : ""}>
-              ${!p.photo ? "💊" : ""}
-            </div>
-            <div class="pharm-card-body">
-              <div class="pharm-card-engin">${fcEsc(p.engin || "—")}</div>
-              <div class="pharm-card-name">${fcEsc(p.name)}</div>
-              <div class="pharm-card-date">Exp. ${expFormatted}</div>
-              <div class="pharm-card-status pharm-status-${status}">${pharmStatusLabel(days)}</div>
-            </div>
-            <div class="pharm-card-actions">
-              <button class="pharm-edit-btn" data-pidx="${realIdx}" title="Modifier">✏️</button>
-              <button class="pharm-del-btn" data-pidx="${realIdx}" title="Supprimer">🗑️</button>
-            </div>
-          </div>
-        `;
-      }).join("")}
+  const info = fcVehicleInfo[vehicle.id] || {};
+  const coverUrl = info.cover_url || "";
+
+  const detailHead = root.querySelector(".fc-detail-head");
+  if (!detailHead) return;
+
+  const card = document.createElement("div");
+  card.className = "fiche-vehicule-card";
+  card.innerHTML = `
+    <h3>🚒 Fiche du véhicule / engin</h3>
+
+    <div class="fiche-cover-wrap">
+      <!-- Photo de couverture -->
+      <div class="fiche-cover-photo" id="ficheCoverZone_${vehicle.id}" title="Cliquer pour ajouter / remplacer la photo">
+        ${coverUrl
+          ? `<img src="${coverUrl}" alt="Photo couverture" id="ficheCoverImg_${vehicle.id}">
+             <div class="fiche-cover-overlay">🔄 Remplacer</div>`
+          : `<span>📷 Photo de couverture</span>
+             <small style="margin-top:4px;font-size:.72rem">Cliquer pour ajouter</small>`}
+        <input type="file" accept="image/*" id="ficheCoverInput_${vehicle.id}"
+          style="display:none" aria-label="Photo de couverture">
+      </div>
+
+      <!-- Champs fiche -->
+      <div class="fiche-fields-grid">
+        <div class="fiche-field">
+          <label>Capacité</label>
+          <input type="text" id="ficheCapacite_${vehicle.id}" placeholder="Ex: 2000 L" value="${info.capacite || ''}">
+        </div>
+        <div class="fiche-field">
+          <label>Nombre de personnels</label>
+          <input type="text" id="fichePersonnels_${vehicle.id}" placeholder="Ex: 6" value="${info.personnels || ''}">
+        </div>
+        <div class="fiche-field fiche-field-full">
+          <label>Spécialité / qualification conducteur</label>
+          <input type="text" id="ficheSpecialite_${vehicle.id}" placeholder="Ex: COD3, permis PL…" value="${info.specialite || ''}">
+        </div>
+        <div class="fiche-field fiche-field-full">
+          <label>Description de l'engin</label>
+          <textarea id="ficheDescription_${vehicle.id}" placeholder="Rôle, caractéristiques, particularités opérationnelles…">${info.description || ''}</textarea>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+      <button class="fiche-save-btn" id="ficheSaveBtn_${vehicle.id}">💾 Enregistrer la fiche</button>
+      <span class="fiche-saved-badge" id="ficheSavedBadge_${vehicle.id}" style="display:none">✓ Enregistré</span>
+      <span class="fiche-cover-uploading" id="ficheUploading_${vehicle.id}" style="display:none">📤 Upload en cours…</span>
     </div>
   `;
 
-  panel.querySelectorAll(".pharm-edit-btn").forEach(btn => {
-    btn.onclick = () => pharmOpenForm(parseInt(btn.dataset.pidx));
-  });
-  panel.querySelectorAll(".pharm-del-btn").forEach(btn => {
-    btn.onclick = () => {
-      if(confirm("Supprimer ce produit ?")){ pharmData.splice(parseInt(btn.dataset.pidx), 1); pharmSave(); pharmRender(); if(typeof savePharmacieSupabase === "function") savePharmacieSupabase(); }
-    };
-  });
-}
+  detailHead.insertAdjacentElement("afterend", card);
 
-function pharmOpenForm(idx){
-  const isEdit = idx !== undefined && idx >= 0;
-  const prod = isEdit ? pharmData[idx] : {name:"", engin:"", expiry:"", photo:""};
+  // ── Bind photo ──
+  const coverZone  = card.querySelector(`#ficheCoverZone_${vehicle.id}`);
+  const coverInput = card.querySelector(`#ficheCoverInput_${vehicle.id}`);
+  const uploading  = card.querySelector(`#ficheUploading_${vehicle.id}`);
 
-  const dlg = document.getElementById("pharmDialog");
-  if(!dlg) return;
+  coverZone.onclick = () => coverInput.click();
 
-  // Remplir les champs
-  document.getElementById("pharmDialogTitle").textContent = isEdit ? "Modifier un produit" : "Ajouter un produit";
-  document.getElementById("pharmFormName").value = prod.name || "";
-  document.getElementById("pharmFormEngin").value = prod.engin || "";
-  document.getElementById("pharmFormExpiry").value = prod.expiry || "";
-  document.getElementById("pharmFormSave").textContent = isEdit ? "Enregistrer" : "Ajouter";
+  coverInput.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    uploading.style.display = "inline";
 
-  // Photo preview
-  const prev = document.getElementById("pharmFormPhotoPreview");
-  if(prod.photo){
-    prev.style.backgroundImage = `url('${prod.photo}')`;
-    prev.textContent = "";
-  } else {
-    prev.style.backgroundImage = "";
-    prev.textContent = "📷";
-  }
-
-  // Datalist engins
-  const knownEngins = [...new Set([
-    "VSAV 1", "VSAV 2", "FPT 53", "VLHR",
-    ...(typeof fcVehicles !== "undefined" ? fcVehicles.map(v=>v.name) : []),
-    ...pharmData.map(p=>p.engin)
-  ].filter(Boolean))].sort();
-  document.getElementById("pharmEnginList").innerHTML = knownEngins.map(e=>`<option value="${fcEsc(e)}">`).join("");
-
-  let currentPhoto = prod.photo || "";
-
-  // Photo input — cloner pour retirer anciens listeners
-  const oldInput = document.getElementById("pharmFormPhotoInput");
-  const newInput = oldInput.cloneNode(true);
-  oldInput.parentNode.replaceChild(newInput, oldInput);
-  newInput.addEventListener("change", async e => {
-    const file = e.target.files && e.target.files[0];
-    if(!file) return;
-    try{
-      currentPhoto = await compressImageV32(file, 600, 0.7);
-      prev.style.backgroundImage = `url('${currentPhoto}')`;
-      prev.textContent = "";
-    }catch(err){ toast("Photo trop lourde"); }
-  });
-
-  // Boutons — cloner pour retirer anciens listeners
-  const oldSave = document.getElementById("pharmFormSave");
-  const newSave = oldSave.cloneNode(true);
-  newSave.textContent = isEdit ? "Enregistrer" : "Ajouter";
-  oldSave.parentNode.replaceChild(newSave, oldSave);
-  newSave.onclick = () => {
-    const name = document.getElementById("pharmFormName").value.trim();
-    const engin = document.getElementById("pharmFormEngin").value.trim();
-    const expiry = document.getElementById("pharmFormExpiry").value;
-    if(!name || !engin || !expiry){ toast("Merci de remplir tous les champs obligatoires"); return; }
-    const entry = { name, engin, expiry, photo: currentPhoto };
-    if(isEdit){ pharmData[idx] = entry; } else { pharmData.push(entry); }
-    pharmSave();
-    pharmRender();
-    dlg.close();
-    toast(isEdit ? "Produit mis à jour" : "Produit ajouté");
-    if(typeof savePharmacieSupabase === "function") savePharmacieSupabase();
+    try {
+      const { dataUrl, publicUrl } = await uploadCoverPhoto(vehicle.id, file);
+      // Mettre à jour l'aperçu
+      let img = coverZone.querySelector("img");
+      if (!img) {
+        coverZone.innerHTML = `<img src="${dataUrl}" alt="Photo couverture" id="ficheCoverImg_${vehicle.id}">
+          <div class="fiche-cover-overlay">🔄 Remplacer</div>`;
+      } else {
+        img.src = dataUrl;
+      }
+      // Aussi mettre à jour getCoverPhoto pour l'impression
+      if (typeof setCoverPhoto === "function") setCoverPhoto(vehicle.id, dataUrl);
+      if (typeof toast === "function") toast("Photo de couverture enregistrée ✓");
+    } catch(err) {
+      if (typeof toast === "function") toast("Erreur lors de l'upload de la photo");
+      console.error(err);
+    } finally {
+      uploading.style.display = "none";
+    }
   };
 
-  document.getElementById("pharmFormCancel").onclick = () => dlg.close();
-  document.getElementById("pharmDialogClose").onclick = () => dlg.close();
+  // ── Bind sauvegarde champs ──
+  const saveBtn = card.querySelector(`#ficheSaveBtn_${vehicle.id}`);
+  const savedBadge = card.querySelector(`#ficheSavedBadge_${vehicle.id}`);
 
-  dlg.showModal();
+  saveBtn.onclick = async () => {
+    saveBtn.disabled = true;
+    saveBtn.textContent = "Enregistrement…";
+
+    const fields = {
+      capacite:    card.querySelector(`#ficheCapacite_${vehicle.id}`).value.trim(),
+      personnels:  card.querySelector(`#fichePersonnels_${vehicle.id}`).value.trim(),
+      specialite:  card.querySelector(`#ficheSpecialite_${vehicle.id}`).value.trim(),
+      description: card.querySelector(`#ficheDescription_${vehicle.id}`).value.trim(),
+    };
+
+    await saveVehicleInfo(vehicle.id, fields);
+
+    saveBtn.disabled = false;
+    saveBtn.textContent = "💾 Enregistrer la fiche";
+    savedBadge.style.display = "inline";
+    setTimeout(() => savedBadge.style.display = "none", 2500);
+    if (typeof toast === "function") toast("Fiche enregistrée ✓");
+  };
 }
 
-// Init
-const pharmAddBtn = document.getElementById("pharmAddBtn");
-if(pharmAddBtn) pharmAddBtn.onclick = () => pharmOpenForm();
+// ── Intégration dans renderFcDetail ────────────────────────────
+const renderFcDetailBeforeV33 = typeof renderFcDetail === "function" ? renderFcDetail : r => r;
+renderFcDetail = function(root) {
+  renderFcDetailBeforeV33(root);
+  const vehicle = (typeof inventoryVehicles !== "undefined" ? inventoryVehicles : [])
+    .find(v => v.id === (typeof selectedInventoryVehicle !== "undefined" ? selectedInventoryVehicle : ""));
+  if (vehicle) renderFicheVehicule(root, vehicle);
+};
 
-// Render quand on clique sur l'onglet
-document.querySelectorAll(".tech-nav").forEach(btn => {
-  if(btn.dataset.tab === "pharmacie"){
-    const origOnclick = btn.onclick;
-    btn.onclick = (e) => {
-      if(origOnclick) origOnclick.call(btn, e);
-      pharmRender();
-    };
+// ── Mise à jour couverture impression ──────────────────────────
+// On surcharge getCoverPhoto pour d'abord chercher dans fcVehicleInfo
+const getCoverPhotoOrigV33 = typeof getCoverPhoto === "function" ? getCoverPhoto : () => "";
+getCoverPhoto = function(vehicleId) {
+  const info = fcVehicleInfo[vehicleId];
+  if (info && info.cover_url) return info.cover_url;
+  return getCoverPhotoOrigV33(vehicleId);
+};
+
+// Surcharge de la fonction d'impression pour ajouter les champs fiche en couverture
+const printInventoryOrigV33 = typeof printInventoryV29 === "function" ? printInventoryV29 : null;
+
+// Patch de la page de couverture : ajouter infos fiche sous le QR code
+const renderCheckSheetsBeforeV33 = typeof renderCheckSheets === "function" ? renderCheckSheets : () => {};
+renderCheckSheets = function() {
+  renderCheckSheetsBeforeV33();
+  // Patch post-rendu : enrichir la couverture d'impression si on lance l'impression
+};
+
+// Patch direct dans printInventoryV29 via surcharge de getCoverPhoto + ajout HTML
+// On intercepte window.print pour injecter les champs fiche dans le printArea
+const windowPrintOrigV33 = window.print.bind(window);
+window.print = function() {
+  // Injecter les infos fiche dans la couverture si elles existent
+  const printArea = document.getElementById("printArea");
+  if (printArea) {
+    const vId = typeof selectedInventoryVehicle !== "undefined" ? selectedInventoryVehicle : "";
+    const info = fcVehicleInfo[vId] || {};
+    const existing = printArea.querySelector(".print-cover-fiche");
+    if (existing) existing.remove();
+
+    if (info.capacite || info.personnels || info.specialite || info.description) {
+      const ficheEl = document.createElement("div");
+      ficheEl.className = "print-cover-fiche";
+      ficheEl.innerHTML = `
+        ${info.capacite ? `<div class="print-cover-fiche-row"><span>Capacité :</span><strong>${info.capacite}</strong></div>` : ""}
+        ${info.personnels ? `<div class="print-cover-fiche-row"><span>Personnels :</span><strong>${info.personnels}</strong></div>` : ""}
+        ${info.specialite ? `<div class="print-cover-fiche-row print-cover-fiche-full"><span>Qualification conducteur :</span><strong>${info.specialite}</strong></div>` : ""}
+        ${info.description ? `<div class="print-cover-fiche-desc">${info.description}</div>` : ""}
+      `;
+      // Insérer après le QR code dans la couverture
+      const qrBox = printArea.querySelector(".qr-box, .print-vehicle-photo");
+      if (qrBox) qrBox.closest("section")?.appendChild(ficheEl);
+      else printArea.querySelector("section")?.appendChild(ficheEl);
+    }
   }
-});
+  windowPrintOrigV33();
+};
+
+// ── Chargement initial ──────────────────────────────────────────
+(function waitLoadVehicleInfo() {
+  if (typeof supabase !== "undefined" && supabase && typeof supabase.from === "function") {
+    loadVehicleInfo().then(() => {
+      // Rafraîchir si l'onglet fiches est actif
+      const checkTab = document.getElementById("checkSheets");
+      if (checkTab && checkTab.classList.contains("active")) {
+        if (typeof renderCheckSheets === "function") renderCheckSheets();
+      }
+    });
+  } else {
+    setTimeout(waitLoadVehicleInfo, 200);
+  }
+})();
+
+/* ============================================================
+   FIN FICHE VÉHICULE V33
+   ============================================================ */
+
+renderAll();
