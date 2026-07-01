@@ -7143,10 +7143,18 @@ function fcPrintInventory(){
     || "";
 
   const usedIds = new Set();
+  // Normaliser : minuscules + suppression accents pour comparaison souple
+  const normPrint = s => String(s||"").toLowerCase()
+    .replace(/[\u00e0\u00e2\u00e4]/g,"a").replace(/[\u00e9\u00e8\u00ea\u00eb]/g,"e")
+    .replace(/[\u00ee\u00ef]/g,"i").replace(/[\u00f4\u00f6]/g,"o")
+    .replace(/[\u00f9\u00fb\u00fc]/g,"u").replace(/\u00e7/g,"c")
+    .replace(/[^a-z0-9]/g," ").replace(/  +/g," ").trim();
+
   const getItemsForStep = (aliases) => {
-    const lower = aliases.map(a => String(a).toLowerCase());
+    const normed = aliases.map(a => normPrint(a));
     return allItems.filter(item => {
-      const ok = lower.some(a => String(item.zone || "").toLowerCase() === a);
+      const zoneNorm = normPrint(item.zone);
+      const ok = normed.some(a => zoneNorm === a);
       if(ok) usedIds.add(item.id);
       return ok;
     });
@@ -9639,50 +9647,100 @@ function setMediaV30(vehicleId, slot, dataUrl){
 }
 
 function getInventoryStepStructureV30(vehicle){
-  // Structure adaptable. Pour FPT on garde le parcours véhicule.
-  // Pour matériel/bateau/MPR/sac : on créera des étapes depuis les zones existantes ou génériques.
-  const isFpt = String(vehicle.name || "").toUpperCase().includes("FPT") || String(vehicle.type || "").toUpperCase().includes("FOURGON");
+  const vname = String(vehicle.name || "").toUpperCase();
+  const vtype = String(vehicle.type || "").toUpperCase();
+  const isFpt  = vname.includes("FPT")  || vtype.includes("FOURGON");
+  const isVsav = vname.includes("VSAV") || vtype.includes("SECOURS");
 
-  if(isFpt){
-    return [
-      {title:"CABINE", subtitle:"Contrôle intérieur et accès opérationnels", steps:[
-        {name:"Cabine avant", aliases:["Cabine conducteur","Cabine chef d’agrès","Cabine chef d'agres","Cabine avant","Cabine avant gauche","Cabine avant droite"]},
-        {name:"Cabine arrière", aliases:["Cabine arrière","Cabine arriere","Cabine arrière gauche","Cabine arrière droite"]}
+  if(isFpt || isVsav){
+    // Zones réelles de l'inventaire pour ce véhicule
+    const realZones = [...new Set(
+      fcInventory.filter(i => i.vehicleId === vehicle.id).map(i => (i.zone||"").trim()).filter(Boolean)
+    )];
+
+    // Normaliser : minuscules, sans accents, espaces simples
+    const norm = s => String(s||"").toLowerCase()
+      .replace(/[àâä]/g,"a").replace(/[éèêë]/g,"e").replace(/[îï]/g,"i")
+      .replace(/[ôö]/g,"o").replace(/[ùûü]/g,"u").replace(/ç/g,"c")
+      .replace(/[^a-z0-9]/g," ").replace(/  +/g," ").trim();
+
+    const structure = [
+      {title:"CABINE", subtitle:"Controle interieur et acces operationnels", steps:[
+        {name:"Cabine avant", aliases:["Cabine conducteur","Cabine chef d'agres","Cabine avant","Cabine avant gauche","Cabine avant droite","Cabine","Cab avant","Poste de conduite","Cab AV","Cabine AV"]},
+        {name:"Cabine arriere", aliases:["Cabine arriere","Cabine ar","Cabine arriere gauche","Cabine arriere droite","Cabine AR","Cab AR","Cab arriere"]}
       ]},
-      {title:"CÔTÉ GAUCHE", subtitle:"Contrôle des rideaux et coffres côté gauche", steps:[
-        {name:"Rideau avant gauche", aliases:["Rideau avant gauche","Rideau av. G"]},
-        {name:"Rideau arrière gauche", aliases:["Rideau arrière gauche","Rideau ar. G"]},
-        {name:"Coffre arrière gauche", aliases:["Coffre arrière gauche","Coffre bas gauche"]}
+      {title:"COTE GAUCHE", subtitle:"Controle des rideaux et coffres cote gauche", steps:[
+        {name:"Rideau avant gauche", aliases:["Rideau avant gauche","Rideau av. G","Rideau av G","R avant gauche","RAG","Rideau AVG"]},
+        {name:"Rideau arriere gauche", aliases:["Rideau arriere gauche","Rideau ar. G","Rideau ar G","RArrG","Rideau ARG"]},
+        {name:"Coffre arriere gauche", aliases:["Coffre arriere gauche","Coffre bas gauche","Coffre G","Coffre gauche","Coffre ARG"]}
       ]},
-      {title:"ARRIÈRE", subtitle:"Pompe, tableau de commande et dévidoirs", steps:[
-        {name:"Compartiment pompe", aliases:["Pompe","Tableau de commande pompe","Rideau arrière"]},
-        {name:"Dévidoir gauche", aliases:["Dévidoir arrière gauche"]},
-        {name:"Dévidoir droit", aliases:["Dévidoir arrière droit"]},
-        {name:"Échelles arrière", aliases:["Échelles arrière / toit"]}
+      {title:"ARRIERE", subtitle:"Pompe, tableau de commande et devidoirs", steps:[
+        {name:"Compartiment pompe", aliases:["Pompe","Tableau de commande pompe","Rideau arriere","Compartiment pompe","Tableau pompe","Arriere pompe","Arr pompe","Arriere"]},
+        {name:"Devidoir gauche", aliases:["Devidoir arriere gauche","Devidoir gauche","Dev. gauche","Dev gauche","Devidoir G"]},
+        {name:"Devidoir droit", aliases:["Devidoir arriere droit","Devidoir droit","Dev. droit","Dev droit","Devidoir D"]},
+        {name:"Echelles arriere", aliases:["Echelles arriere / toit","Echelles arriere","Echelle AR","Echelles AR","Chelles AR"]}
       ]},
-      {title:"CÔTÉ DROIT", subtitle:"Contrôle des rideaux et coffres côté droit", steps:[
-        {name:"Rideau avant droit", aliases:["Rideau avant droit","Rideau av. D"]},
-        {name:"Rideau arrière droit", aliases:["Rideau arrière droit","Rideau ar. D"]},
-        {name:"Coffre arrière droit", aliases:["Coffre arrière droit","Coffre bas droit"]}
+      {title:"COTE DROIT", subtitle:"Controle des rideaux et coffres cote droit", steps:[
+        {name:"Rideau avant droit", aliases:["Rideau avant droit","Rideau av. D","Rideau av D","R avant droit","RAD","Rideau AVD"]},
+        {name:"Rideau arriere droit", aliases:["Rideau arriere droit","Rideau ar. D","Rideau ar D","RArrD","Rideau ARD"]},
+        {name:"Coffre arriere droit", aliases:["Coffre arriere droit","Coffre bas droit","Coffre D","Coffre droit","Coffre ARD"]}
       ]},
-      {title:"TOIT", subtitle:"Échelles et matériel de toit", steps:[
-        {name:"Échelles et matériel de toit", aliases:["Toit","Toit / échelles","Échelles de toit","Équipements de toit"]}
+      {title:"TOIT", subtitle:"Echelles et materiel de toit", steps:[
+        {name:"Echelles et materiel de toit", aliases:["Toit","Toit / echelles","Echelles de toit","Equipements de toit","Materiel de toit","Toit echelles","Echelle toit"]}
       ]}
     ];
+
+    // Construire la map normalisée de tous les aliases existants
+    const aliasNorms = new Set(structure.flatMap(sec => sec.steps.flatMap(s => s.aliases.map(norm))));
+
+    // Pour chaque zone réelle non reconnue : trouver l'étape la plus proche
+    realZones.forEach(zone => {
+      if(aliasNorms.has(norm(zone))) return; // déjà couverte
+
+      // Score de similarité par mots communs
+      const zWords = norm(zone).split(" ").filter(w => w.length > 2);
+      let bestStep = null, bestScore = 0;
+      structure.forEach(sec => sec.steps.forEach(step => {
+        const sWords = step.aliases.flatMap(a => norm(a).split(" ")).filter(w => w.length > 2);
+        const score = zWords.filter(w => sWords.includes(w)).length;
+        if(score > bestScore){ bestScore = score; bestStep = step; }
+      }));
+
+      if(bestStep && bestScore > 0){
+        bestStep.aliases.push(zone);
+        aliasNorms.add(norm(zone));
+      } else {
+        // Aucune correspondance : créer une étape dédiée dans la section TOIT (fin)
+        const lastSec = structure[structure.length - 1];
+        lastSec.steps.push({name:zone, aliases:[zone]});
+        aliasNorms.add(norm(zone));
+      }
+    });
+
+    // Convertir les noms d'étapes en noms avec accents pour l'affichage
+    // (on garde les noms normalisés pour la comparaison, l'affichage utilise le premier alias avec accents)
+    structure.forEach(sec => sec.steps.forEach(step => {
+      // Trouver le premier alias réel qui correspond à une zone inventaire (préserver accents)
+      const realMatch = realZones.find(z => norm(z) === norm(step.name) || step.aliases.map(norm).includes(norm(z)));
+      if(realMatch && !step._nameSet){
+        step._nameSet = true;
+        // Garder le nom d'affichage propre (avec accents si dispo)
+        const originalAlias = step.aliases.find(a => norm(a) === norm(step.name));
+        if(originalAlias) step.displayName = originalAlias;
+      }
+    }));
+
+    return structure;
   }
 
-  const zones = [...new Set(fcInventory.filter(i => i.vehicleId === vehicle.id).map(i => i.zone).filter(Boolean))];
+  // Pour tous les autres vehicules/materiels : etapes = zones reelles
+  const zones = [...new Set(fcInventory.filter(i => i.vehicleId === vehicle.id).map(i => (i.zone||"").trim()).filter(Boolean))];
   const steps = zones.length ? zones.map(z => ({name:z, aliases:[z]})) : [
-    {name:"Contrôle général", aliases:["Contrôle général"]},
+    {name:"Controle general", aliases:["Controle general","Controle","General"]},
     {name:"Accessoires", aliases:["Accessoires"]},
-    {name:"État / fonctionnement", aliases:["État / fonctionnement"]}
+    {name:"Etat / fonctionnement", aliases:["Etat / fonctionnement","Fonctionnement"]}
   ];
-
-  return [{
-    title:"INVENTAIRE",
-    subtitle:"Contrôle adapté au matériel ou à l’engin",
-    steps
-  }];
+  return [{title:"INVENTAIRE", subtitle:"Controle adapte au materiel ou a l'engin", steps}];
 }
 
 function fcStepNameForZone(vehicle, zoneId){
