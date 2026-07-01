@@ -10493,7 +10493,16 @@ async function loadVehicleInfo(){
   try{
     const res=await supabase.from("fc_vehicle_info").select("*");
     if(res.error){ console.warn("fc_vehicle_info:",res.error); return; }
-    if(res.data){ fcVehicleInfo={}; res.data.forEach(row=>{ fcVehicleInfo[row.vehicle_id]=row; }); }
+    if(res.data){
+      fcVehicleInfo={};
+      res.data.forEach(row=>{ fcVehicleInfo[row.vehicle_id]=row; });
+      console.log("fc_vehicle_info chargé:",res.data.length,"enregistrements");
+      // Rafraîchir la fiche si l'onglet fiches vérification est actif
+      const checkTab=document.getElementById("checkSheets");
+      if(checkTab&&checkTab.classList.contains("active")){
+        if(typeof renderCheckSheets==="function") renderCheckSheets();
+      }
+    }
   }catch(e){ console.warn("loadVehicleInfo err",e); }
 }
 
@@ -10502,8 +10511,19 @@ async function saveVehicleInfo(vehicleId,fields){
   Object.assign(fcVehicleInfo[vehicleId],fields);
   const existing=fcVehicleInfo[vehicleId];
   try{
-    if(existing.id){ await supabase.from("fc_vehicle_info").update(fields).eq("id",existing.id); }
-    else{ const res=await supabase.from("fc_vehicle_info").insert({vehicle_id:vehicleId,...fields}); if(res.data&&res.data[0]) existing.id=res.data[0].id; }
+    if(existing.id){
+      // Mise à jour
+      const res=await supabase.from("fc_vehicle_info").update(fields).eq("id",existing.id);
+      if(res.error) console.warn("update vehicle_info err:",res.error);
+    } else {
+      // Insertion — utiliser upsert pour éviter les doublons sur vehicle_id
+      const payload={vehicle_id:vehicleId,...fields};
+      const res=await supabase.from("fc_vehicle_info").upsert(payload);
+      if(res.error){ console.warn("upsert vehicle_info err:",res.error); return; }
+      // Recharger pour récupérer l'id généré
+      const sel=await supabase.from("fc_vehicle_info").select("id").eq("vehicle_id",vehicleId);
+      if(sel.data&&sel.data[0]) existing.id=sel.data[0].id;
+    }
   }catch(e){ console.warn("saveVehicleInfo err",e); }
 }
 
@@ -10525,6 +10545,15 @@ async function uploadCoverPhoto(vehicleId,file){
     await saveVehicleInfo(vehicleId,{cover_url:dataUrl});
     return {dataUrl,publicUrl:dataUrl};
   }
+}
+
+async function renderFicheVehiculeAsync(root,vehicle){
+  // Recharger depuis Supabase pour avoir les données à jour
+  try{
+    const res=await supabase.from("fc_vehicle_info").select("*").eq("vehicle_id",vehicle.id);
+    if(res.data&&res.data[0]) fcVehicleInfo[vehicle.id]=res.data[0];
+  }catch(e){ console.warn("reload vehicle_info:",e); }
+  renderFicheVehicule(root,vehicle);
 }
 
 function renderFicheVehicule(root,vehicle){
@@ -10594,7 +10623,11 @@ const renderFcDetailBeforeV33=typeof renderFcDetail==="function"?renderFcDetail:
 renderFcDetail=function(root){
   renderFcDetailBeforeV33(root);
   const vehicle=(typeof inventoryVehicles!=="undefined"?inventoryVehicles:[]).find(v=>v.id===(typeof selectedInventoryVehicle!=="undefined"?selectedInventoryVehicle:""));
-  if(vehicle) renderFicheVehicule(root,vehicle);
+  if(vehicle){
+    // Afficher d'abord avec données en cache, puis recharger depuis Supabase
+    renderFicheVehicule(root,vehicle);
+    renderFicheVehiculeAsync(root,vehicle);
+  }
 };
 
 const getCoverPhotoOrigV33=typeof getCoverPhoto==="function"?getCoverPhoto:()=>"";
