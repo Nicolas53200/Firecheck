@@ -321,7 +321,7 @@ let serviceInventory = [{"id": "FPTGO-Z01-M001", "vehicle": "FPT GO", "zone": "C
 let editingInventoryIndex = null;
 
 function $(id){return document.getElementById(id)}
-function showScreen(id){
+function showScreen(id, pushHistory = true){
   // Si un véhicule a été scanné via QR Code (?check=xxx), proposer un choix
   // (vérification journalière ou relève sur intervention) au lieu de redemander un scan.
   if(id === "scanner" && typeof scannedAsset !== "undefined" && scannedAsset){
@@ -334,7 +334,15 @@ function showScreen(id){
   if(id === "scanChoice" && typeof renderScanChoiceV36 === "function") renderScanChoiceV36();
   if(id === "interventionReport" && typeof renderInterventionReportV36 === "function") renderInterventionReportV36();
   if(id === "tech" && typeof fcAskNotificationPermission === "function") fcAskNotificationPermission();
+
+  // V38 — pushState : le bouton "retour" du navigateur revient à l'écran précédent
+  if(pushHistory) history.pushState({screen: id}, "", "#" + id);
 }
+// V38 — gestion du popstate (bouton retour navigateur)
+window.addEventListener("popstate", e => {
+  const id = e.state?.screen || "home";
+  showScreen(id, false);
+});
 // Délégation d'événement : fonctionne aussi pour les boutons [data-go] créés
 // dynamiquement plus tard (ex: dans renderStep(), regénéré via innerHTML).
 document.addEventListener("click", (e) => {
@@ -2234,7 +2242,7 @@ const libraryV8 = [
     "sub": "Secours à personne",
     "qty": 1
   },
-  ,{
+  {
     "name": "GHV (Gilet Haute Visibilité)",
     "family": "SSUAP",
     "sub": "Équipement personnel",
@@ -7523,38 +7531,42 @@ function parsePersonnelRows(rows){
   return parsed;
 }
 
+/* V38 — chargement dynamique de XLSX (~450 Ko économisés au chargement initial) */
+function fcLoadXLSX(){
+  return new Promise((resolve, reject) => {
+    if(typeof XLSX !== "undefined") return resolve(XLSX);
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js";
+    script.onload = () => resolve(XLSX);
+    script.onerror = () => reject(new Error("Impossible de charger la bibliothèque Excel"));
+    document.head.appendChild(script);
+  });
+}
+
 function importPersonnelCsv(file){
   const reader = new FileReader();
 
   if(file.name.toLowerCase().endsWith(".xlsx") || file.name.toLowerCase().endsWith(".xls")){
-    reader.onload = () => {
-      if(typeof XLSX === "undefined"){
-        toast("Import Excel indisponible hors connexion. Ouvre l’application avec internet ou utilise CSV.");
-        return;
-      }
-      const workbook = XLSX.read(reader.result, {type:"array"});
-      const sheetName = workbook.SheetNames.includes("Personnel") ? "Personnel" : workbook.SheetNames[0];
-      const sheet = workbook.Sheets[sheetName];
-      const rows = XLSX.utils.sheet_to_json(sheet, {header:1, raw:false});
-      const parsed = parsePersonnelRows(rows);
-      if(parsed.length){
-        personnelList = parsed;
-        localStorage.setItem("fc_personnel", JSON.stringify(personnelList));
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-        renderPersonnelTable();
-        toast(`${parsed.length} personnels importés depuis Excel`);
-      } else {
-        toast("Aucune ligne exploitable dans le fichier Excel");
+    reader.onload = async () => {
+      try{
+        const lib = await fcLoadXLSX();
+        const workbook = lib.read(reader.result, {type:"array"});
+        const sheetName = workbook.SheetNames.includes("Personnel") ? "Personnel" : workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const rows = lib.utils.sheet_to_json(sheet, {header:1, raw:false});
+        const parsed = parsePersonnelRows(rows);
+        if(parsed.length){
+          personnelList = parsed;
+          localStorage.setItem("fc_personnel", JSON.stringify(personnelList));
+          if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
+          renderPersonnelTable();
+          toast(`${parsed.length} personnels importés depuis Excel`);
+        } else {
+          toast("Aucune ligne exploitable dans le fichier Excel");
+        }
+      }catch(e){
+        console.warn("Import Excel échoué:", e);
+        toast("Import Excel indisponible. Vérifie ta connexion ou utilise un fichier CSV.");
       }
     };
     reader.readAsArrayBuffer(file);
@@ -8700,10 +8712,10 @@ function setLoginMode(mode){
 }
 
 function loginManualUser(){
-  const grade = (document.getElementById("manualGrade")?.value || "").trim();
-  const nom = (document.getElementById("manualNom")?.value || "").trim();
-  const prenom = (document.getElementById("manualPrenom")?.value || "").trim();
-  const matricule = (document.getElementById("manualMatricule")?.value || "").trim() || "NON RENSEIGNÉ";
+  const grade = (document.getElementById("manualGrade")?.value || "").trim().slice(0, 50);
+  const nom = (document.getElementById("manualNom")?.value || "").trim().slice(0, 80);
+  const prenom = (document.getElementById("manualPrenom")?.value || "").trim().slice(0, 80);
+  const matricule = (document.getElementById("manualMatricule")?.value || "").trim().slice(0, 20) || "NON RENSEIGNÉ";
 
   if(!grade || !nom){
     toast("Indique au minimum le grade et le nom");
