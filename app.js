@@ -1561,8 +1561,11 @@ function applyVehiclePhotoV7(vehicleId){
   const stage = $("photoStage");
   if(!stage || !url) return;
   stage.style.backgroundImage = `url('${url}')`;
-  stage.style.backgroundSize = "cover";
+  stage.style.backgroundSize = "contain";
   stage.style.backgroundPosition = "center";
+  stage.style.backgroundRepeat = "no-repeat";
+  // V38 — aspect-ratio dynamique pour aligner les zones sur la photo
+  fcSetStageAspectRatio(stage, url);
   const ph = stage.querySelector(".vehicle-photo-placeholder");
   if(ph) ph.style.display = "none";
 }
@@ -5648,8 +5651,11 @@ function renderInventoryDetailV8(container){
   if(savedPhoto){
     const stage = document.getElementById("photoStageV8");
     stage.style.backgroundImage = `url('${savedPhoto}')`;
-    stage.style.backgroundSize = "cover";
+    stage.style.backgroundSize = "contain";
     stage.style.backgroundPosition = "center";
+    stage.style.backgroundRepeat = "no-repeat";
+    // V38 — aspect-ratio dynamique pour aligner les zones
+    fcSetStageAspectRatio(stage, savedPhoto);
     const ph = stage.querySelector(".vehicle-photo-placeholder");
     if(ph) ph.style.display = "none";
   }
@@ -5954,6 +5960,8 @@ renderInventoryDetailV8 = function(container){
     stage.style.backgroundSize = "contain";
     stage.style.backgroundRepeat = "no-repeat";
     stage.style.backgroundPosition = "center";
+    // V38 — aspect-ratio dynamique pour aligner les zones
+    fcSetStageAspectRatio(stage, url);
     const ph = stage.querySelector(".vehicle-photo-placeholder");
     if(ph) ph.style.display = "none";
   }
@@ -6223,6 +6231,25 @@ function fcEnsureVehicle(vehicleId){
     fcLayouts[vehicleId] = {droite:[], arriere:[], gauche:[], toit:[], avant:[], interieur:[]};
   }
   if(!fcPhotos[vehicleId]) fcPhotos[vehicleId] = {};
+}
+
+/* ── V38 fix : aspect-ratio dynamique du stage photo ──────────────
+   Les zones sont positionnées en % du conteneur.  Avec background-size:contain
+   et un conteneur dont le ratio change (responsive, breakpoints), l'image se
+   décale dans le conteneur alors que les zones restent au même % → dérive.
+   En forçant l'aspect-ratio du conteneur à celui de l'image, contain remplit
+   100 % du conteneur et les % des zones correspondent toujours à l'image.   */
+function fcSetStageAspectRatio(stageEl, photoUrl){
+  if(!stageEl || !photoUrl) return;
+  var img = new Image();
+  img.onload = function(){
+    if(img.naturalWidth && img.naturalHeight){
+      stageEl.style.aspectRatio = img.naturalWidth + " / " + img.naturalHeight;
+      // Abaisser min-height pour laisser l'aspect-ratio piloter la hauteur
+      stageEl.style.minHeight = "200px";
+    }
+  };
+  img.src = photoUrl;
 }
 
 function renderCheckSheets(){
@@ -6586,7 +6613,9 @@ function renderFcDetail(root){
 
   root.querySelector(".fc-back").onclick = () => { fcState.mode = "list"; renderCheckSheets(); };
 
-
+  // V38 — aspect-ratio dynamique pour que les zones restent alignées sur la photo
+  const fcStageEl = document.getElementById("fcPhotoStage");
+  if(fcStageEl && photo) fcSetStageAspectRatio(fcStageEl, photo);
 
   document.querySelectorAll(".fc-view-tab").forEach(btn=>{
     btn.onclick = () => {
@@ -9325,6 +9354,10 @@ function renderStep(){
       </section>
     </div>
   `;
+
+  // V38 — aspect-ratio dynamique pour le stage photo du contrôle
+  const checkStageEl = checkScreen.querySelector(".check-photo-stage");
+  if(checkStageEl && activeView.photo) fcSetStageAspectRatio(checkStageEl, activeView.photo);
 
   document.querySelectorAll("[data-check-view]").forEach(btn => {
     btn.onclick = () => {
