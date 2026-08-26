@@ -1,8 +1,8 @@
-// Service Worker V38 — stratégie cache-first pour les fichiers statiques,
+// Service Worker V39 — stratégie cache-first pour les fichiers statiques,
 // network-first pour les requêtes API (Supabase).
 // Permet le fonctionnement hors-ligne (zones blanches en intervention).
 
-const CACHE_NAME = "firecheck-v38";
+const CACHE_NAME = "firecheck-v39";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
