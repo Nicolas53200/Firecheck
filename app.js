@@ -321,7 +321,7 @@ let serviceInventory = [{"id": "FPTGO-Z01-M001", "vehicle": "FPT GO", "zone": "C
 let editingInventoryIndex = null;
 
 function $(id){return document.getElementById(id)}
-function showScreen(id){
+function showScreen(id, pushHistory = true){
   // Si un véhicule a été scanné via QR Code (?check=xxx), proposer un choix
   // (vérification journalière ou relève sur intervention) au lieu de redemander un scan.
   if(id === "scanner" && typeof scannedAsset !== "undefined" && scannedAsset){
@@ -334,7 +334,15 @@ function showScreen(id){
   if(id === "scanChoice" && typeof renderScanChoiceV36 === "function") renderScanChoiceV36();
   if(id === "interventionReport" && typeof renderInterventionReportV36 === "function") renderInterventionReportV36();
   if(id === "tech" && typeof fcAskNotificationPermission === "function") fcAskNotificationPermission();
+
+  // V38 — pushState : le bouton "retour" du navigateur revient à l'écran précédent
+  if(pushHistory) history.pushState({screen: id}, "", "#" + id);
 }
+// V38 — gestion du popstate (bouton retour navigateur)
+window.addEventListener("popstate", e => {
+  const id = e.state?.screen || "home";
+  showScreen(id, false);
+});
 // Délégation d'événement : fonctionne aussi pour les boutons [data-go] créés
 // dynamiquement plus tard (ex: dans renderStep(), regénéré via innerHTML).
 document.addEventListener("click", (e) => {
@@ -552,12 +560,162 @@ const fcOriginalTitle = document.title;
 let fcLastNotifiedCount = 0;
 let fcNotifPermissionAsked = false;
 
+// ============================================================
+//  Changelog & système de notification de mise à jour
+// ============================================================
+const FC_APP_VERSION = "1.1.0";
+const FC_CHANGELOG = [
+  {
+    version: "1.1.0",
+    date: "27 août 2026",
+    title: "Sécurité, performance & accessibilité",
+    changes: [
+      { icon: "🔒", text: "Protection XSS complète — échappement systématique de toutes les données affichées" },
+      { icon: "⚡", text: "Chargement XLSX en lazy loading — 450 Ko économisés au démarrage" },
+      { icon: "📡", text: "Mode hors-ligne — l'application fonctionne sans réseau (zones blanches)" },
+      { icon: "📲", text: "PWA installable — ajout possible sur l'écran d'accueil" },
+      { icon: "🔙", text: "Bouton retour du navigateur — navigation naturelle entre les écrans" },
+      { icon: "♿", text: "Accessibilité améliorée — navigation clavier, lecteurs d'écran" },
+      { icon: "🐛", text: "Correction bug doublon sauvegarde personnel" },
+      { icon: "🐛", text: "Correction erreur de syntaxe bibliothèque matériel" },
+      { icon: "📐", text: "Zones de vérification — positionnement stable sur les photos" }
+    ]
+  },
+  {
+    version: "1.0.0",
+    date: "24 août 2026",
+    title: "Version initiale",
+    changes: [
+      { icon: "🚒", text: "Vérification d'inventaire des engins avec photos et zones cliquables" },
+      { icon: "📋", text: "Gestion du personnel et de l'habillement" },
+      { icon: "📊", text: "Remontées d'anomalies et suivi technique" },
+      { icon: "☁️", text: "Synchronisation cloud Supabase" }
+    ]
+  }
+];
+
+function fcShowUpdateBanner(version){
+  // Ne pas afficher si déjà vu
+  const lastSeen = localStorage.getItem("fc_last_version_seen");
+  if(lastSeen === FC_APP_VERSION) return;
+
+  // Supprimer un ancien bandeau éventuel
+  const old = document.getElementById("fcUpdateBanner");
+  if(old) old.remove();
+
+  const banner = document.createElement("div");
+  banner.id = "fcUpdateBanner";
+  banner.className = "fc-update-banner";
+  banner.innerHTML = `
+    <div class="fc-update-banner-content">
+      <span class="fc-update-icon">🆕</span>
+      <div class="fc-update-text">
+        <strong>FireCheck mis à jour — v${fcEsc(FC_APP_VERSION)}</strong>
+        <span>${fcEsc(FC_CHANGELOG[0]?.title || "")}</span>
+      </div>
+      <button class="fc-update-details-btn" id="fcShowChangelog">Voir les nouveautés</button>
+      <button class="fc-update-close" id="fcCloseUpdateBanner" title="Fermer">✕</button>
+    </div>
+  `;
+  document.body.appendChild(banner);
+
+  // Animation d'entrée
+  requestAnimationFrame(() => banner.classList.add("show"));
+
+  document.getElementById("fcShowChangelog").onclick = () => {
+    fcShowChangelogDialog();
+    banner.classList.remove("show");
+    setTimeout(() => banner.remove(), 350);
+  };
+  document.getElementById("fcCloseUpdateBanner").onclick = () => {
+    localStorage.setItem("fc_last_version_seen", FC_APP_VERSION);
+    banner.classList.remove("show");
+    setTimeout(() => banner.remove(), 350);
+  };
+}
+
+function fcShowChangelogDialog(){
+  // Supprimer un ancien dialog éventuel
+  let dlg = document.getElementById("fcChangelogDialog");
+  if(dlg) dlg.remove();
+
+  dlg = document.createElement("dialog");
+  dlg.id = "fcChangelogDialog";
+  dlg.innerHTML = `
+    <div class="modal">
+      <div class="modal-head">
+        <h2>📋 Nouveautés FireCheck</h2>
+        <button class="btn ghost" id="fcCloseChangelog">✕</button>
+      </div>
+      <div class="fc-changelog-body">
+        ${FC_CHANGELOG.map(release => `
+          <div class="fc-release">
+            <div class="fc-release-header">
+              <span class="fc-release-version">v${fcEsc(release.version)}</span>
+              <span class="fc-release-date">${fcEsc(release.date)}</span>
+              ${release.version === FC_APP_VERSION ? '<span class="fc-release-current">Actuelle</span>' : ''}
+            </div>
+            <h3>${fcEsc(release.title)}</h3>
+            <ul class="fc-release-changes">
+              ${release.changes.map(c => `<li><span class="fc-change-icon">${c.icon}</span> ${fcEsc(c.text)}</li>`).join("")}
+            </ul>
+          </div>
+        `).join("")}
+      </div>
+      <div style="text-align:center;padding:8px 0 4px;">
+        <button class="btn primary" id="fcChangelogOk">C'est compris !</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(dlg);
+  dlg.showModal();
+
+  const close = () => {
+    localStorage.setItem("fc_last_version_seen", FC_APP_VERSION);
+    dlg.close();
+    dlg.remove();
+  };
+  document.getElementById("fcCloseChangelog").onclick = close;
+  document.getElementById("fcChangelogOk").onclick = close;
+  dlg.addEventListener("click", e => { if(e.target === dlg) close(); });
+}
+
 // Enregistrement du service worker — rend l'application installable (PWA)
 if("serviceWorker" in navigator){
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("sw.js").catch(e => console.warn("Service worker non enregistré:", e));
+    navigator.serviceWorker.register("sw.js")
+      .then(reg => {
+        // Écouter les mises à jour trouvées
+        reg.addEventListener("updatefound", () => {
+          const newWorker = reg.installing;
+          if(newWorker){
+            newWorker.addEventListener("statechange", () => {
+              if(newWorker.state === "activated"){
+                fcShowUpdateBanner(FC_APP_VERSION);
+              }
+            });
+          }
+        });
+      })
+      .catch(e => console.warn("Service worker non enregistré:", e));
+  });
+
+  // Écouter le message du SW quand la mise à jour est prête
+  navigator.serviceWorker.addEventListener("message", event => {
+    if(event.data && event.data.type === "FC_UPDATE_READY"){
+      fcShowUpdateBanner(FC_APP_VERSION);
+    }
   });
 }
+
+// Afficher le bandeau au premier chargement si version pas encore vue
+window.addEventListener("DOMContentLoaded", () => {
+  const lastSeen = localStorage.getItem("fc_last_version_seen");
+  if(lastSeen !== FC_APP_VERSION){
+    // Petit délai pour ne pas encombrer le chargement initial
+    setTimeout(() => fcShowUpdateBanner(FC_APP_VERSION), 1500);
+  }
+});
 
 function fcComputeAlertCount(){
   let count = 0;
@@ -699,19 +857,19 @@ function renderStep(){
   const totalItems = flattenItems(step).length;
   $("itemsCount").textContent = `${totalItems} élément${totalItems > 1 ? "s" : ""}`;
   $("progressBar").style.width = `${((currentStep + 1) / appData.steps.length) * 100}%`;
-  $("referencePhoto").innerHTML = `<span>📷</span><strong>${step.photo}</strong><small>Photo de référence à intégrer</small>`;
+  $("referencePhoto").innerHTML = `<span>📷</span><strong>${fcEsc(step.photo)}</strong><small>Photo de référence à intégrer</small>`;
 
   $("inventoryList").innerHTML = step.groups.map((group, groupIndex) => `
-    <div class="group-title">${group.name}</div>
+    <div class="group-title">${fcEsc(group.name)}</div>
     ${group.items.map((item, itemIndex) => {
       const key = issueKey(currentStep, groupIndex, itemIndex);
       const issue = stepIssues[key];
       return `
         <div class="item-row ${issue ? "has-issue" : ""}" data-group="${groupIndex}" data-item="${itemIndex}">
-          <span class="item-emoji">${item[0]}</span>
-          <strong>${item[1]}</strong>
+          <span class="item-emoji">${fcEsc(item[0])}</span>
+          <strong>${fcEsc(item[1])}</strong>
           <span class="qty">x ${item[2]}</span>
-          ${issue ? `<span class="item-issue-badge">⚠️ ${issue.problemQty || 1} · ${issue.problem}</span>` : ""}
+          ${issue ? `<span class="item-issue-badge">⚠️ ${issue.problemQty || 1} · ${fcEsc(issue.problem)}</span>` : ""}
         </div>
       `;
     }).join("")}
@@ -833,10 +991,10 @@ function renderAnomaly(){
   const currentIssues = Object.values(stepIssues).filter(i => i.stepIndex === currentStep);
   $("anomalyItems").innerHTML = currentIssues.length ? currentIssues.map(issue => `
     <div class="checkbox-row">
-      <span>${issue.emoji}</span>
+      <span>${fcEsc(issue.emoji)}</span>
       <div>
-        <strong>${issue.item}</strong><br>
-        <span class="muted">${issue.problem} · ${issue.comment}</span>
+        <strong>${fcEsc(issue.item)}</strong><br>
+        <span class="muted">${fcEsc(issue.problem)} · ${fcEsc(issue.comment)}</span>
       </div>
       <span class="qty">x ${issue.qty}</span>
     </div>
@@ -896,12 +1054,12 @@ function renderReports(){
   $("myReportsList").innerHTML = reports.filter(r => !myName || r.author === myName).map(r => `
     <article class="report-card">
       <div class="report-top">
-        <div><strong>${r.asset}</strong><br><span class="muted">${r.zone} · ${r.origin}</span></div>
-        <span class="pill ${statusClass(r.status)}">${r.status}</span>
+        <div><strong>${fcEsc(r.asset)}</strong><br><span class="muted">${fcEsc(r.zone)} · ${fcEsc(r.origin)}</span></div>
+        <span class="pill ${statusClass(r.status)}">${fcEsc(r.status)}</span>
       </div>
-      <p><strong>${r.type}</strong> — ${r.item}</p>
-      <p class="muted">${r.comment}</p>
-      <small class="muted">${r.time}</small>
+      <p><strong>${fcEsc(r.type)}</strong> — ${fcEsc(r.item)}</p>
+      <p class="muted">${fcEsc(r.comment)}</p>
+      <small class="muted">${fcEsc(r.time)}</small>
       ${!["Clôturé","Corrigé par SP"].includes(r.status) ? `<button class="btn secondary full fix-btn" data-id="${r.id}">J’ai réglé</button>` : ""}
     </article>
   `).join("");
@@ -914,11 +1072,11 @@ function renderReports(){
   const filter = $("reportFilter")?.value || "all";
   $("techReportsList").innerHTML = reports.filter(r => filter === "all" || r.status === filter).map(r => `
     <article class="tech-report">
-      <div><strong>${r.asset}</strong><br><span class="muted">${r.zone}</span></div>
-      <div><strong>${r.type}</strong><br><span class="muted">${r.item}</span></div>
-      <div>${r.author}<br><span class="muted">${r.time}</span></div>
+      <div><strong>${fcEsc(r.asset)}</strong><br><span class="muted">${fcEsc(r.zone)}</span></div>
+      <div><strong>${fcEsc(r.type)}</strong><br><span class="muted">${fcEsc(r.item)}</span></div>
+      <div>${fcEsc(r.author)}<br><span class="muted">${fcEsc(r.time)}</span></div>
       <div>
-        <span class="pill ${statusClass(r.status)}">${r.status}</span>
+        <span class="pill ${statusClass(r.status)}">${fcEsc(r.status)}</span>
         <button class="btn ghost take-btn" data-id="${r.id}">Prendre en charge</button>
         <button class="btn primary close-btn" data-id="${r.id}">Clôturer</button>
       </div>
@@ -1091,11 +1249,11 @@ function renderInventoryList(view){
         const count = serviceInventory.filter(i => i.vehicleId === v.id || i.vehicle === v.name).length;
         return `
           <article class="inventory-vehicle-card">
-            <h3>${v.name}</h3>
-            <p>${v.type}</p>
-            <p><strong>${v.plate}</strong></p>
+            <h3>${fcEsc(v.name)}</h3>
+            <p>${fcEsc(v.type)}</p>
+            <p><strong>${fcEsc(v.plate)}</strong></p>
             <p>${count} matériels inventoriés</p>
-            <button class="btn secondary open-inventory" data-id="${v.id}">Ouvrir l’inventaire</button>
+            <button class="btn secondary open-inventory" data-id="${fcEsc(v.id)}">Ouvrir l’inventaire</button>
           </article>
         `;
       }).join("")}
@@ -1233,15 +1391,15 @@ function renderLibrary(){
   if(!categorySelect || !list) return;
   const cats = ["Toutes catégories", ...new Set(materialLibrary.map(i => i.category))];
   const currentCat = categorySelect.value || "Toutes catégories";
-  categorySelect.innerHTML = cats.map(c => `<option ${c===currentCat?"selected":""}>${c}</option>`).join("");
+  categorySelect.innerHTML = cats.map(c => `<option ${c===currentCat?"selected":""}>${fcEsc(c)}</option>`).join("");
   const search = ($("librarySearch")?.value || "").toLowerCase();
   const filtered = materialLibrary
     .filter(i => currentCat === "Toutes catégories" || i.category === currentCat)
     .filter(i => i.name.toLowerCase().includes(search));
   list.innerHTML = filtered.map((item, idx) => `
     <div class="library-item" draggable="true" data-library-index="${materialLibrary.indexOf(item)}">
-      <strong>${item.name}</strong>
-      <small>${item.category} · quantité par défaut ${item.qty}</small>
+      <strong>${fcEsc(item.name)}</strong>
+      <small>${fcEsc(item.category)} · quantité par défaut ${item.qty}</small>
     </div>
   `).join("");
   document.querySelectorAll(".library-item").forEach(el => {
@@ -1386,13 +1544,13 @@ function renderInventoryDetail(view, vehicle){
       <div class="panel-head">
         <div>
           <p class="eyebrow">Inventaire véhicule</p>
-          <h2>${vehicle.name}</h2>
+          <h2>${fcEsc(vehicle.name)}</h2>
         </div>
         <button class="btn primary" id="editVehicleMeta">Modifier l’inventaire</button>
       </div>
       <div class="vehicle-detail-grid">
-        <div><span>Immatriculation / référence</span><strong>${vehicle.plate}</strong></div>
-        <div><span>Type de véhicule</span><strong>${vehicle.type}</strong></div>
+        <div><span>Immatriculation / référence</span><strong>${fcEsc(vehicle.plate)}</strong></div>
+        <div><span>Type de véhicule</span><strong>${fcEsc(vehicle.type)}</strong></div>
         <div><span>Matériels</span><strong>${allCount}</strong></div>
       </div>
     </div>
@@ -1412,15 +1570,15 @@ function renderInventoryDetail(view, vehicle){
         <div class="selected-zone-panel">
           <h3>Zone sélectionnée</h3>
           ${selectedZone ? `
-            <input class="zone-name-input" id="zoneRenameInput" value="${escapeHtml(selectedZone.label)}">
+            <input class="zone-name-input" id="zoneRenameInput" value="${fcEsc(selectedZone.label)}">
             <div class="zone-material-list" id="zoneDropArea">
               ${zoneItems.length ? zoneItems.map(item => {
                 const globalIndex = serviceInventory.indexOf(item);
                 return `
                   <div class="zone-material-row" data-index="${globalIndex}">
                     <div>
-                      <strong>${item.name}</strong>
-                      <small>${item.category || "Sans catégorie"}</small>
+                      <strong>${fcEsc(item.name)}</strong>
+                      <small>${fcEsc(item.category || "Sans catégorie")}</small>
                     </div>
                     <input type="number" min="1" value="${item.qty}" data-zone-qty="${globalIndex}">
                     <button class="delete-mini" data-zone-delete="${globalIndex}">Suppr.</button>
@@ -1447,7 +1605,7 @@ function renderInventoryDetail(view, vehicle){
             </div>
             ${zonesForView.map(z => `
               <div class="draw-zone ${z.id === selectedDrawZoneIdV7 ? "active" : ""}" data-zone-id="${z.id}" style="left:${z.x}%;top:${z.y}%;width:${z.w}%;height:${z.h}%;">
-                ${z.label}
+                ${fcEsc(z.label)}
                 <span class="resize"></span>
               </div>
             `).join("")}
@@ -2234,7 +2392,7 @@ const libraryV8 = [
     "sub": "Secours à personne",
     "qty": 1
   },
-  ,{
+  {
     "name": "GHV (Gilet Haute Visibilité)",
     "family": "SSUAP",
     "sub": "Équipement personnel",
@@ -5501,9 +5659,9 @@ function renderGlobalLibraryV8(){
       </div>
       <div class="global-library-list" id="globalLibraryList">
         ${items.map((item, idx) => `
-          <div class="global-library-item" draggable="true" data-lib-name="${escapeHtml(item.name)}" data-lib-family="${item.family}" data-lib-sub="${escapeHtml(item.sub)}" data-lib-qty="${item.qty}">
-            <strong>${item.name}</strong>
-            <small>${item.family} · ${item.sub}</small>
+          <div class="global-library-item" draggable="true" data-lib-name="${fcEsc(item.name)}" data-lib-family="${fcEsc(item.family)}" data-lib-sub="${fcEsc(item.sub)}" data-lib-qty="${item.qty}">
+            <strong>${fcEsc(item.name)}</strong>
+            <small>${fcEsc(item.family)} · ${fcEsc(item.sub)}</small>
           </div>
         `).join("")}
       </div>
@@ -5553,11 +5711,11 @@ function renderInventoryListV8(container){
         const count = serviceInventory.filter(i => i.vehicleId === v.id || i.vehicle === v.name).length;
         return `
           <article class="inventory-vehicle-card">
-            <h3>${v.name}</h3>
-            <p>${v.type}</p>
-            <p><strong>${v.plate}</strong></p>
+            <h3>${fcEsc(v.name)}</h3>
+            <p>${fcEsc(v.type)}</p>
+            <p><strong>${fcEsc(v.plate)}</strong></p>
             <p>${count} matériels inventoriés</p>
-            <button class="btn secondary open-inventory-v8" data-id="${v.id}">Ouvrir l’inventaire</button>
+            <button class="btn secondary open-inventory-v8" data-id="${fcEsc(v.id)}">Ouvrir l’inventaire</button>
           </article>`;
       }).join("")}
     </div>
@@ -5590,13 +5748,13 @@ function renderInventoryDetailV8(container){
       <div class="panel-head">
         <div>
           <p class="eyebrow">Inventaire véhicule</p>
-          <h2>${vehicle.name}</h2>
+          <h2>${fcEsc(vehicle.name)}</h2>
         </div>
         <button class="btn primary" id="editVehicleMetaV8">Modifier l’inventaire</button>
       </div>
       <div class="vehicle-detail-grid">
-        <div><span>Immatriculation / référence</span><strong>${vehicle.plate}</strong></div>
-        <div><span>Type</span><strong>${vehicle.type}</strong></div>
+        <div><span>Immatriculation / référence</span><strong>${fcEsc(vehicle.plate)}</strong></div>
+        <div><span>Type</span><strong>${fcEsc(vehicle.type)}</strong></div>
         <div><span>Matériels</span><strong>${allCount}</strong></div>
       </div>
     </div>
@@ -5616,7 +5774,7 @@ function renderInventoryDetailV8(container){
                 <p>Importe la photo réelle, puis dessine les rectangles cliquables.</p>
               </div>
             </div>
-            ${zones.map(z => `<div class="draw-zone ${z.id===selectedZoneV8?"active":""}" data-zone-v8="${z.id}" style="left:${z.x}%;top:${z.y}%;width:${z.w}%;height:${z.h}%;">${z.label}<span class="resize"></span></div>`).join("")}
+            ${zones.map(z => `<div class="draw-zone ${z.id===selectedZoneV8?"active":""}" data-zone-v8="${z.id}" style="left:${z.x}%;top:${z.y}%;width:${z.w}%;height:${z.h}%;">${fcEsc(z.label)}<span class="resize"></span></div>`).join("")}
           </div>
           <div class="photo-editor-actions">
             <label class="file-label" for="vehiclePhotoInputV8">📷 Importer photo</label>
@@ -5631,12 +5789,12 @@ function renderInventoryDetailV8(container){
       <aside class="selected-zone-panel">
         <h3>Zone sélectionnée</h3>
         ${selectedZone ? `
-          <input class="zone-name-input" id="renameZoneV8" value="${escapeHtml(selectedZone.label)}">
+          <input class="zone-name-input" id="renameZoneV8" value="${fcEsc(selectedZone.label)}">
           <div class="zone-material-list" id="dropZoneV8">
             ${zoneItems.length ? zoneItems.map(item => {
               const idx = serviceInventory.indexOf(item);
               return `<div class="zone-material-row">
-                <div><strong>${item.name}</strong><small>${item.category || "Sans catégorie"}</small></div>
+                <div><strong>${fcEsc(item.name)}</strong><small>${fcEsc(item.category || "Sans catégorie")}</small></div>
                 <input type="number" min="1" value="${item.qty}" data-qty-v8="${idx}">
                 <button class="delete-mini" data-del-v8="${idx}">Suppr.</button>
               </div>`;
@@ -6309,7 +6467,7 @@ function renderFcLibrary(){
           <div class="fc-lib-item ${i.custom ? "fc-lib-custom" : ""}" draggable="true"
                data-name="${fcEsc(i.name)}" data-family="${i.family}" data-sub="${fcEsc(i.sub)}"
                data-qty="${i.qty}" data-lib-idx="${libIdx}">
-            <strong>${i.name}</strong>
+            <strong>${fcEsc(i.name)}</strong>
             <button class="fc-lib-edit-btn" data-lib-idx="${libIdx}" title="Modifier / déplacer" draggable="false">✏️</button>
           </div>
         `;
@@ -6425,9 +6583,9 @@ function renderFcList(root){
       ${vehicles.map(v=>{
         const count = fcInventory.filter(i => i.vehicleId === v.id).length;
         return `<article class="fc-card">
-          <h3>${v.name}</h3>
-          <p>${v.type}</p>
-          <p><strong>${v.plate}</strong></p>
+          <h3>${fcEsc(v.name)}</h3>
+          <p>${fcEsc(v.type)}</p>
+          <p><strong>${fcEsc(v.plate)}</strong></p>
           <p>${count} matériels inventoriés</p>
           <div class="fc-card-actions">
             <button class="btn secondary fc-open" data-id="${v.id}">Ouvrir l’inventaire</button>
@@ -6499,13 +6657,13 @@ function renderFcDetail(root){
       <div class="panel-head">
         <div>
           <p class="eyebrow">Inventaire véhicule</p>
-          <h2>${vehicle.name}</h2>
+          <h2>${fcEsc(vehicle.name)}</h2>
         </div>
         <button class="btn primary">Modifier l’inventaire</button>
       </div>
       <div class="fc-meta">
-        <div><span>Immatriculation / référence</span><strong>${vehicle.plate}</strong></div>
-        <div><span>Type</span><strong>${vehicle.type}</strong></div>
+        <div><span>Immatriculation / référence</span><strong>${fcEsc(vehicle.plate)}</strong></div>
+        <div><span>Type</span><strong>${fcEsc(vehicle.type)}</strong></div>
         <div><span>Matériels</span><strong>${allCount}</strong></div>
       </div>
     </div>
@@ -6532,7 +6690,7 @@ function renderFcDetail(root){
             <span>${allCount} matériels</span>
           </div>
         </div>
-        <div class="fc-photo-stage" id="fcPhotoStage" ${photo ? `style="background-image:url('${photo}')"` : ""}>
+        <div class="fc-photo-stage" id="fcPhotoStage" ${photo ? `style="background-image:url('${fcEsc(photo)}')"` : ""}>
           ${photo ? "" : `<div class="fc-placeholder"><div><span>📷</span><strong>${fcGetViews(vehicle.id).find(v=>v.id===fcState.view)?.label || ""}</strong><p>Importe une photo ou ajoute des zones.</p></div></div>`}
           ${zones.map(z=>`<div class="fc-zone ${z.id===fcState.zone?"active":""}" data-zone="${fcEsc(z.id)}" style="left:${z.x}%;top:${z.y}%;width:${z.w}%;height:${z.h}%">${z.label}<span class="resize"></span></div>`).join("")}
         </div>
@@ -6580,7 +6738,7 @@ function renderFcDetail(root){
                   <div class="fc-sub-group-body">
                     ${items.length ? items.map(i=>`
                       <div class="fc-zone-item" draggable="true" data-move-item="${i.id}">
-                        <div><strong>${i.name}</strong><small>${i.category || "Sans catégorie"}</small></div>
+                        <div><strong>${fcEsc(i.name)}</strong><small>${fcEsc(i.category || "Sans catégorie")}</small></div>
                         <div class="fc-item-controls" draggable="false">
                           ${!subName && fcGetSubZones(vehicle.id, selectedZone.id).length ? `
                             <select class="fc-move-select" data-move-item-to="${i.id}" draggable="false">
@@ -7404,12 +7562,29 @@ function applyCenterSettings(){
 
   const preview = document.getElementById("logoPreview");
   if(preview){
-    preview.innerHTML = centerSettings.logo ? `<img src="${centerSettings.logo}" alt="Logo">` : "🚒";
+    if(centerSettings.logo){
+      const img = document.createElement("img");
+      img.src = centerSettings.logo;
+      img.alt = "Logo";
+      preview.textContent = "";
+      preview.appendChild(img);
+    } else {
+      preview.textContent = "🚒";
+    }
   }
 
   const homeLogo = document.querySelector(".cis-logo");
   if(homeLogo){
-    homeLogo.innerHTML = centerSettings.logo ? `<img src="${centerSettings.logo}" alt="Logo CIS" style="width:100%;height:100%;object-fit:cover;border-radius:34px;">` : "🚒";
+    if(centerSettings.logo){
+      const img = document.createElement("img");
+      img.src = centerSettings.logo;
+      img.alt = "Logo CIS";
+      img.style.cssText = "width:100%;height:100%;object-fit:cover;border-radius:34px;";
+      homeLogo.textContent = "";
+      homeLogo.appendChild(img);
+    } else {
+      homeLogo.textContent = "🚒";
+    }
   }
 }
 
@@ -7523,38 +7698,42 @@ function parsePersonnelRows(rows){
   return parsed;
 }
 
+/* V38 — chargement dynamique de XLSX (~450 Ko économisés au chargement initial) */
+function fcLoadXLSX(){
+  return new Promise((resolve, reject) => {
+    if(typeof XLSX !== "undefined") return resolve(XLSX);
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js";
+    script.onload = () => resolve(XLSX);
+    script.onerror = () => reject(new Error("Impossible de charger la bibliothèque Excel"));
+    document.head.appendChild(script);
+  });
+}
+
 function importPersonnelCsv(file){
   const reader = new FileReader();
 
   if(file.name.toLowerCase().endsWith(".xlsx") || file.name.toLowerCase().endsWith(".xls")){
-    reader.onload = () => {
-      if(typeof XLSX === "undefined"){
-        toast("Import Excel indisponible hors connexion. Ouvre l’application avec internet ou utilise CSV.");
-        return;
-      }
-      const workbook = XLSX.read(reader.result, {type:"array"});
-      const sheetName = workbook.SheetNames.includes("Personnel") ? "Personnel" : workbook.SheetNames[0];
-      const sheet = workbook.Sheets[sheetName];
-      const rows = XLSX.utils.sheet_to_json(sheet, {header:1, raw:false});
-      const parsed = parsePersonnelRows(rows);
-      if(parsed.length){
-        personnelList = parsed;
-        localStorage.setItem("fc_personnel", JSON.stringify(personnelList));
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-    if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
-        renderPersonnelTable();
-        toast(`${parsed.length} personnels importés depuis Excel`);
-      } else {
-        toast("Aucune ligne exploitable dans le fichier Excel");
+    reader.onload = async () => {
+      try{
+        const lib = await fcLoadXLSX();
+        const workbook = lib.read(reader.result, {type:"array"});
+        const sheetName = workbook.SheetNames.includes("Personnel") ? "Personnel" : workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const rows = lib.utils.sheet_to_json(sheet, {header:1, raw:false});
+        const parsed = parsePersonnelRows(rows);
+        if(parsed.length){
+          personnelList = parsed;
+          localStorage.setItem("fc_personnel", JSON.stringify(personnelList));
+          if(typeof savePersonnelSupabase === "function") savePersonnelSupabase();
+          renderPersonnelTable();
+          toast(`${parsed.length} personnels importés depuis Excel`);
+        } else {
+          toast("Aucune ligne exploitable dans le fichier Excel");
+        }
+      }catch(e){
+        console.warn("Import Excel échoué:", e);
+        toast("Import Excel indisponible. Vérifie ta connexion ou utilise un fichier CSV.");
       }
     };
     reader.readAsArrayBuffer(file);
@@ -7598,6 +7777,14 @@ function bindSettings(){
     applyCenterSettings();
     toast("Paramètres du centre enregistrés");
   };
+
+  // Version info dans les paramètres
+  const vBadge = document.getElementById("fcVersionBadge");
+  const vDate = document.getElementById("fcVersionDate");
+  if(vBadge) vBadge.textContent = "v" + FC_APP_VERSION;
+  if(vDate && FC_CHANGELOG[0]) vDate.textContent = FC_CHANGELOG[0].date;
+  const openCl = document.getElementById("fcOpenChangelog");
+  if(openCl) openCl.onclick = () => fcShowChangelogDialog();
 
   const logoInput = document.getElementById("cisLogoInput");
   if(logoInput) logoInput.onchange = e => {
@@ -8342,14 +8529,14 @@ function assetCardV18(a, mode){
   const typeLabel = c.followType === "hours" ? "heures" : c.followType === "date" ? "date" : "kilométrage";
   return `
     <article class="asset-card">
-      <h3>${a.name}</h3>
-      <p>${a.detail || a.type || ""}</p>
-      <p>Suivi : <strong>${typeLabel}</strong></p>
-      <p>Valeur actuelle : <strong>${c.current || a.km || "—"} ${c.current ? c.unit : ""}</strong></p>
-      ${c.nextValue ? `<p>Prochain entretien : <strong>${c.nextValue} ${c.unit}</strong></p>` : ""}
-      ${c.remaining !== null ? `<p>Restant : <strong>${c.remaining} ${c.unit}</strong></p>` : ""}
+      <h3>${fcEsc(a.name)}</h3>
+      <p>${fcEsc(a.detail || a.type || "")}</p>
+      <p>Suivi : <strong>${fcEsc(typeLabel)}</strong></p>
+      <p>Valeur actuelle : <strong>${fcEsc(c.current || a.km || "—")} ${fcEsc(c.current ? c.unit : "")}</strong></p>
+      ${c.nextValue ? `<p>Prochain entretien : <strong>${fcEsc(c.nextValue)} ${fcEsc(c.unit)}</strong></p>` : ""}
+      ${c.remaining !== null ? `<p>Restant : <strong>${c.remaining} ${fcEsc(c.unit)}</strong></p>` : ""}
       <div class="asset-progress"><span style="width:${c.percent}%"></span></div>
-      <p>Contrôle / CT : <strong>${a.ct || a.nextControlDate || "—"}</strong></p>
+      <p>Contrôle / CT : <strong>${fcEsc(a.ct || a.nextControlDate || "—")}</strong></p>
       <p class="due ${c.state}">${label}</p>
       <span class="asset-next">${c.followType === "hours" ? "Calcul en heures" : c.followType === "km" ? "Calcul en kilomètres" : "Suivi par date"}</span>
       <div class="asset-actions">
@@ -8602,10 +8789,10 @@ function printQrOnly(){
 
   area.innerHTML = `
     <div class="qr-print-sheet">
-      <h1>${vehicle.name}</h1>
-      <p>${vehicle.type} · ${vehicle.plate}<br>Scanner pour ouvrir la vérification FireCheck</p>
+      <h1>${fcEsc(vehicle.name)}</h1>
+      <p>${fcEsc(vehicle.type)} · ${fcEsc(vehicle.plate)}<br>Scanner pour ouvrir la vérification FireCheck</p>
       <div class="real-qr" id="qrPrintBox"></div>
-      <p>${url}</p>
+      <p>${fcEsc(url)}</p>
     </div>
   `;
   renderQrInto(document.getElementById("qrPrintBox"), url);
@@ -8700,10 +8887,10 @@ function setLoginMode(mode){
 }
 
 function loginManualUser(){
-  const grade = (document.getElementById("manualGrade")?.value || "").trim();
-  const nom = (document.getElementById("manualNom")?.value || "").trim();
-  const prenom = (document.getElementById("manualPrenom")?.value || "").trim();
-  const matricule = (document.getElementById("manualMatricule")?.value || "").trim() || "NON RENSEIGNÉ";
+  const grade = (document.getElementById("manualGrade")?.value || "").trim().slice(0, 50);
+  const nom = (document.getElementById("manualNom")?.value || "").trim().slice(0, 80);
+  const prenom = (document.getElementById("manualPrenom")?.value || "").trim().slice(0, 80);
+  const matricule = (document.getElementById("manualMatricule")?.value || "").trim().slice(0, 20) || "NON RENSEIGNÉ";
 
   if(!grade || !nom){
     toast("Indique au minimum le grade et le nom");
@@ -9270,8 +9457,8 @@ function renderStep(){
         <button class="round" data-go="home">←</button>
         <div>
           <p class="eyebrow">Vérification</p>
-          <h1>${vehicle.name}</h1>
-          <span class="muted">${vehicle.type || ""} ${vehicle.plate ? "· " + vehicle.plate : ""}</span>
+          <h1>${fcEsc(vehicle.name)}</h1>
+          <span class="muted">${fcEsc(vehicle.type || "")} ${vehicle.plate ? "· " + fcEsc(vehicle.plate) : ""}</span>
         </div>
       </header>
 
@@ -9304,7 +9491,7 @@ function renderStep(){
         </div>
 
         ${views.length ? `
-          <div class="check-photo-stage" style="${activeView.photo ? `background-image:url('${activeView.photo}')` : ""}">
+          <div class="check-photo-stage" style="${activeView.photo ? `background-image:url('${fcEsc(activeView.photo)}')` : ""}">
             ${(activeView.zones || []).map(z => {
               const mappedStep = order.find(s => s.aliases.some(a => String(a).toLowerCase() === String(z.id).toLowerCase()));
               const key = mappedStep?.zone || z.id;
@@ -9323,20 +9510,20 @@ function renderStep(){
         <div class="guided-head-v27">
           <div>
             <p class="eyebrow">Contrôle guidé recommandé</p>
-            <h2>${step.section}</h2>
-            <span class="muted">${step.zone}</span>
+            <h2>${fcEsc(step.section)}</h2>
+            <span class="muted">${fcEsc(step.zone)}</span>
           </div>
           <span class="step-pill-v27">Étape ${order.indexOf(step) + 1}</span>
         </div>
 
-        <div class="guided-zone-photo-placeholder ${fcGuidedStepPhotoV27(vehicle, step.zone) ? "has-zone-photo" : ""}" style="${fcGuidedStepPhotoV27(vehicle, step.zone) ? `background-image:url('${fcGuidedStepPhotoV27(vehicle, step.zone)}')` : ""}">
+        <div class="guided-zone-photo-placeholder ${fcGuidedStepPhotoV27(vehicle, step.zone) ? "has-zone-photo" : ""}" style="${fcGuidedStepPhotoV27(vehicle, step.zone) ? `background-image:url('${fcEsc(fcGuidedStepPhotoV27(vehicle, step.zone))}')` : ""}">
           <span>${fcGuidedStepPhotoV27(vehicle, step.zone) ? "" : `📷 Aucune photo détaillée pour ${fcEsc(step.zone)}`}</span>
         </div>
 
         <div class="guided-items-v27">
           ${items.length ? items.map(item => `
             <div class="guided-item-v27" data-guided-item="${item.id}">
-              <strong>${item.name}</strong>
+              <strong>${fcEsc(item.name)}</strong>
               <span>×${item.qty}</span>
               <small class="guided-item-hint">Toucher pour signaler un problème</small>
             </div>
@@ -9508,7 +9695,7 @@ renderFcDetail = function(root){
   card.className = "zone-detail-photo-card";
   card.innerHTML = `
     <h3>Photo détaillée de la zone</h3>
-    <div class="zone-detail-photo ${photo ? "has-photo" : ""}" id="zoneDetailPhotoPreview" ${photo ? `style="background-image:url('${photo}')"` : ""}>
+    <div class="zone-detail-photo ${photo ? "has-photo" : ""}" id="zoneDetailPhotoPreview" ${photo ? `style="background-image:url('${fcEsc(photo)}')"` : ""}>
       ${photo ? "" : "📷 Aucune photo pour cette zone"}
     </div>
     <div class="zone-detail-photo-actions">
@@ -9816,7 +10003,7 @@ renderFcDetail = function(root){
         return `
           <div class="media-slot-v30">
             <strong>${s.label}</strong>
-            <div class="media-preview-v30">${img ? `<img src="${img}" alt="">` : "📷 Emplacement photo"}</div>
+            <div class="media-preview-v30">${img ? `<img src="${fcEsc(img)}" alt="">` : "📷 Emplacement photo"}</div>
             <label class="media-label-v30" for="mediaInputV30_${idx}">Ajouter / remplacer</label>
             <input id="mediaInputV30_${idx}" type="file" accept="image/*" data-media-slot="${s.slot}">
           </div>
@@ -9931,11 +10118,11 @@ function renderMediaManagerV31(root, vehicle){
           <div class="media-slot-v31">
             <strong>${fcEsc(s.label)}</strong>
             <div class="media-preview-v31" id="mediaPreviewV31_${idx}">
-              ${img ? `<img src="${img}" alt="">` : "📷 Ajouter photo"}
+              ${img ? `<img src="${fcEsc(img)}" alt="">` : "📷 Ajouter photo"}
             </div>
             <label class="media-label-v31" style="cursor:pointer;display:block;">
               Ajouter / remplacer
-              <input type="file" accept="image/*" data-media-slot-v31="${s.slot}" data-preview-id="mediaPreviewV31_${idx}" style="display:none;">
+              <input type="file" accept="image/*" data-media-slot-v31="${fcEsc(s.slot)}" data-preview-id="mediaPreviewV31_${idx}" style="display:none;">
             </label>
             <div class="media-error-v32 hidden" id="mediaErrorV31_${idx}"></div>
           </div>
@@ -9975,7 +10162,7 @@ function renderMediaManagerV31(root, vehicle){
 
       try{
         const value = await compressImageV32(file, 1000, 0.7);
-        if(preview) preview.innerHTML = `<img src="${value}" alt="">`;
+        if(preview) preview.innerHTML = `<img src="${fcEsc(value)}" alt="">`;
 
         // Upload vers Supabase Storage (évite le quota localStorage)
         if(typeof setMediaSupabase === "function"){
@@ -10380,7 +10567,7 @@ function habSelectAgent(agent){
   const typeBadge=(agent.type||"SPV").toUpperCase()==="SPP"
     ?`<span style="font-size:.72rem;background:#e3f2fd;color:#1565c0;border-radius:4px;padding:1px 6px;font-weight:700;margin-left:6px">SPP</span>`
     :`<span style="font-size:.72rem;background:#f3e5f5;color:#6a1b9a;border-radius:4px;padding:1px 6px;font-weight:700;margin-left:6px">SPV</span>`;
-  if(info) info.innerHTML=`<div><strong>${agent.grade||""} ${agent.nom||""} ${agent.prenom||""}${typeBadge}</strong><span class="muted" style="display:block;font-size:.78rem">Mat. ${agent.matricule||"—"} · ${agent.equipe||agent.service||"CIS Château-Gontier"}</span></div>`;
+  if(info) info.innerHTML=`<div><strong>${fcEsc(agent.grade||"")} ${fcEsc(agent.nom||"")} ${fcEsc(agent.prenom||"")}${typeBadge}</strong><span class="muted" style="display:block;font-size:.78rem">Mat. ${fcEsc(agent.matricule||"—")} · ${fcEsc(agent.equipe||agent.service||"CIS Château-Gontier")}</span></div>`;
   renderHabAgentStats(agent);
   renderHabTable();
 }
@@ -10416,8 +10603,8 @@ function renderHabTable(){
     const cats=[...new Set(HAB_REF.map(r=>r.cat))];
     tbody.innerHTML=cats.map(cat=>{
       const efs=HAB_REF.filter(r=>r.cat===cat);
-      return `<tr class="hab-row-group"><td colspan="6">${cat}</td></tr>`+efs.map(ef=>`<tr>
-        <td></td><td>${ef.label}</td>
+      return `<tr class="hab-row-group"><td colspan="6">${fcEsc(cat)}</td></tr>`+efs.map(ef=>`<tr>
+        <td></td><td>${fcEsc(ef.label)}</td>
         <td style="text-align:center">${ef.spp?"✓":"—"}</td>
         <td style="text-align:center">${ef.spv?"✓":"—"}</td>
         <td>${ef.periode?`<span class="hab-periode-chip">${habPeriodeLabel(ef.periode)}</span>`:`<span class="hab-manuel-chip">Manuel C.RH</span>`}</td>
@@ -10433,7 +10620,7 @@ function renderHabTable(){
   const cats=[...new Set(effets.map(e=>e.ref.cat))];
   tbody.innerHTML=cats.map(cat=>{
     const efs=effets.filter(e=>e.ref.cat===cat);
-    return `<tr class="hab-row-group"><td colspan="7">${cat}</td></tr>`+efs.map(ef=>{
+    return `<tr class="hab-row-group"><td colspan="7">${fcEsc(cat)}</td></tr>`+efs.map(ef=>{
       const periode=ef.ref.periode,s=habStatut(agent.matricule,ef.id);
       const derniere=habDernier(agent.matricule,ef.id),prochain=habProchain(agent.matricule,ef.id);
       const dotCls=s==="renouvelable"?"hab-dot-red":s==="bientot"?"hab-dot-orange":s==="ok"?"hab-dot-green":"hab-dot-grey";
@@ -10444,8 +10631,8 @@ function renderHabTable(){
       const dateVal=derniere||"";
       const periodeLabel=ef.slotNum>0?`<span class="hab-periode-chip">${habPeriodeLabel(periode)} · pièce ${ef.slotNum}</span>`:periode?`<span class="hab-periode-chip">${habPeriodeLabel(periode)}</span>`:`<span class="hab-manuel-chip">Manuel</span>`;
       return `<tr>
-        <td></td><td>${ef.label}</td><td>${periodeLabel}</td>
-        <td><input type="date" class="hab-date-input${!dateVal?" hab-date-empty":""}" data-hab-date-mat="${agent.matricule}" data-hab-date-ef="${ef.id}" value="${dateVal}" title="Cliquer pour modifier la date"></td>
+        <td></td><td>${fcEsc(ef.label)}</td><td>${periodeLabel}</td>
+        <td><input type="date" class="hab-date-input${!dateVal?" hab-date-empty":""}" data-hab-date-mat="${fcEsc(agent.matricule)}" data-hab-date-ef="${fcEsc(ef.id)}" value="${fcEsc(dateVal)}" title="Cliquer pour modifier la date"></td>
         <td>${prochainStr}</td>
         <td><span class="hab-chip ${chipCls}"><span class="hab-dot ${dotCls}"></span>${slabel}</span></td>
         <td>${periode||!derniere?`<button class="hab-reg-btn" data-hab-today-mat="${agent.matricule}" data-hab-today-ef="${ef.id}" ${s==="ok"?"disabled":""}>Aujourd'hui</button>`:`<span style="color:#bbb;font-size:.78rem">—</span>`}</td>
@@ -10494,7 +10681,7 @@ function renderHabPicker(q){
   const results=habAgents().filter(a=>{ const txt=`${a.matricule||""} ${a.nom||""} ${a.prenom||""} ${a.grade||""}`.toLowerCase(); return txt.includes(q.toLowerCase()); }).slice(0,18);
   if(!results.length){ wrap.style.display="none"; return; }
   wrap.style.display="block";
-  list.innerHTML=results.map(a=>{ const isSPP=(a.type||"SPV").toUpperCase()==="SPP"; return `<div class="hab-picker-item" data-hpick="${a.matricule}"><span class="hab-picker-mat">${a.matricule||"—"}</span><span class="hab-picker-type ${isSPP?"hab-picker-spp":"hab-picker-spv"}">${isSPP?"SPP":"SPV"}</span><span>${a.grade||""} <strong>${a.nom||""}</strong> ${a.prenom||""}</span></div>`; }).join("");
+  list.innerHTML=results.map(a=>{ const isSPP=(a.type||"SPV").toUpperCase()==="SPP"; return `<div class="hab-picker-item" data-hpick="${fcEsc(a.matricule)}"><span class="hab-picker-mat">${fcEsc(a.matricule||"—")}</span><span class="hab-picker-type ${isSPP?"hab-picker-spp":"hab-picker-spv"}">${isSPP?"SPP":"SPV"}</span><span>${fcEsc(a.grade||"")} <strong>${fcEsc(a.nom||"")}</strong> ${fcEsc(a.prenom||"")}</span></div>`; }).join("");
   list.querySelectorAll("[data-hpick]").forEach(item=>{
     item.onmousedown=e=>{ e.preventDefault(); const a=habAgents().find(x=>x.matricule===item.dataset.hpick); if(a) habSelectAgent(a); };
   });
@@ -10659,14 +10846,14 @@ function renderFicheVehicule(root,vehicle){
     <h3>🚒 Fiche du véhicule / engin</h3>
     <div class="fiche-cover-wrap">
       <div class="fiche-cover-photo" id="ficheCoverZone_${vehicle.id}" title="Cliquer pour ajouter / remplacer la photo">
-        ${coverUrl?`<img src="${coverUrl}" alt="Photo couverture"><div class="fiche-cover-overlay">🔄 Remplacer</div>`:`<span>📷 Photo de couverture</span><small style="margin-top:4px;font-size:.72rem">Cliquer pour ajouter</small>`}
+        ${coverUrl?`<img src="${fcEsc(coverUrl)}" alt="Photo couverture"><div class="fiche-cover-overlay">🔄 Remplacer</div>`:`<span>📷 Photo de couverture</span><small style="margin-top:4px;font-size:.72rem">Cliquer pour ajouter</small>`}
         <input type="file" accept="image/*" id="ficheCoverInput_${vehicle.id}" style="display:none">
       </div>
       <div class="fiche-fields-grid">
-        <div class="fiche-field"><label>Capacité</label><input type="text" id="ficheCapacite_${vehicle.id}" placeholder="Ex: 2000 L" value="${info.capacite||''}"></div>
-        <div class="fiche-field"><label>Nombre de personnels</label><input type="text" id="fichePersonnels_${vehicle.id}" placeholder="Ex: 6" value="${info.personnels||''}"></div>
-        <div class="fiche-field fiche-field-full"><label>Spécialité / qualification conducteur</label><input type="text" id="ficheSpecialite_${vehicle.id}" placeholder="Ex: COD3, permis PL…" value="${info.specialite||''}"></div>
-        <div class="fiche-field fiche-field-full"><label>Description de l'engin</label><textarea id="ficheDescription_${vehicle.id}" placeholder="Rôle, caractéristiques, particularités opérationnelles…">${info.description||''}</textarea></div>
+        <div class="fiche-field"><label>Capacité</label><input type="text" id="ficheCapacite_${vehicle.id}" placeholder="Ex: 2000 L" value="${fcEsc(info.capacite||'')}"></div>
+        <div class="fiche-field"><label>Nombre de personnels</label><input type="text" id="fichePersonnels_${vehicle.id}" placeholder="Ex: 6" value="${fcEsc(info.personnels||'')}"></div>
+        <div class="fiche-field fiche-field-full"><label>Spécialité / qualification conducteur</label><input type="text" id="ficheSpecialite_${vehicle.id}" placeholder="Ex: COD3, permis PL…" value="${fcEsc(info.specialite||'')}"></div>
+        <div class="fiche-field fiche-field-full"><label>Description de l'engin</label><textarea id="ficheDescription_${vehicle.id}" placeholder="Rôle, caractéristiques, particularités opérationnelles…">${fcEsc(info.description||'')}</textarea></div>
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
@@ -10734,10 +10921,10 @@ window.print=function(){
     if(info.capacite||info.personnels||info.specialite||info.description){
       const el=document.createElement("div"); el.className="print-cover-fiche";
       el.innerHTML=`
-        ${info.capacite?`<div class="print-cover-fiche-row"><span>Capacité :</span><strong>${info.capacite}</strong></div>`:""}
-        ${info.personnels?`<div class="print-cover-fiche-row"><span>Personnels :</span><strong>${info.personnels}</strong></div>`:""}
-        ${info.specialite?`<div class="print-cover-fiche-row print-cover-fiche-full"><span>Qualification conducteur :</span><strong>${info.specialite}</strong></div>`:""}
-        ${info.description?`<div class="print-cover-fiche-desc">${info.description}</div>`:""}`;
+        ${info.capacite?`<div class="print-cover-fiche-row"><span>Capacité :</span><strong>${fcEsc(info.capacite)}</strong></div>`:""}
+        ${info.personnels?`<div class="print-cover-fiche-row"><span>Personnels :</span><strong>${fcEsc(info.personnels)}</strong></div>`:""}
+        ${info.specialite?`<div class="print-cover-fiche-row print-cover-fiche-full"><span>Qualification conducteur :</span><strong>${fcEsc(info.specialite)}</strong></div>`:""}
+        ${info.description?`<div class="print-cover-fiche-desc">${fcEsc(info.description)}</div>`:""}`;
       const qrBox=printArea.querySelector(".qr-box,.print-vehicle-photo");
       if(qrBox) qrBox.closest("section")?.appendChild(el); else printArea.querySelector("section")?.appendChild(el);
     }

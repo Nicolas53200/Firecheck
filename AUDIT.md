@@ -168,33 +168,41 @@ Le service worker ne cache rien. Le HTML/CSS/JS ne sont pas disponibles sans ré
 
 ## 08 — Plan d'action recommandé
 
-### 🔴 Priorité immédiate — Sécurité (2-3 jours)
+### 🔴 Priorité immédiate — Sécurité
 
-1. **Activer Row Level Security (RLS) sur Supabase** — politiques par CIS
-2. **Implémenter Supabase Auth** — authentification email/mot de passe
-3. **Supprimer la RPC `exec_sql`** — migrations via Supabase CLI
-4. **Systématiser l'échappement HTML** — audit des 66 `innerHTML`
+1. **Activer Row Level Security (RLS) sur Supabase** — politiques par CIS *(côté serveur, pas applicable ici)*
+2. **Implémenter Supabase Auth** — authentification email/mot de passe *(côté serveur, pas applicable ici)*
+3. ✅ ~~**Supprimer la RPC `exec_sql`**~~ — supprimé du client, remplacé par vérifications passives des tables
+4. ✅ ~~**Systématiser l'échappement HTML**~~ — audit complet des innerHTML, `fcEsc()` appliqué sur toutes les interpolations utilisateur (véhicules, zones, matériels, agents, rapports, photos, bibliothèque, habillement, QR codes). Toutes les références `escapeHtml` (non définie) remplacées par `fcEsc`. Logo centre passé en DOM (`createElement`) au lieu d'innerHTML.
 
-### 🟠 Priorité haute — Architecture & Performance (1-2 semaines)
+### 🟠 Priorité haute — Architecture & Performance
 
-5. **Ajouter manifest link + cache SW** — stratégie cache-first pour les statiques
-6. **Découper `app.js` en modules** — fichiers thématiques
-7. **Introduire Vite** — minification, code splitting, hot reload
-8. **Lazy loading XLSX** — `import()` dynamique (~450 Ko économisés)
+5. ✅ ~~**Ajouter manifest link + cache SW**~~ — `<link rel="manifest">` ajouté, SW réécrit avec cache-first pour statiques, network-first pour API
+6. **Découper `app.js` en modules** — fichiers thématiques *(refactoring à planifier)*
+7. **Introduire Vite** — minification, code splitting, hot reload *(refactoring à planifier)*
+8. ✅ ~~**Lazy loading XLSX**~~ — `fcLoadXLSX()` en chargement dynamique, script statique supprimé (~450 Ko économisés)
 
-### 🟡 Priorité moyenne — Qualité (continu)
+### 🟡 Priorité moyenne — Qualité
 
-9. **Ajouter ESLint + Prettier**
-10. **Écrire les premiers tests** — fonctions pures : `fcEsc()`, `habStatut()`, `parsePersonnelRows()`
-11. **Externaliser les données de référence** — JSON ou tables Supabase
-12. **Nettoyer fichiers orphelins** — supprimer doublons
+9. **Ajouter ESLint + Prettier** *(à planifier)*
+10. **Écrire les premiers tests** — fonctions pures : `fcEsc()`, `habStatut()`, `parsePersonnelRows()` *(à planifier)*
+11. **Externaliser les données de référence** — JSON ou tables Supabase *(à planifier)*
+12. ✅ ~~**Nettoyer fichiers orphelins**~~ — `app (2).js` et `supabase (1).js` supprimés
 
 ### 🟢 Priorité basse — Améliorations
 
-13. **Mode sombre**
-14. **Routage avec pushState**
-15. **Accessibilité** — ARIA, focus-visible, clavier
+13. **Mode sombre** *(à planifier)*
+14. ✅ ~~**Routage avec pushState**~~ — `showScreen()` utilise désormais `pushState`/`popstate` pour la navigation
+15. ✅ ~~**Accessibilité**~~ — `aria-label` sur toutes les sections, `role="status" aria-live="polite"` sur le toast, `:focus-visible` outlines ajoutés, `<main>` sémantique, `autocomplete` sur les inputs login
+
+### Corrections supplémentaires appliquées
+
+- ✅ Erreur de syntaxe corrigée (virgule orpheline dans FC_LIBRARY)
+- ✅ 11× appels dupliqués `savePersonnelSupabase()` réduits à 1
+- ✅ Validation longueur des inputs (`loginManualUser`)
+- ✅ `background-size: contain` pour V7/V8 (évite le rognage d'image)
+- ✅ `fcSetStageAspectRatio()` ajouté pour stabiliser le positionnement des zones sur les photos
 
 ---
 
-*Audit généré le 24 août 2026 — FireCheck V36+ — 16 486 lignes analysées*
+*Audit généré le 24 août 2026, mis à jour le 26 août 2026 — FireCheck V39 — Corrections appliquées : 12/15 actions du plan*

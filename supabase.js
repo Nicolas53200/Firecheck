@@ -72,67 +72,20 @@ async function getPhotoUrl(path){
    TABLES — initialisation automatique
    ============================================================ */
 
+/* V38 — exec_sql supprimé (vulnérabilité : exécution SQL arbitraire depuis le client).
+   Les tables doivent être créées via le dashboard Supabase ou Supabase CLI.
+   ensureTables() vérifie simplement que les tables sont accessibles. */
 async function ensureTables(){
   if(!sb) return;
-  // On tente d'insérer dans chaque table — si elle n'existe pas, on la crée via SQL
-  const tables = [
-    `CREATE TABLE IF NOT EXISTS fc_inventaire (
-      id TEXT PRIMARY KEY,
-      vehicle_id TEXT,
-      zone TEXT,
-      name TEXT,
-      qty INTEGER,
-      created_at TIMESTAMPTZ DEFAULT NOW()
-    )`,
-    `CREATE TABLE IF NOT EXISTS fc_vehicles (
-      id TEXT PRIMARY KEY,
-      name TEXT,
-      plate TEXT,
-      type TEXT,
-      category TEXT,
-      status TEXT DEFAULT 'Actif'
-    )`,
-    `CREATE TABLE IF NOT EXISTS fc_remontees (
-      id TEXT PRIMARY KEY,
-      vehicle TEXT,
-      zone TEXT,
-      type TEXT,
-      note TEXT,
-      status TEXT DEFAULT 'Nouveau',
-      reporter TEXT,
-      created_at TIMESTAMPTZ DEFAULT NOW()
-    )`,
-    `CREATE TABLE IF NOT EXISTS fc_pharmacie (
-      id TEXT PRIMARY KEY,
-      name TEXT,
-      engin TEXT,
-      expiry TEXT,
-      photo_url TEXT,
-      created_at TIMESTAMPTZ DEFAULT NOW()
-    )`,
-    `CREATE TABLE IF NOT EXISTS fc_personnel (
-      matricule TEXT PRIMARY KEY,
-      grade TEXT,
-      nom TEXT,
-      prenom TEXT,
-      type TEXT,
-      equipe TEXT,
-      acces_st BOOLEAN DEFAULT FALSE
-    )`,
-    `CREATE TABLE IF NOT EXISTS fc_medias (
-      id TEXT PRIMARY KEY,
-      vehicle_id TEXT,
-      slot TEXT,
-      photo_url TEXT,
-      updated_at TIMESTAMPTZ DEFAULT NOW()
-    )`
+  const requiredTables = [
+    "fc_inventaire", "fc_vehicles", "fc_remontees",
+    "fc_pharmacie", "fc_personnel", "fc_medias"
   ];
-
-  for(const sql of tables){
-    const { error } = await sb.rpc("exec_sql", { query: sql }).catch(() => ({ error: "rpc not available" }));
-    // Si rpc non dispo, on continue — les tables seront créées manuellement
-    if(error && !String(error).includes("already exists")){
-      // Silencieux — l'utilisateur créera les tables via le dashboard si besoin
+  for(const table of requiredTables){
+    try{
+      await sb.from(table).select("id").limit(1);
+    }catch(e){
+      console.warn(`Table ${table} inaccessible — crée-la via le dashboard Supabase.`);
     }
   }
 }

@@ -5,12 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FireCheck — V3</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#d71920" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="FireCheck" />
 </head>
 <body>
-  <div id="toast" class="toast"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <section id="home" class="screen active">
-    <button class="settings-fab" data-go="settings" title="Paramètres">⚙️</button>
+  <main id="home" class="screen active" role="main" aria-label="Accueil">
+    <button class="settings-fab" data-go="settings" title="Paramètres" aria-label="Paramètres">⚙️</button>
     <div class="mobile-shell home-shell">
       <div class="cis-card">
         <div class="cis-logo">🚒</div>
@@ -31,7 +36,7 @@
 
         <div id="loginMatriculePanel">
           <div class="login-row">
-            <input id="matriculeInput" placeholder="Matricule ex : SP-45821">
+            <input id="matriculeInput" placeholder="Matricule ex : SP-45821" aria-label="Matricule" autocomplete="off">
             <button class="btn primary" id="loginByMatricule">OK</button>
           </div>
           <p class="login-help">Prototype : SP-45821, SP-10254, SP-77881</p>
@@ -39,10 +44,10 @@
 
         <div id="loginManualPanel" class="hidden">
           <div class="manual-login-grid">
-            <input id="manualGrade" placeholder="Grade">
-            <input id="manualNom" placeholder="Nom">
-            <input id="manualPrenom" placeholder="Prénom">
-            <input id="manualMatricule" placeholder="Matricule facultatif">
+            <input id="manualGrade" placeholder="Grade" aria-label="Grade">
+            <input id="manualNom" placeholder="Nom" aria-label="Nom">
+            <input id="manualPrenom" placeholder="Prénom" aria-label="Prénom">
+            <input id="manualMatricule" placeholder="Matricule facultatif" aria-label="Matricule">
           </div>
           <button class="btn primary full" id="loginManual">S’identifier</button>
         </div>
@@ -88,10 +93,10 @@
         </button>
       </div>
     </div>
-  </section>
+  </main>
 
 
-  <section id="settings" class="screen">
+  <section id="settings" class="screen" aria-label="Paramètres">
     <div class="mobile-shell settings-shell">
       <header class="mobile-top">
         <button class="round" data-go="home">←</button>
@@ -138,10 +143,19 @@
           Aucun téléchargement depuis un store n’est nécessaire.
         </p>
       </div>
+
+      <div class="card fc-version-card">
+        <h3>À propos de FireCheck</h3>
+        <div class="fc-version-info">
+          <span class="fc-version-badge" id="fcVersionBadge"></span>
+          <span class="fc-version-date" id="fcVersionDate"></span>
+        </div>
+        <button class="btn secondary full" id="fcOpenChangelog">📋 Voir les nouveautés</button>
+      </div>
     </div>
   </section>
 
-  <section id="scanner" class="screen">
+  <section id="scanner" class="screen" aria-label="Scanner QR code">
     <div class="mobile-shell">
       <header class="mobile-top">
         <button class="round" data-go="home">←</button>
@@ -164,7 +178,7 @@
     </div>
   </section>
 
-  <section id="check" class="screen">
+  <section id="check" class="screen" aria-label="Vérification">
     <div class="mobile-shell check-shell">
       <header class="control-top">
         <button class="round" data-go="home">×</button>
@@ -206,7 +220,7 @@
     </div>
   </section>
 
-  <section id="anomaly" class="screen">
+  <section id="anomaly" class="screen" aria-label="Signalement anomalie">
     <div class="mobile-shell">
       <header class="mobile-top">
         <button class="round" data-go="check">←</button>
@@ -247,7 +261,7 @@
     </div>
   </section>
 
-  <section id="finish" class="screen">
+  <section id="finish" class="screen" aria-label="Vérification terminée">
     <div class="mobile-shell finish-shell">
       <div class="finish-card">
         <div class="finish-icon">✅</div>
@@ -262,7 +276,7 @@
     </div>
   </section>
 
-  <section id="quickReport" class="screen">
+  <section id="quickReport" class="screen" aria-label="Signalement rapide">
     <div class="mobile-shell">
       <header class="mobile-top">
         <button class="round" data-go="home">←</button>
@@ -310,7 +324,7 @@
     </div>
   </section>
 
-  <section id="myReports" class="screen">
+  <section id="myReports" class="screen" aria-label="Mes signalements">
     <div class="mobile-shell">
       <header class="mobile-top">
         <button class="round" data-go="home">←</button>
@@ -323,7 +337,7 @@
     </div>
   </section>
 
-  <section id="tech" class="screen">
+  <section id="tech" class="screen" aria-label="Service technique">
     <div class="tech-layout">
       <aside class="sidebar">
         <div class="brand">
@@ -970,7 +984,7 @@
     </div>
   </dialog>
 
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- XLSX chargé dynamiquement au moment de l'import (V38 — ~450 Ko économisés au chargement) -->
   <script src="qrcode.min.js"></script>
   <script src="supabase-sdk.js"></script>
   <script src="supabase.js"></script>
