@@ -506,11 +506,16 @@ async function syncLayouts(){
     });
     if(typeof fcSaveVehicleViews === "function") fcSaveVehicleViews();
     if(typeof fcSaveSubZones === "function") fcSaveSubZones();
+    if(typeof fcSaveLayoutsLocal === "function") fcSaveLayoutsLocal();
+    if(typeof fcSavePhotosLocal === "function") fcSavePhotosLocal();
     if(typeof renderCheckSheets === "function") renderCheckSheets();
   }catch(e){ console.warn("syncLayouts:", e); }
 }
 
 async function saveLayoutSupabase(vehicleId){
+  // Toujours sauvegarder en localStorage (fonctionne hors-ligne)
+  if(typeof fcSaveLayoutsLocal === "function") fcSaveLayoutsLocal();
+  if(typeof fcSavePhotosLocal === "function") fcSavePhotosLocal();
   if(!sb) return;
   try{
     fcEnsureVehicle(vehicleId);

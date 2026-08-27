@@ -2,7 +2,7 @@
 // network-first pour les requêtes API (Supabase).
 // Permet le fonctionnement hors-ligne (zones blanches en intervention).
 
-const CACHE_NAME = "firecheck-v40";
+const CACHE_NAME = "firecheck-v41";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
