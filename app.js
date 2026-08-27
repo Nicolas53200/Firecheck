@@ -563,8 +563,16 @@ let fcNotifPermissionAsked = false;
 // ============================================================
 //  Changelog & système de notification de mise à jour
 // ============================================================
-const FC_APP_VERSION = "1.1.1";
+const FC_APP_VERSION = "1.1.2";
 const FC_CHANGELOG = [
+  {
+    version: "1.1.2",
+    date: "27 août 2026",
+    title: "Persistance habillement",
+    changes: [
+      { icon: "👔", text: "Habillement — les modifications sont sauvegardées localement et persistent hors-ligne" }
+    ]
+  },
   {
     version: "1.1.1",
     date: "27 août 2026",
@@ -10428,8 +10436,17 @@ const HAB_REF = [
 
 const HAB_SEUIL = 30;
 let fcHabillement = [];
+// Restaurer habillement depuis localStorage (persistance hors-ligne)
+try{
+  const savedHab = JSON.parse(localStorage.getItem("fc_habillement") || "[]");
+  if(Array.isArray(savedHab) && savedHab.length > 0) fcHabillement = savedHab;
+}catch(e){}
 let habAgentActuel = null;
 let habGlobalFilter = "";
+
+function fcSaveHabLocal(){
+  try{ localStorage.setItem("fc_habillement", JSON.stringify(fcHabillement)); }catch(e){ console.warn("fc_habillement localStorage plein:", e); }
+}
 
 async function loadHabillement() {
   try {
@@ -10437,6 +10454,7 @@ async function loadHabillement() {
     if (res.error) { console.warn("fc_habillement:", res.error); return; }
     if (res.data) {
       fcHabillement = res.data;
+      fcSaveHabLocal(); // Persister en localStorage pour usage hors-ligne
       const section = document.getElementById("habillement");
       if (section && section.classList.contains("active")) {
         renderHabGlobalStats();
@@ -10450,11 +10468,13 @@ async function habSaveDate(matricule, effetId, dateStr) {
   const existing = fcHabillement.find(h => h.agent_matricule === matricule && h.effet_id === effetId);
   if (existing) {
     existing.date_renouvellement = dateStr; existing.renouvele_par = "ST";
+    fcSaveHabLocal(); // Sauvegarder localement d'abord (toujours disponible)
     try { await supabase.from("fc_habillement").update({date_renouvellement:dateStr,renouvele_par:"ST"}).eq("id",existing.id); }
     catch(e) { console.warn("Err update hab",e); }
   } else {
     const row = {agent_matricule:matricule,effet_id:effetId,date_renouvellement:dateStr,renouvele_par:"ST"};
     fcHabillement.push(row);
+    fcSaveHabLocal(); // Sauvegarder localement d'abord (toujours disponible)
     try { const res = await supabase.from("fc_habillement").insert(row); if(res.data&&res.data[0]) row.id=res.data[0].id; }
     catch(e) { console.warn("Err insert hab",e); }
   }
