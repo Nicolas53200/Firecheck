@@ -3840,3 +3840,68 @@ dialog::backdrop{background:rgba(15,23,42,.52)}
 .print-cover-fiche-full{grid-column:1/-1}
 .print-cover-fiche-desc{grid-column:1/-1;font-style:italic;color:#555;margin-top:4px}
 /* ===== FIN FICHE VÉHICULE V33 ===== */
+
+/* ===== BANNIÈRE MISE À JOUR & CHANGELOG V40 ===== */
+.fc-update-banner{
+  position:fixed;z-index:9999;left:0;right:0;bottom:0;
+  transform:translateY(100%);opacity:0;
+  transition:transform .35s cubic-bezier(.4,0,.2,1),opacity .35s ease;
+  pointer-events:none;
+  padding:12px;
+}
+.fc-update-banner.show{transform:translateY(0);opacity:1;pointer-events:auto}
+.fc-update-banner-content{
+  max-width:600px;margin:0 auto;
+  display:flex;align-items:center;gap:12px;
+  background:linear-gradient(135deg,#1e3a5f,#2563eb);
+  color:#fff;padding:14px 18px;border-radius:18px;
+  box-shadow:0 8px 32px rgba(0,0,0,.25);
+  flex-wrap:wrap;
+}
+.fc-update-icon{font-size:1.5rem;flex-shrink:0}
+.fc-update-text{flex:1;min-width:140px}
+.fc-update-text strong{display:block;font-size:.95rem;line-height:1.3}
+.fc-update-text span{font-size:.8rem;opacity:.85}
+.fc-update-details-btn{
+  background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.35);
+  padding:7px 16px;border-radius:10px;font-size:.82rem;font-weight:600;cursor:pointer;
+  white-space:nowrap;transition:background .2s;
+}
+.fc-update-details-btn:hover{background:rgba(255,255,255,.35)}
+.fc-update-close{
+  background:none;border:none;color:rgba(255,255,255,.7);font-size:1.1rem;
+  cursor:pointer;padding:4px 8px;border-radius:8px;transition:color .2s;
+}
+.fc-update-close:hover{color:#fff}
+
+/* Changelog dialog */
+.fc-changelog-body{max-height:60vh;overflow-y:auto;padding:0 4px}
+.fc-release{padding:16px 0;border-bottom:1px solid #e5e7eb}
+.fc-release:last-child{border-bottom:none}
+.fc-release-header{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+.fc-release-version{
+  background:#2563eb;color:#fff;font-size:.75rem;font-weight:700;
+  padding:3px 10px;border-radius:20px;
+}
+.fc-release-date{font-size:.8rem;color:#888}
+.fc-release-current{
+  background:#16a34a;color:#fff;font-size:.68rem;font-weight:600;
+  padding:2px 8px;border-radius:20px;
+}
+.fc-release h3{font-size:1rem;margin:4px 0 10px;color:#1e293b}
+.fc-release-changes{list-style:none;padding:0;margin:0}
+.fc-release-changes li{
+  padding:7px 0 7px 4px;font-size:.88rem;color:#334155;
+  display:flex;align-items:flex-start;gap:8px;line-height:1.4;
+}
+.fc-release-changes li+li{border-top:1px solid #f1f5f9}
+.fc-change-icon{flex-shrink:0;font-size:1rem}
+/* Version card dans les paramètres */
+.fc-version-card{text-align:center}
+.fc-version-info{display:flex;justify-content:center;align-items:center;gap:12px;margin:10px 0 14px}
+.fc-version-badge{
+  background:#2563eb;color:#fff;font-size:.82rem;font-weight:700;
+  padding:4px 14px;border-radius:20px;
+}
+.fc-version-date{font-size:.82rem;color:#888}
+/* ===== FIN BANNIÈRE MISE À JOUR ===== */

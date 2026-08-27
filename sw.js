@@ -1,8 +1,8 @@
-// Service Worker V39 — stratégie cache-first pour les fichiers statiques,
+// Service Worker V40 — stratégie cache-first pour les fichiers statiques,
 // network-first pour les requêtes API (Supabase).
 // Permet le fonctionnement hors-ligne (zones blanches en intervention).
 
-const CACHE_NAME = "firecheck-v39";
+const CACHE_NAME = "firecheck-v40";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
@@ -22,14 +22,23 @@ self.addEventListener("install", event => {
   );
 });
 
-// Activation : nettoyage des anciens caches
+// Activation : nettoyage des anciens caches + notification de mise à jour
 self.addEventListener("activate", event => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
-      )
-    ).then(() => self.clients.claim())
+    caches.keys().then(keys => {
+      const oldCaches = keys.filter(k => k !== CACHE_NAME);
+      return Promise.all(oldCaches.map(k => caches.delete(k))).then(() => {
+        // Notifier les clients qu'une mise à jour a eu lieu (seulement si on remplace un ancien cache)
+        if (oldCaches.length > 0) {
+          self.clients.matchAll().then(clients => {
+            clients.forEach(client => client.postMessage({
+              type: "FC_UPDATE_READY",
+              version: CACHE_NAME
+            }));
+          });
+        }
+      });
+    }).then(() => self.clients.claim())
   );
 });
 

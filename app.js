@@ -560,12 +560,162 @@ const fcOriginalTitle = document.title;
 let fcLastNotifiedCount = 0;
 let fcNotifPermissionAsked = false;
 
+// ============================================================
+//  Changelog & système de notification de mise à jour
+// ============================================================
+const FC_APP_VERSION = "1.1.0";
+const FC_CHANGELOG = [
+  {
+    version: "1.1.0",
+    date: "27 août 2026",
+    title: "Sécurité, performance & accessibilité",
+    changes: [
+      { icon: "🔒", text: "Protection XSS complète — échappement systématique de toutes les données affichées" },
+      { icon: "⚡", text: "Chargement XLSX en lazy loading — 450 Ko économisés au démarrage" },
+      { icon: "📡", text: "Mode hors-ligne — l'application fonctionne sans réseau (zones blanches)" },
+      { icon: "📲", text: "PWA installable — ajout possible sur l'écran d'accueil" },
+      { icon: "🔙", text: "Bouton retour du navigateur — navigation naturelle entre les écrans" },
+      { icon: "♿", text: "Accessibilité améliorée — navigation clavier, lecteurs d'écran" },
+      { icon: "🐛", text: "Correction bug doublon sauvegarde personnel" },
+      { icon: "🐛", text: "Correction erreur de syntaxe bibliothèque matériel" },
+      { icon: "📐", text: "Zones de vérification — positionnement stable sur les photos" }
+    ]
+  },
+  {
+    version: "1.0.0",
+    date: "24 août 2026",
+    title: "Version initiale",
+    changes: [
+      { icon: "🚒", text: "Vérification d'inventaire des engins avec photos et zones cliquables" },
+      { icon: "📋", text: "Gestion du personnel et de l'habillement" },
+      { icon: "📊", text: "Remontées d'anomalies et suivi technique" },
+      { icon: "☁️", text: "Synchronisation cloud Supabase" }
+    ]
+  }
+];
+
+function fcShowUpdateBanner(version){
+  // Ne pas afficher si déjà vu
+  const lastSeen = localStorage.getItem("fc_last_version_seen");
+  if(lastSeen === FC_APP_VERSION) return;
+
+  // Supprimer un ancien bandeau éventuel
+  const old = document.getElementById("fcUpdateBanner");
+  if(old) old.remove();
+
+  const banner = document.createElement("div");
+  banner.id = "fcUpdateBanner";
+  banner.className = "fc-update-banner";
+  banner.innerHTML = `
+    <div class="fc-update-banner-content">
+      <span class="fc-update-icon">🆕</span>
+      <div class="fc-update-text">
+        <strong>FireCheck mis à jour — v${fcEsc(FC_APP_VERSION)}</strong>
+        <span>${fcEsc(FC_CHANGELOG[0]?.title || "")}</span>
+      </div>
+      <button class="fc-update-details-btn" id="fcShowChangelog">Voir les nouveautés</button>
+      <button class="fc-update-close" id="fcCloseUpdateBanner" title="Fermer">✕</button>
+    </div>
+  `;
+  document.body.appendChild(banner);
+
+  // Animation d'entrée
+  requestAnimationFrame(() => banner.classList.add("show"));
+
+  document.getElementById("fcShowChangelog").onclick = () => {
+    fcShowChangelogDialog();
+    banner.classList.remove("show");
+    setTimeout(() => banner.remove(), 350);
+  };
+  document.getElementById("fcCloseUpdateBanner").onclick = () => {
+    localStorage.setItem("fc_last_version_seen", FC_APP_VERSION);
+    banner.classList.remove("show");
+    setTimeout(() => banner.remove(), 350);
+  };
+}
+
+function fcShowChangelogDialog(){
+  // Supprimer un ancien dialog éventuel
+  let dlg = document.getElementById("fcChangelogDialog");
+  if(dlg) dlg.remove();
+
+  dlg = document.createElement("dialog");
+  dlg.id = "fcChangelogDialog";
+  dlg.innerHTML = `
+    <div class="modal">
+      <div class="modal-head">
+        <h2>📋 Nouveautés FireCheck</h2>
+        <button class="btn ghost" id="fcCloseChangelog">✕</button>
+      </div>
+      <div class="fc-changelog-body">
+        ${FC_CHANGELOG.map(release => `
+          <div class="fc-release">
+            <div class="fc-release-header">
+              <span class="fc-release-version">v${fcEsc(release.version)}</span>
+              <span class="fc-release-date">${fcEsc(release.date)}</span>
+              ${release.version === FC_APP_VERSION ? '<span class="fc-release-current">Actuelle</span>' : ''}
+            </div>
+            <h3>${fcEsc(release.title)}</h3>
+            <ul class="fc-release-changes">
+              ${release.changes.map(c => `<li><span class="fc-change-icon">${c.icon}</span> ${fcEsc(c.text)}</li>`).join("")}
+            </ul>
+          </div>
+        `).join("")}
+      </div>
+      <div style="text-align:center;padding:8px 0 4px;">
+        <button class="btn primary" id="fcChangelogOk">C'est compris !</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(dlg);
+  dlg.showModal();
+
+  const close = () => {
+    localStorage.setItem("fc_last_version_seen", FC_APP_VERSION);
+    dlg.close();
+    dlg.remove();
+  };
+  document.getElementById("fcCloseChangelog").onclick = close;
+  document.getElementById("fcChangelogOk").onclick = close;
+  dlg.addEventListener("click", e => { if(e.target === dlg) close(); });
+}
+
 // Enregistrement du service worker — rend l'application installable (PWA)
 if("serviceWorker" in navigator){
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("sw.js").catch(e => console.warn("Service worker non enregistré:", e));
+    navigator.serviceWorker.register("sw.js")
+      .then(reg => {
+        // Écouter les mises à jour trouvées
+        reg.addEventListener("updatefound", () => {
+          const newWorker = reg.installing;
+          if(newWorker){
+            newWorker.addEventListener("statechange", () => {
+              if(newWorker.state === "activated"){
+                fcShowUpdateBanner(FC_APP_VERSION);
+              }
+            });
+          }
+        });
+      })
+      .catch(e => console.warn("Service worker non enregistré:", e));
+  });
+
+  // Écouter le message du SW quand la mise à jour est prête
+  navigator.serviceWorker.addEventListener("message", event => {
+    if(event.data && event.data.type === "FC_UPDATE_READY"){
+      fcShowUpdateBanner(FC_APP_VERSION);
+    }
   });
 }
+
+// Afficher le bandeau au premier chargement si version pas encore vue
+window.addEventListener("DOMContentLoaded", () => {
+  const lastSeen = localStorage.getItem("fc_last_version_seen");
+  if(lastSeen !== FC_APP_VERSION){
+    // Petit délai pour ne pas encombrer le chargement initial
+    setTimeout(() => fcShowUpdateBanner(FC_APP_VERSION), 1500);
+  }
+});
 
 function fcComputeAlertCount(){
   let count = 0;
@@ -7627,6 +7777,14 @@ function bindSettings(){
     applyCenterSettings();
     toast("Paramètres du centre enregistrés");
   };
+
+  // Version info dans les paramètres
+  const vBadge = document.getElementById("fcVersionBadge");
+  const vDate = document.getElementById("fcVersionDate");
+  if(vBadge) vBadge.textContent = "v" + FC_APP_VERSION;
+  if(vDate && FC_CHANGELOG[0]) vDate.textContent = FC_CHANGELOG[0].date;
+  const openCl = document.getElementById("fcOpenChangelog");
+  if(openCl) openCl.onclick = () => fcShowChangelogDialog();
 
   const logoInput = document.getElementById("cisLogoInput");
   if(logoInput) logoInput.onchange = e => {
