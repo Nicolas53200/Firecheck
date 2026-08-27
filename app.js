@@ -563,8 +563,19 @@ let fcNotifPermissionAsked = false;
 // ============================================================
 //  Changelog & système de notification de mise à jour
 // ============================================================
-const FC_APP_VERSION = "1.1.0";
+const FC_APP_VERSION = "1.1.1";
 const FC_CHANGELOG = [
+  {
+    version: "1.1.1",
+    date: "27 août 2026",
+    title: "Corrections fiche véhicule & persistance",
+    changes: [
+      { icon: "📷", text: "Photo de couverture — s'affiche correctement dans la fiche véhicule" },
+      { icon: "🗑️", text: "Suppression du cadre doublon « Photo de couverture »" },
+      { icon: "💾", text: "Zones de vérification — modifications sauvegardées localement (persistance hors-ligne)" },
+      { icon: "🖼️", text: "Photo détaillée des zones — ajout et affichage corrigés" }
+    ]
+  },
   {
     version: "1.1.0",
     date: "27 août 2026",
@@ -6344,6 +6355,15 @@ let fcPhotos = {
   }
 };
 
+// Restaurer photos depuis localStorage (merge avec les valeurs par défaut)
+try{
+  const savedPhotos = JSON.parse(localStorage.getItem("fc_photos") || "{}");
+  Object.keys(savedPhotos).forEach(vid => {
+    if(!fcPhotos[vid]) fcPhotos[vid] = {};
+    Object.assign(fcPhotos[vid], savedPhotos[vid]);
+  });
+}catch(e){}
+
 let fcLayouts = {
   "fpt-53": {
     avant: [
@@ -6382,6 +6402,22 @@ let fcLayouts = {
   }
 };
 
+// Restaurer layouts depuis localStorage (merge avec les valeurs par défaut)
+try{
+  const savedLayouts = JSON.parse(localStorage.getItem("fc_layouts") || "{}");
+  Object.keys(savedLayouts).forEach(vid => {
+    if(!fcLayouts[vid]) fcLayouts[vid] = {};
+    Object.keys(savedLayouts[vid]).forEach(view => {
+      // Seulement si la vue sauvegardée a des zones (éviter d'écraser les données par défaut avec du vide)
+      if(Array.isArray(savedLayouts[vid][view]) && savedLayouts[vid][view].length > 0){
+        fcLayouts[vid][view] = savedLayouts[vid][view];
+      } else if(!fcLayouts[vid][view]){
+        fcLayouts[vid][view] = savedLayouts[vid][view] || [];
+      }
+    });
+  });
+}catch(e){}
+
 let fcInventory = []; // Chargé depuis Supabase
 
 function fcEnsureVehicle(vehicleId){
@@ -6389,6 +6425,14 @@ function fcEnsureVehicle(vehicleId){
     fcLayouts[vehicleId] = {droite:[], arriere:[], gauche:[], toit:[], avant:[], interieur:[]};
   }
   if(!fcPhotos[vehicleId]) fcPhotos[vehicleId] = {};
+}
+
+// Sauvegarde locale des layouts et photos (persistance hors-ligne)
+function fcSaveLayoutsLocal(){
+  try{ localStorage.setItem("fc_layouts", JSON.stringify(fcLayouts)); }catch(e){ console.warn("fc_layouts localStorage plein:", e); }
+}
+function fcSavePhotosLocal(){
+  try{ localStorage.setItem("fc_photos", JSON.stringify(fcPhotos)); }catch(e){ console.warn("fc_photos localStorage plein:", e); }
 }
 
 /* ── V38 fix : aspect-ratio dynamique du stage photo ──────────────
@@ -6848,8 +6892,10 @@ function renderFcDetail(root){
 
   const saveLayoutBtn = document.getElementById("fcSaveLayoutBtn");
   if(saveLayoutBtn) saveLayoutBtn.onclick = () => {
+    fcSaveLayoutsLocal();
+    fcSavePhotosLocal();
     if(typeof saveLayoutSupabase === "function") saveLayoutSupabase(vehicle.id);
-    toast("Plan enregistré");
+    toast("Plan enregistré ✓");
   };
 
   const photoInput = document.getElementById("fcPhotoInput");
@@ -9717,22 +9763,21 @@ renderFcDetail = function(root){
     if(preview) preview.textContent = "Compression en cours...";
     try{
       const value = await compressImageV32(file, 1000, 0.7);
+      // Afficher immédiatement la photo (avant toute sauvegarde)
       if(preview){
         preview.classList.add("has-photo");
         preview.style.backgroundImage = `url('${value}')`;
         preview.textContent = "";
       }
       if(lbl) lbl.textContent = "Remplacer la photo de cette zone";
+
+      // Sauvegarder en local d'abord (toujours disponible)
+      safeSetMediaV32(vehicle.id, slot, value);
+      // Puis synchroniser vers Supabase si disponible
       if(typeof setMediaSupabase === "function"){
-        await setMediaSupabase(vehicle.id, slot, value);
-      } else {
-        safeSetMediaV32(vehicle.id, slot, value);
+        try{ await setMediaSupabase(vehicle.id, slot, value); }catch(e2){ console.warn("setMediaSupabase:", e2); }
       }
-      const existingCard = document.getElementById("zoneDetailPhotoCard");
-      if(existingCard) existingCard.remove();
-      const root = document.getElementById("fcView");
-      if(root && typeof renderFcDetail === "function") renderFcDetail(root);
-      toast("Photo détaillée enregistrée");
+      toast("Photo détaillée enregistrée ✓");
     }catch(err){
       console.error(err);
       if(preview) preview.textContent = "Erreur — réessaie";
@@ -9768,63 +9813,8 @@ function setCoverPhoto(vehicleId, dataUrl){
   localStorage.setItem("fc_cover_photos", JSON.stringify(fcCoverPhotos));
 }
 
-// Ajout dans la fiche inventaire ST : photo de couverture papier
+// V29 — Section "Photo de couverture" supprimée (doublon avec "Fiche du véhicule / engin" V33 qui intègre la photo de couverture)
 const renderFcDetailBeforeV29 = renderFcDetail;
-renderFcDetail = function(root){
-  renderFcDetailBeforeV29(root);
-
-  const vehicle = fcVehicles.find(v => v.id === fcState.vehicleId);
-  if(!vehicle) return;
-
-  const detailHead = root.querySelector(".fc-detail-head");
-  if(!detailHead || root.querySelector("#inventoryCoverPhotoInput")) return;
-
-  const photo = getCoverPhoto(vehicle.id);
-  const card = document.createElement("div");
-  card.className = "inventory-cover-card collapsible-panel";
-  card.innerHTML = `
-    <div class="collapsible-header" data-panel="coverPanel">
-      <h3>📷 Photo de couverture</h3>
-      <span class="collapsible-arrow">▾</span>
-    </div>
-    <div class="collapsible-body" id="coverPanel" style="display:none;">
-      <p class="muted">Cette photo apparaît sur la première page, à côté du QR Code.</p>
-      <div class="inventory-cover-preview ${photo ? "has-photo" : ""}" id="inventoryCoverPreview" ${photo ? `style="background-image:url('${photo}')"` : ""}>
-        ${photo ? "" : "📷 Photo dédiée à la fiche papier"}
-      </div>
-      <label class="inventory-cover-label" for="inventoryCoverPhotoInput">Ajouter / remplacer la photo de couverture</label>
-      <input id="inventoryCoverPhotoInput" type="file" accept="image/*">
-    </div>
-  `;
-  detailHead.insertAdjacentElement("afterend", card);
-
-  // Collapsible toggle for cover panel
-  const coverHdr = card.querySelector(".collapsible-header");
-  if(coverHdr){
-    coverHdr.style.cursor = "pointer";
-    coverHdr.onclick = () => {
-      const body = document.getElementById(coverHdr.dataset.panel);
-      const arrow = coverHdr.querySelector(".collapsible-arrow");
-      if(body){
-        const open = body.style.display !== "none";
-        body.style.display = open ? "none" : "";
-        if(arrow) arrow.textContent = open ? "▾" : "▴";
-      }
-    };
-  }
-
-  card.querySelector("#inventoryCoverPhotoInput").onchange = e => {
-    const file = e.target.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      setCoverPhoto(vehicle.id, reader.result);
-      toast("Photo de couverture ajoutée");
-      renderCheckSheets();
-    };
-    reader.readAsDataURL(file);
-  };
-};
 
 // Remplace l'impression pour utiliser photo couverture + photos par étapes
 
@@ -10866,15 +10856,32 @@ function renderFicheVehicule(root,vehicle){
   const coverZone=card.querySelector(`#ficheCoverZone_${vehicle.id}`);
   const coverInput=card.querySelector(`#ficheCoverInput_${vehicle.id}`);
   const uploading=card.querySelector(`#ficheUploading_${vehicle.id}`);
-  coverZone.onclick=()=>coverInput.click();
+  coverZone.onclick=e=>{ if(e.target.tagName!=="INPUT") coverInput.click(); };
   coverInput.onchange=async e=>{
     const file=e.target.files[0]; if(!file) return;
     uploading.style.display="inline";
     try{
       const {dataUrl}=await uploadCoverPhoto(vehicle.id,file);
+      // Mettre à jour l'image sans détruire le DOM (garde le input et ses listeners)
       let img=coverZone.querySelector("img");
-      if(!img){ coverZone.innerHTML=`<img src="${dataUrl}" alt="Photo couverture"><div class="fiche-cover-overlay">🔄 Remplacer</div><input type="file" accept="image/*" id="ficheCoverInput_${vehicle.id}" style="display:none">`; }
-      else{ img.src=dataUrl; }
+      if(!img){
+        img=document.createElement("img");
+        img.alt="Photo couverture";
+        coverZone.prepend(img);
+        // Ajouter l'overlay si absent
+        if(!coverZone.querySelector(".fiche-cover-overlay")){
+          const overlay=document.createElement("div");
+          overlay.className="fiche-cover-overlay";
+          overlay.textContent="🔄 Remplacer";
+          img.insertAdjacentElement("afterend",overlay);
+        }
+        // Retirer le placeholder texte
+        const span=coverZone.querySelector("span");
+        if(span) span.remove();
+        const small=coverZone.querySelector("small");
+        if(small) small.remove();
+      }
+      img.src=dataUrl;
       if(typeof setCoverPhoto==="function") setCoverPhoto(vehicle.id,dataUrl);
       if(typeof toast==="function") toast("Photo de couverture enregistrée ✓");
     }catch(err){ if(typeof toast==="function") toast("Erreur lors de l'upload"); console.error(err); }
