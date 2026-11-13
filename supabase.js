@@ -498,23 +498,42 @@ async function syncLayouts(){
   try{
     const { data, error } = await sb.from("fc_layouts").select("*");
     if(error) throw error;
-    (data || []).forEach(row => {
-      if(row.layouts) fcLayouts[row.vehicle_id] = row.layouts;
-      if(row.views) fcVehicleViews[row.vehicle_id] = row.views;
-      if(row.photos) fcPhotos[row.vehicle_id] = row.photos;
-      if(row.subzones) fcSubZones[row.vehicle_id] = row.subzones;
+    const rows = data || [];
+    const seenVehicles = new Set();
+    const localWins = [];
+    rows.forEach(row => {
+      const vehicleId = row.vehicle_id;
+      if(!vehicleId) return;
+      seenVehicles.add(vehicleId);
+      const localTime = Date.parse(fcLayoutsUpdatedAt?.[vehicleId] || "") || 0;
+      const remoteTime = Date.parse(row.updated_at || "") || 0;
+      if(localTime && localTime > remoteTime){
+        localWins.push(vehicleId);
+        return;
+      }
+      if(row.layouts) fcLayouts[vehicleId] = row.layouts;
+      if(row.views) fcVehicleViews[vehicleId] = row.views;
+      if(row.photos) fcPhotos[vehicleId] = row.photos;
+      if(row.subzones) fcSubZones[vehicleId] = row.subzones;
+      if(row.updated_at) fcLayoutsUpdatedAt[vehicleId] = row.updated_at;
+    });
+    // Un véhicule modifié hors ligne peut ne pas encore avoir de ligne distante.
+    Object.keys(fcLayoutsUpdatedAt || {}).forEach(vehicleId => {
+      if(!seenVehicles.has(vehicleId)) localWins.push(vehicleId);
     });
     if(typeof fcSaveVehicleViews === "function") fcSaveVehicleViews();
     if(typeof fcSaveSubZones === "function") fcSaveSubZones();
     if(typeof fcSaveLayoutsLocal === "function") fcSaveLayoutsLocal();
     if(typeof fcSavePhotosLocal === "function") fcSavePhotosLocal();
+    try{ localStorage.setItem("fc_layouts_updated_at", JSON.stringify(fcLayoutsUpdatedAt || {})); }catch(e){}
     if(typeof renderCheckSheets === "function") renderCheckSheets();
+    for(const vehicleId of [...new Set(localWins)]) await saveLayoutSupabase(vehicleId);
   }catch(e){ console.warn("syncLayouts:", e); }
 }
 
 async function saveLayoutSupabase(vehicleId){
   // Toujours sauvegarder en localStorage (fonctionne hors-ligne)
-  if(typeof fcSaveLayoutsLocal === "function") fcSaveLayoutsLocal();
+  if(typeof fcSaveLayoutsLocal === "function") fcSaveLayoutsLocal(vehicleId);
   if(typeof fcSavePhotosLocal === "function") fcSavePhotosLocal();
   if(!sb) return;
   try{
@@ -525,7 +544,7 @@ async function saveLayoutSupabase(vehicleId){
       views: fcGetViews(vehicleId),
       photos: fcPhotos[vehicleId] || {},
       subzones: fcSubZones[vehicleId] || {},
-      updated_at: new Date().toISOString()
+      updated_at: fcLayoutsUpdatedAt?.[vehicleId] || new Date().toISOString()
     };
     let { error } = await sb.from("fc_layouts").upsert(payload);
     if(error){
