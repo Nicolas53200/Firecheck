@@ -6346,6 +6346,16 @@ let fcState = {
   zone:"Cabine avant gauche"
 };
 
+// Restaurer la fiche, la vue et la zone sélectionnées après fermeture de l'application.
+try{
+  const savedState = JSON.parse(localStorage.getItem("fc_check_state") || "null");
+  if(savedState && typeof savedState === "object"){
+    ["family", "category", "mode", "vehicleId", "view", "zone"].forEach(key => {
+      if(typeof savedState[key] === "string") fcState[key] = savedState[key];
+    });
+  }
+}catch(e){}
+
 let fcPhotos = {
   "fpt-53": {
     avant:"assets/fpt53_avant.jpg",
@@ -6402,6 +6412,13 @@ let fcLayouts = {
   }
 };
 
+// Horodatage par véhicule : empêche une ancienne réponse Supabase d'écraser
+// les derniers changements locaux (par exemple si la connexion a coupé).
+let fcLayoutsUpdatedAt = {};
+try{
+  fcLayoutsUpdatedAt = JSON.parse(localStorage.getItem("fc_layouts_updated_at") || "{}");
+}catch(e){}
+
 // Restaurer layouts depuis localStorage (merge avec les valeurs par défaut)
 try{
   const savedLayouts = JSON.parse(localStorage.getItem("fc_layouts") || "{}");
@@ -6428,8 +6445,16 @@ function fcEnsureVehicle(vehicleId){
 }
 
 // Sauvegarde locale des layouts et photos (persistance hors-ligne)
-function fcSaveLayoutsLocal(){
+function fcSaveLayoutsLocal(vehicleId){
+  if(vehicleId){
+    fcLayoutsUpdatedAt[vehicleId] = new Date().toISOString();
+    try{ localStorage.setItem("fc_layouts_updated_at", JSON.stringify(fcLayoutsUpdatedAt)); }
+    catch(e){ console.warn("fc_layouts_updated_at localStorage indisponible:", e); }
+  }
   try{ localStorage.setItem("fc_layouts", JSON.stringify(fcLayouts)); }catch(e){ console.warn("fc_layouts localStorage plein:", e); }
+}
+function fcSaveStateLocal(){
+  try{ localStorage.setItem("fc_check_state", JSON.stringify(fcState)); }catch(e){ console.warn("fc_check_state localStorage indisponible:", e); }
 }
 function fcSavePhotosLocal(){
   try{ localStorage.setItem("fc_photos", JSON.stringify(fcPhotos)); }catch(e){ console.warn("fc_photos localStorage plein:", e); }
@@ -6457,6 +6482,7 @@ function fcSetStageAspectRatio(stageEl, photoUrl){
 function renderCheckSheets(){
   const root = document.getElementById("fcView");
   if(!root) return;
+  fcSaveStateLocal();
   renderFcLibrary();
 
   document.querySelectorAll("[data-fc-category]").forEach(btn=>{
